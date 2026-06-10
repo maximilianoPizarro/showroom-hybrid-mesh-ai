@@ -4,25 +4,25 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 Kairos Community on OpenShift analyzes workload metrics and recommends node or machine set adjustments through SmartScalingPolicy resources — bridging the gap between Kubernetes HPA (pod-level) and infrastructure provisioning (cluster-level). Operators approve recommendations in Kairos Console, preserving human oversight for factory edge sites where sudden scale-down is risky.
 
 In this lab, the sensor-scan policy watches Industrial Edge metrics and proposes scaling when scan rates spike — analogous to ROSA MachineSet autoscaling triggered by custom CloudWatch metrics. Pair this module with module 18 (HPA + Kafka) to show two layers: pods scale horizontally while Kairos evaluates node capacity.
 
-Open Kairos Console from the OpenShift menu, locate pending recommendations tied to `{user_name}` namespaces, and approve or discuss trade-offs with the facilitator. Run `oc get smartscalingpolicy -A` to correlate CRDs with UI actions.
+Open Kairos Console from the OpenShift menu, locate pending recommendations tied to `%USER_NAME%` namespaces, and approve or discuss trade-offs with the facilitator. Run `oc get smartscalingpolicy -A` to correlate CRDs with UI actions.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Kairos Console | `https://kairos-console-kairos-system.{hub_domain}` | OpenShift OAuth
-| Grafana (sensor metrics) | `https://grafana.{hub_domain}` | OpenShift OAuth
+| Kairos Console | `https://kairos-console-kairos-system.%HUB_DOMAIN%` | OpenShift OAuth
+| Grafana (sensor metrics) | `https://grafana.%HUB_DOMAIN%` | OpenShift OAuth
 | OpenShift Console — HPA | ACM → `east` → Workloads → HPA | Workshop user
 |===
 
@@ -32,7 +32,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Correlate UI action with `oc get smartscalingpolicy -A`.
 . Discuss human-in-the-loop approval for factory edge.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Open Kairos Console and review one SmartScalingPolicy
 * [ ] Run `oc get smartscalingpolicy -A` from Showroom terminal

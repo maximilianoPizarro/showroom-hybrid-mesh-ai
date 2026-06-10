@@ -4,10 +4,12 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+image::images/26-ai-end-user-apps.png[AI in end-user applications,600]
+
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
-Las aplicaciones finales — dashboards de operador, alertas móviles, integraciones MES — consumen insights de IA donde ocurre el trabajo, no solo en notebooks de data science. line-dashboard en spoke east visualiza streams Kafka de sensores; integraciones Camel enrutan eventos de anomalía; NeuroFace y resúmenes MaaS se embeben en la misma UX que `{user_name}` ve en rollouts de producción.
+Las aplicaciones finales — dashboards de operador, alertas móviles, integraciones MES — consumen insights de IA donde ocurre el trabajo, no solo en notebooks de data science. line-dashboard en spoke east visualiza streams Kafka de sensores; integraciones Camel enrutan eventos de anomalía; NeuroFace y resúmenes MaaS se embeben en la misma UX que `%USER_NAME%` ve en rollouts de producción.
 
 Este módulo integra módulos 13–25: verifica que line-dashboard muestra datos IE en vivo, dispara umbrales ie-anomaly-alerter y opcionalmente embebe iframe NeuroFace o enlace chat para ayuda IA contextual. Integraciones Camel K de plantillas `demo-camel-kaoto-east` y `demo-camel-cdc-east` muestran patrones event-driven que equipos de fábrica despliegan en OpenShift junto a sistemas OT.
 
@@ -15,15 +17,15 @@ Los equipos de plataforma ganan cuando la IA es infraestructura invisible: OpenS
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Dashboard línea IE | `https://industrial-edge.{hub_domain}` | Pública (sin login)
-| Developer Hub — componentes IE | `https://developer-hub.{hub_domain}/catalog` | Usuario taller
-| Grafana (telemetría) | `https://grafana.{hub_domain}` | OAuth OpenShift
+| Dashboard línea IE | `https://industrial-edge.%HUB_DOMAIN%` | Pública (sin login)
+| Developer Hub — componentes IE | `https://developer-hub.%HUB_DOMAIN%/catalog` | Usuario taller
+| Grafana (telemetría) | `https://grafana.%HUB_DOMAIN%` | OAuth OpenShift
 |===
 
 == Demostración
@@ -32,7 +34,7 @@ NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer 
 . Opcional estado integración Camel en Topology.
 . Historia: operador ve telemetría, predicción y ayuda IA en una UX.
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
 * [ ] Verificar que line-dashboard muestra telemetría IE en vivo
 * [ ] Conectar un insight de anomalía o IA al flujo del operador

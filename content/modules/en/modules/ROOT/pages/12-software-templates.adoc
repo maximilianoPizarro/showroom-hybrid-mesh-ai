@@ -4,27 +4,29 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+image::images/12-software-templates.png[Developer Hub software templates,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 Red Hat Developer Hub software templates encode golden paths: parameterized scaffolder actions create Git repos, register catalog entities, and trigger Argo CD Applications with guardrails (namespaces, quotas, network policies) already wired. Platform teams publish templates once; developers self-serve through the Create flow without opening infrastructure tickets.
 
-This workshop ships templates for Industrial Edge, Camel Kaoto, API products, OpenShift AI workspaces, CNV VMs, and NeuroFace. If your `{user_name}` scaffold fails due to quota or Gitea timing, switch to Plan B — Developer Hub System `hybrid-mesh-shared-demos` exposes pre-deployed Components with the same URLs and Topology entries.
+This workshop ships templates for Industrial Edge, Camel Kaoto, API products, OpenShift AI workspaces, CNV VMs, and NeuroFace. If your `%USER_NAME%` scaffold fails due to quota or Gitea timing, switch to Plan B — Developer Hub System `hybrid-mesh-shared-demos` exposes pre-deployed Components with the same URLs and Topology entries.
 
 Templates are the bridge between executive strategy (module 01) and spoke deployments (module 13). Inspect `docs/assets/backstage/software-templates/` and catalog ConfigMaps to see how OpenShift GitOps picks up generated repos automatically.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Developer Hub — Create | `https://developer-hub.{hub_domain}/create` | Workshop user
-| Developer Hub — Catalog | `https://developer-hub.{hub_domain}/catalog` | Workshop user
-| Plan B shared demos | `https://developer-hub.{hub_domain}/catalog/default/system/hybrid-mesh-shared-demos` | Workshop user
-| Gitea (repos created by scaffold) | `https://gitea-gitea.{hub_domain}` | Workshop user
+| Developer Hub — Create | `https://developer-hub.%HUB_DOMAIN%/create` | Workshop user
+| Developer Hub — Catalog | `https://developer-hub.%HUB_DOMAIN%/catalog` | Workshop user
+| Plan B shared demos | `https://developer-hub.%HUB_DOMAIN%/catalog/default/system/hybrid-mesh-shared-demos` | Workshop user
+| Gitea (repos created by scaffold) | `https://gitea-gitea.%HUB_DOMAIN%` | Workshop user
 |===
 
 == Show and Tell
@@ -33,7 +35,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Show catalog YAML source and generated Gitea repo URL pattern.
 . Demonstrate Plan B fallback entity in `hybrid-mesh-shared-demos`.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Browse Developer Hub Create templates list
 * [ ] Locate Plan B System `hybrid-mesh-shared-demos` as fallback

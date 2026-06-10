@@ -4,27 +4,29 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+image::images/20-acs-kuadrant.png[ACS and Kuadrant API security,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 Red Hat Advanced Cluster Security provides vulnerability scanning, compliance benchmarks, and runtime threat detection across ACM-managed clusters. SecuredCluster agents on spokes report to ACS Central on the hub; init bundles sync via GitOps jobs in `components/acs-init-bundle-sync/`.
 
 Connectivity Link and Kuadrant extend API management to the hub gateway: AuthPolicy validates tokens, RateLimitPolicy protects backends, and APIProduct publishes Industrial Edge APIs for external consumers. Demo `demo-ie-api-product` in Plan B catalog exposes the same Kuadrant resources without scaffolding.
 
-As `{user_name}`, verify ACS sees your spoke workloads and test APIProduct routes through the hub gateway. Remember ACS runs outside ambient mesh — this coexistence pattern is deliberate and matches production ROSA + ACS deployments.
+As `%USER_NAME%`, verify ACS sees your spoke workloads and test APIProduct routes through the hub gateway. Remember ACS runs outside ambient mesh — this coexistence pattern is deliberate and matches production ROSA + ACS deployments.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| ACS Central | `https://central-stackrox.{hub_domain}` | OpenShift OAuth
-| Kuadrant — API keys | `https://developer-hub.{hub_domain}/kuadrant` | Workshop user → key for {user_name}
-| Workshop APIs (httpbin, REST, LLM) | `https://workshop-apis.{hub_domain}` | `Authorization: Bearer <API_KEY>`
-| Developer Hub — API catalog | `https://developer-hub.{hub_domain}/catalog` | Workshop user
+| ACS Central | `https://central-stackrox.%HUB_DOMAIN%` | OpenShift OAuth
+| Kuadrant — API keys | `https://developer-hub.%HUB_DOMAIN%/kuadrant` | Workshop user → key for %USER_NAME%
+| Workshop APIs (httpbin, REST, LLM) | `https://workshop-apis.%HUB_DOMAIN%` | `Authorization: Bearer <API_KEY>`
+| Developer Hub — API catalog | `https://developer-hub.%HUB_DOMAIN%/catalog` | Workshop user
 |===
 
 == Show and Tell
@@ -33,7 +35,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Demo APIProduct route via hub gateway with AuthPolicy.
 . Remind ACS namespace stays outside ambient mesh.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Verify ACS shows your spoke workloads in Central UI
 * [ ] Test APIProduct route through hub gateway (or Plan B demo)

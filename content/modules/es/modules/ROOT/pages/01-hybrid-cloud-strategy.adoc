@@ -6,26 +6,26 @@
 
 image::images/01-hybrid-strategy.png[Hybrid cloud strategy overview,600]
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
 La estrategia de nube híbrida comienza con la ubicación de cargas: sistemas de fábrica sensibles a latencia en el edge, analytics e IA en regiones cloud, y gobernanza central desde un hub OpenShift. Red Hat OpenShift Container Platform ofrece una API Kubernetes y modelo de operadores únicos on-prem, edge o ROSA en AWS.
 
 En este lab, ACM en el hub representa esa capa de gobernanza — políticas, federación de observabilidad y placement GitOps hacia spokes east y west como un cliente hacia clusters ROSA y on-prem. No aprendes diapositivas abstractas; cada módulo de la Parte B refuerza un pilar estratégico: automatización, seguridad, velocidad de desarrollo o preparación para IA.
 
-Los ejecutivos deben notar que OpenShift evita replatformear dos veces: microservicios, VMs (CNV) e pipelines de IA comparten RBAC, red y CI/CD. Al registrarte como `{user_name}`, tu ruta hands-on refleja cómo los equipos de plataforma incorporan squads en producción.
+Los ejecutivos deben notar que OpenShift evita replatformear dos veces: microservicios, VMs (CNV) e pipelines de IA comparten RBAC, red y CI/CD. Al registrarte como `%USER_NAME%`, tu ruta hands-on refleja cómo los equipos de plataforma incorporan squads en producción.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME={user_name}` | Tras registro
-| Consola OpenShift (hub) | `https://console-openshift-console.{hub_domain}` | Usuario taller
-| Vista flota ACM | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | Usuario taller
+| Showroom | `https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%` | Tras registro
+| Consola OpenShift (hub) | `https://console-openshift-console.%HUB_DOMAIN%` | Usuario taller
+| Vista flota ACM | `https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters` | Usuario taller
 |===
 
 == Demostración
@@ -34,7 +34,7 @@ NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer 
 . Mapear cada pilar a un número de módulo Parte B en la tabla agenda.
 . Preguntar split híbrido actual de asistentes (ROSA vs on-prem vs edge).
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
 * [ ] Mapear cargas de tu organización a placement hub vs spoke vs ROSA
 * [ ] Identificar qué módulo Parte B aborda tu pilar prioritario

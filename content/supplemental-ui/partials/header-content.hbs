@@ -1,15 +1,16 @@
-<div class="workshop-rhds-header">
-  <a class="workshop-rhds-brand" href="../{{page.component.name}}/00-index.html" title="Red Hat Demo Platform">
-    <img src="{{{uiRootPath}}}/img/logo-demo-platform.svg" alt="Red Hat Demo Platform logo" width="180" />
+<div class="workshop-toolbar">
+  <a class="workshop-rhds-brand" href="../{{page.component.name}}/00-index.html" title="Hybrid Mesh AI Workshop">
+    <img src="{{{uiRootPath}}}/img/logo-demo-platform.svg" alt="Red Hat Demo Platform" width="140" height="36" />
   </a>
   <span class="workshop-rhds-title">Hybrid Mesh AI Workshop</span>
-</div>
-<div class="workshop-lang-bar">
-  <a href="../en/{{page.file.srcStem}}.html">EN</a>
-  &nbsp;|&nbsp;
-  <a href="../es/{{page.file.srcStem}}.html">ES</a>
-  &nbsp;|&nbsp;
-  <a id="workshop-register-link" href="#">Register</a>
-  &nbsp;|&nbsp;
-  <span class="workshop-user-badge">User: <strong class="workshop-user-name">guest</strong></span>
+  <span class="workshop-toolbar-spacer"></span>
+  <nav class="workshop-lang-bar" aria-label="Workshop navigation">
+    <a href="../en/{{page.file.srcStem}}.html">EN</a>
+    <span class="workshop-lang-sep">|</span>
+    <a href="../es/{{page.file.srcStem}}.html">ES</a>
+    <span class="workshop-lang-sep">|</span>
+    <a id="workshop-register-link" class="workshop-register-nav" href="https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%">Register</a>
+    <span class="workshop-lang-sep">|</span>
+    <span class="workshop-user-badge">User: <strong class="workshop-user-name">guest</strong></span>
+  </nav>
 </div>

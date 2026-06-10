@@ -4,40 +4,42 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+image::images/13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 Industrial Edge on OpenShift combines event streaming, integration, and visualization for factory and IoT scenarios. Apache Kafka buffers high-volume sensor topics; Camel K integrations transform and route events; line-dashboard provides operators a live view — all deployed via GitOps to spoke clusters after Developer Hub scaffolding.
 
-Run the Industrial Edge template as `{user_name}` and confirm your Gitea organization `ws-{user_name}` contains the generated repository. Argo CD on east syncs the Application into namespace `industrial-edge-tst-all` (or your user-scoped equivalent). Plan B demo `demo-industrial-edge-east` offers the same topology if scaffolding is skipped.
+Run the Industrial Edge template as `%USER_NAME%` and confirm your Gitea organization `ws-%USER_NAME%` contains the generated repository. Argo CD on east syncs the Application into namespace `industrial-edge-tst-all` (or your user-scoped equivalent). Plan B demo `demo-industrial-edge-east` offers the same topology if scaffolding is skipped.
 
 This module is the operational heart of Part B: later observability, scaling, network policy, anomaly detection, and AI modules all assume IE workloads are running on your spoke. Verify the line-dashboard route and Kafka topics before proceeding to Kairos scaling.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Developer Hub — scaffold IE | `https://developer-hub.{hub_domain}/create` | Workshop user
-| Gitea — your IE repos | `https://gitea-gitea.{hub_domain}` | Workshop user
-| Industrial Edge UI | `https://industrial-edge.{hub_domain}` | Public (no login)
+| Developer Hub — scaffold IE | `https://developer-hub.%HUB_DOMAIN%/create` | Workshop user
+| Gitea — your IE repos | `https://gitea-gitea.%HUB_DOMAIN%` | Workshop user
+| Industrial Edge UI | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
 | OpenShift GitOps (east) | ACM → cluster `east` → GitOps applications | Workshop user
-| Kafka Console | `https://kafka-console.{hub_domain}` | OpenShift OAuth
+| Kafka Console | `https://kafka-console.%HUB_DOMAIN%` | OpenShift OAuth
 |===
 
 == Show and Tell
 
-. Confirm Gitea org `ws-{user_name}` and Argo CD sync on east.
+. Confirm Gitea org `ws-%USER_NAME%` and Argo CD sync on east.
 . Open line-dashboard route and Kafka Console topics.
 . Offer Plan B `demo-industrial-edge-east` if scaffold fails.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Scaffold IE or open Plan B `demo-industrial-edge-east`
-* [ ] Verify Gitea org `ws-{user_name}` and Argo CD sync Healthy
+* [ ] Verify Gitea org `ws-%USER_NAME%` and Argo CD sync Healthy
 * [ ] Save progress at the end of this module
 
 == Live lab

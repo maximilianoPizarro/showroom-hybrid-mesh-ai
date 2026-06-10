@@ -4,7 +4,7 @@ title: Workshop runtime attributes
 version: ~
 asciidoc:
   attributes:
-    hub_domain: YOUR_HUB_DOMAIN
-    east_domain: YOUR_EAST_DOMAIN
-    west_domain: YOUR_WEST_DOMAIN
-    user_name: guest
+    hub_domain: "%HUB_DOMAIN%"
+    east_domain: "%EAST_DOMAIN%"
+    west_domain: "%WEST_DOMAIN%"
+    user_name: "%USER_NAME%"

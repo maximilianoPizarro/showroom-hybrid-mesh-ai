@@ -4,25 +4,27 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+image::images/16-openshift-gitops.png[OpenShift GitOps and Argo CD,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 OpenShift GitOps installs Argo CD as a managed operator and integrates with ACM ApplicationSets to propagate manifests hub-to-spoke with policy-safe destinations. Platform teams commit desired state to Git; controllers reconcile drift — the same GitOps discipline ROSA customers use when pairing ROSA clusters with ACM hub repositories.
 
 In this lab, hub Applications under `templates/component-applications.yaml` deploy shared services while spoke Applications (for example Industrial Edge) sync from user Gitea repos created in module 13. ApplicationSet `industrial-edge-spoke` demonstrates matrix generators targeting east/west labels.
 
-Inspect sync status in Argo CD UI as `{user_name}` and identify which repo revision triggered your deployment. GitOps is the operational backbone: every product module (mesh, ACS, AI) ultimately resolves to tracked YAML in `platform-hub-spoke-config`.
+Inspect sync status in Argo CD UI as `%USER_NAME%` and identify which repo revision triggered your deployment. GitOps is the operational backbone: every product module (mesh, ACS, AI) ultimately resolves to tracked YAML in `platform-hub-spoke-config`.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Gitea | `https://gitea-gitea.{hub_domain}` | Workshop user (*Gitea admin (facilitator):* `gitea_admin` / `openshift`)
-| Argo CD (hub) | `https://console-openshift-console.{hub_domain}/k8s/ns/openshift-gitops/applications.argoproj.io~v1alpha1~Application` | Workshop user
+| Gitea | `https://gitea-gitea.%HUB_DOMAIN%` | Workshop user (*Gitea admin (facilitator):* `gitea_admin` / `openshift`)
+| Argo CD (hub) | `https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/openshift-gitops/applications.argoproj.io~v1alpha1~Application` | Workshop user
 | ACM GitOps cluster | ACM → Infrastructure → Clusters → GitOps | Workshop user
 |===
 
@@ -32,7 +34,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Highlight ApplicationSet generator for east/west matrix.
 . Show sync wave or health status for IE app.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Find your IE Application in Argo CD and note sync status
 * [ ] Identify Git repo source (user Gitea vs hub platform repo)

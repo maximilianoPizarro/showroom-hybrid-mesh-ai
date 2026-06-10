@@ -4,26 +4,26 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 Scalability on OpenShift spans horizontal pod autoscaling, Kafka partition scaling, and node-level recommendations from Kairos. HPA v2 watches CPU, memory, or custom metrics from Prometheus adapters; KafkaNodePool resources expand broker capacity when IE topics saturate consumer lag.
 
-In this lab, line-dashboard and related IE deployments include HPAs defined in workload manifests under `components/industrial-edge-tst/`. Trigger load via workshop scripts or simulated sensor rates, then watch pods scale in the Topology view as `{user_name}`. Kafka scaling complements HPA by absorbing event bursts before pods reject traffic.
+In this lab, line-dashboard and related IE deployments include HPAs defined in workload manifests under `components/industrial-edge-tst/`. Trigger load via workshop scripts or simulated sensor rates, then watch pods scale in the Topology view as `%USER_NAME%`. Kafka scaling complements HPA by absorbing event bursts before pods reject traffic.
 
 This module completes the capacity story started in module 14: Kairos proposes nodes, HPA adds pods, Kafka buffers events — together they mirror how a ROSA customer scales factory edge during production peaks without manual cluster admin intervention.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Kairos Console | `https://kairos-console-kairos-system.{hub_domain}` | OpenShift OAuth
-| Kafka Console | `https://kafka-console.{hub_domain}` | OpenShift OAuth
-| Grafana (Kafka lag) | `https://grafana.{hub_domain}` | OpenShift OAuth
+| Kairos Console | `https://kairos-console-kairos-system.%HUB_DOMAIN%` | OpenShift OAuth
+| Kafka Console | `https://kafka-console.%HUB_DOMAIN%` | OpenShift OAuth
+| Grafana (Kafka lag) | `https://grafana.%HUB_DOMAIN%` | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -32,7 +32,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Show Kafka consumer lag recovering after buffer capacity.
 . Tie pod-scale (HPA) vs node-scale (Kairos) layering.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Check HPA status for line-dashboard or related IE deployment
 * [ ] Observe Kafka consumer lag under load or simulated traffic

@@ -4,25 +4,27 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+image::images/17-service-mesh.png[OpenShift Service Mesh ambient,600]
+
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
 OpenShift Service Mesh 3 introduce modo ambient: una capa ztunnel compartida maneja mTLS y telemetría L4 sin inyectar sidecars en cada pod por defecto. Kiali visualiza grafos de tráfico; la config mesh habilita trazas distribuidas para microservicios Industrial Edge en namespaces spoke east.
 
 En este taller, OSSM3 se suscribe vía `components/operators/templates/servicemeshoperator3.yaml` y se configura en modo dataplane ambient en namespaces IE — excluyendo `stackrox` donde ACS requiere visibilidad de red directa. Compara con despliegues ROSA usando App Mesh o meshes de terceros: OpenShift mantiene CRDs y políticas mesh nativas al ciclo de vida de plataforma.
 
-Usa Kiali desde la consola OpenShift para ver tráfico en vivo de despliegues de `{user_name}` y validar mTLS entre line-dashboard y servicios orientados a Kafka. El módulo 17 combina con dashboards de observabilidad del módulo 15 para análisis de latencia end-to-end.
+Usa Kiali desde la consola OpenShift para ver tráfico en vivo de despliegues de `%USER_NAME%` y validar mTLS entre line-dashboard y servicios orientados a Kafka. El módulo 17 combina con dashboards de observabilidad del módulo 15 para análisis de latencia end-to-end.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
-| Industrial Edge (apps en mesh) | `https://industrial-edge.{hub_domain}` | Pública (sin login)
+| Kiali | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OAuth OpenShift
+| Industrial Edge (apps en mesh) | `https://industrial-edge.%HUB_DOMAIN%` | Pública (sin login)
 | Consola OpenShift — mesh | ACM → `east` → Operators → Service Mesh | Usuario taller
 |===
 
@@ -32,7 +34,7 @@ NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer 
 . Notar exclusión `stackrox` del mesh ambient.
 . Opcional: mostrar icono candado mTLS en aristas de servicio.
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
 * [ ] Abrir Kiali y ver tráfico de tus despliegues IE
 * [ ] Confirmar mesh ambient habilitado en namespace IE (no stackrox)

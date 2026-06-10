@@ -4,10 +4,12 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+image::images/26-ai-end-user-apps.png[AI in end-user applications,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
-End-user applications — operator dashboards, mobile alerts, MES integrations — consume AI insights where work happens, not only in data science notebooks. line-dashboard on the east spoke visualizes Kafka sensor streams; Camel integrations route anomaly events; NeuroFace and MaaS summaries embed into the same UX `{user_name}` sees in production rollouts.
+End-user applications — operator dashboards, mobile alerts, MES integrations — consume AI insights where work happens, not only in data science notebooks. line-dashboard on the east spoke visualizes Kafka sensor streams; Camel integrations route anomaly events; NeuroFace and MaaS summaries embed into the same UX `%USER_NAME%` sees in production rollouts.
 
 This module integrates modules 13–25: verify line-dashboard displays live IE data, trigger ie-anomaly-alerter thresholds, and optionally embed a NeuroFace iframe or chat link for contextual AI help. Camel K Integrations from templates `demo-camel-kaoto-east` and `demo-camel-cdc-east` show event-driven patterns factory teams deploy on OpenShift alongside OT systems.
 
@@ -15,15 +17,15 @@ Platform teams win when AI is invisible infrastructure: OpenShift AI, MaaS, and 
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Industrial Edge line dashboard | `https://industrial-edge.{hub_domain}` | Public (no login)
-| Developer Hub — IE components | `https://developer-hub.{hub_domain}/catalog` | Workshop user
-| Grafana (telemetry) | `https://grafana.{hub_domain}` | OpenShift OAuth
+| Industrial Edge line dashboard | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
+| Developer Hub — IE components | `https://developer-hub.%HUB_DOMAIN%/catalog` | Workshop user
+| Grafana (telemetry) | `https://grafana.%HUB_DOMAIN%` | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -32,7 +34,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Optional Camel integration status in Topology.
 . Story: operator sees telemetry, prediction, and AI help in one UX.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Verify line-dashboard shows live IE telemetry
 * [ ] Connect one anomaly or AI insight to operator workflow

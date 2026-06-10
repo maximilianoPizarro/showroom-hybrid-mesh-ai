@@ -6,7 +6,7 @@
 
 image::images/02-rosa-architecture.png[ROSA and OpenShift hub-spoke architecture,600]
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 Red Hat OpenShift Service on AWS (ROSA) provides a fully managed control plane in your AWS account while Red Hat handles upgrades, security patches, and SRE operations. Worker nodes scale via MachineSets; ingress integrates with Route 53 and ALB; IAM and STS enable secure cloud service access — the reference architecture for hybrid customers who standardize on OpenShift everywhere.
@@ -17,14 +17,14 @@ Understanding ROSA architecture helps you explain SLA boundaries: Red Hat manage
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| ACM — ManagedClusters | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | Workshop user
-| Hub cluster console | `https://console-openshift-console.{hub_domain}` | Workshop user
+| ACM — ManagedClusters | `https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters` | Workshop user
+| Hub cluster console | `https://console-openshift-console.%HUB_DOMAIN%` | Workshop user
 | East spoke (switch cluster in ACM) | Same ACM UI → cluster `east` | Workshop user
 | West spoke | ACM UI → cluster `west` | Workshop user
 |===
@@ -35,7 +35,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Show ACM ManagedCluster list as the lab equivalent of joining ROSA to a fleet hub.
 . Mention SLA and support boundaries Red Hat vs customer ops.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Sketch ROSA control plane vs worker responsibilities for your account
 * [ ] Preview ACM ManagedCluster in module 10 reading list

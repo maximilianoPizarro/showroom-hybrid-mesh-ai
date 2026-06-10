@@ -4,26 +4,26 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
 La observabilidad OpenShift abarca métricas de cluster, logs, trazas y dashboards custom federados en clusters gestionados por ACM. Red Hat se apoya en Prometheus, patrones Loki o Elasticsearch, Grafana e Instrumentation CRs OpenTelemetry para que equipos de aplicación hereden collectors de plataforma sin sidecar sprawl en cada pod.
 
-Este taller despliega dashboards Grafana multicluster en el hub, collectors OpenTelemetry vía `components/opentelemetry/` y Kafka Console para inspección de topics IE. Como `{user_name}`, filtra dashboards a tu namespace y correlaciona picos de latencia con trazas mesh en el módulo 17.
+Este taller despliega dashboards Grafana multicluster en el hub, collectors OpenTelemetry vía `components/opentelemetry/` y Kafka Console para inspección de topics IE. Como `%USER_NAME%`, filtra dashboards a tu namespace y correlaciona picos de latencia con trazas mesh en el módulo 17.
 
 Los ejecutivos deben conectar este módulo con el 21 (Kubecost): métricas demuestran cumplimiento SLO mientras métricas de costo demuestran eficiencia — ambos requeridos para FinOps híbrido. Usa `oc` en Showroom para listar CRs `GrafanaDashboard` y confirmar que cargas IE emiten targets de scrape.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Grafana | `https://grafana.{hub_domain}` | OAuth OpenShift
-| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
-| Consola OpenShift — Observe | `https://console-openshift-console.{hub_domain}/observe/metrics` | Usuario taller
+| Grafana | `https://grafana.%HUB_DOMAIN%` | OAuth OpenShift
+| Kiali | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OAuth OpenShift
+| Consola OpenShift — Observe | `https://console-openshift-console.%HUB_DOMAIN%/observe/metrics` | Usuario taller
 |===
 
 == Demostración
@@ -32,7 +32,7 @@ NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer 
 . Mostrar Kafka Console y traza OTEL de ejemplo (o gap métricas si trace pendiente).
 . Enlazar historia SLO métricas al próximo módulo Kubecost.
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
 * [ ] Abrir dashboard Grafana multicluster para tu namespace IE
 * [ ] Inspeccionar topics Kafka Console para datos de sensores

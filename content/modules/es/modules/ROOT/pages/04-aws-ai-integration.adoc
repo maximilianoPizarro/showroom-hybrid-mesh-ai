@@ -4,7 +4,9 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+image::images/04-aws-ai-integration.png[AWS and AI integration on OpenShift,600]
+
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
 Los clientes AWS suelen combinar ROSA con servicios nativos de IA — Amazon Bedrock para modelos foundation, SageMaker para pipelines de entrenamiento e IAM OIDC para identidad segura de cargas. El enfoque híbrido de Red Hat mantiene inferencia y pipelines de datos en OpenShift AI permitiendo integración opcional con servicios AWS vía credenciales y endpoints externos donde la política lo permita.
@@ -15,14 +17,14 @@ Desde el módulo 22 se activa este stack hands-on. Los ejecutivos deben reconoce
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OAuth OpenShift
-| Developer Hub (Lightspeed / catálogo) | `https://developer-hub.{hub_domain}` | Usuario taller
+| Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%` | OAuth OpenShift
+| Developer Hub (Lightspeed / catálogo) | `https://developer-hub.%HUB_DOMAIN%` | Usuario taller
 | Endpoint MaaS (lab) | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Token facilitador
 |===
 
@@ -32,7 +34,7 @@ NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer 
 . Mostrar ubicación conceptual del secret MaaS (sin valores de secret).
 . Explicar inferencia portable cuando cambian residencia o precios AWS.
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
 * [ ] Comparar tus servicios IA AWS con patrón lab OpenShift AI + MaaS
 * [ ] Localizar módulo 22 para setup hands-on DSC y MaaS

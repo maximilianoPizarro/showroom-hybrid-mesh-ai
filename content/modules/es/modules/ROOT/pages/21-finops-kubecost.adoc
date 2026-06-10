@@ -4,34 +4,34 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
 Kubecost en OpenShift asigna gasto Kubernetes por namespace, label y cluster — federando datos del primario hub y agentes spoke en almacenamiento ETL respaldado por MinIO. Los equipos de plataforma cargan back tenants edge de fábrica y comparan costos de nodos ROSA versus depreciación on-prem con economía unitaria Kubernetes consistente.
 
-En este lab, Kubecost se despliega desde `components/kubecost/` con agentes en east/west reportando al primario hub. Filtra asignaciones a namespaces de `{user_name}` y correlaciona capacidad ociosa con recomendaciones Kairos del módulo 14.
+En este lab, Kubecost se despliega desde `components/kubecost/` con agentes en east/west reportando al primario hub. Filtra asignaciones a namespaces de `%USER_NAME%` y correlaciona capacidad ociosa con recomendaciones Kairos del módulo 14.
 
 FinOps cierra el loop ejecutivo del módulo 01: estrategia híbrida sin visibilidad de costo falla en revisión CFO. Kubecost complementa tags AWS Cost Explorer en ROSA exponiendo desperdicio a nivel pod dentro del límite del cluster.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Kubecost | `https://kubecost.{hub_domain}` | OAuth OpenShift
+| Kubecost | `https://kubecost.%HUB_DOMAIN%` | OAuth OpenShift
 | Consola OpenShift — quotas | ACM → tu namespace en `east` | Usuario taller
 |===
 
 == Demostración
 
-. UI Kubecost: asignación por namespace para `{user_name}`.
+. UI Kubecost: asignación por namespace para `%USER_NAME%`.
 . Mostrar dropdown cluster federado (hub + spokes).
 . Comparar costo ocioso con narrativa sobreaprovisión Kairos.
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
 * [ ] Abrir Kubecost y filtrar asignaciones a tu namespace
 * [ ] Comparar costos cluster hub vs spoke en vista federada

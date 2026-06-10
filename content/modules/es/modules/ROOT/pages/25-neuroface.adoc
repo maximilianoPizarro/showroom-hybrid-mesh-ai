@@ -6,37 +6,37 @@
 
 image::images/25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,600]
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
 NeuroFace entrega visión por computadora e IA conversacional en OpenShift sin empaquetar LibreChat: webcam del navegador alimenta detección de objetos YOLO y pipelines de reconocimiento facial mientras `/api/chat` proxy al LLM MaaS compartido (llama-scout-17b). OVMS ModelMesh sirve modelos de visión localmente; el chat permanece centralizado para gobernanza de tokens — el patrón IA híbrido que clientes de manufactura piden para líneas de inspección de calidad.
 
-Accede a NeuroFace en `https://neuroface.{hub_domain}` tras registrarte como `{user_name}`. Valores Helm en `components/neuroface/` deshabilitan LiteLLM y dependencias LibreChat externas; modelEndpoint y modelName alinean con credenciales maas-workshop. La entidad catálogo Plan B `demo-neuroface` mapea a la misma ruta si omites scaffolding.
+Accede a NeuroFace en `https://neuroface.%HUB_DOMAIN%` tras registrarte como `%USER_NAME%`. Valores Helm en `components/neuroface/` deshabilitan LiteLLM y dependencias LibreChat externas; modelEndpoint y modelName alinean con credenciales maas-workshop. La entidad catálogo Plan B `demo-neuroface` mapea a la misma ruta si omites scaffolding.
 
 En el lab, prueba latencia de inferencia webcam en rutas de red spoke y haz preguntas chat sobre objetos detectados — simulando un asistente de planta que explica alertas de visión en lenguaje natural. El módulo 26 cablea estas señales en dashboards Industrial Edge para experiencia unificada del operador.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| App NeuroFace | `https://neuroface.{hub_domain}` | Pública (sin login)
-| API chat | `https://neuroface.{hub_domain}/api/chat` | Pública (sin login)
+| App NeuroFace | `https://neuroface.%HUB_DOMAIN%` | Pública (sin login)
+| API chat | `https://neuroface.%HUB_DOMAIN%/api/chat` | Pública (sin login)
 | Consola OpenShift — deploy | ACM → `hub` → namespace `neuroface` | Usuario taller
 |===
 
 == Demostración
 
-. Abrir `https://neuroface.{hub_domain}` — detección objetos webcam en vivo.
+. Abrir `https://neuroface.%HUB_DOMAIN%` — detección objetos webcam en vivo.
 . Enviar pregunta chat sobre objeto detectado; mostrar backend MaaS (no LibreChat).
 . Destacar visión local OVMS + gobernanza chat centralizada.
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
-* [ ] Abrir `https://neuroface.{hub_domain}` y probar detección webcam
+* [ ] Abrir `https://neuroface.%HUB_DOMAIN%` y probar detección webcam
 * [ ] Preguntar a `/api/chat` sobre un objeto detectado
 * [ ] Guardar progreso al final de este módulo
 

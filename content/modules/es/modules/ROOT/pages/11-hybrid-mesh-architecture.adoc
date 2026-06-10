@@ -6,7 +6,7 @@
 
 image::images/11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,600]
 
-NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 == Panorama
 
 La arquitectura hybrid mesh conecta redes de aplicación entre clusters sin aplanar VPCs ni exponer endpoints kube-apiserver públicamente. Red Hat Service Interconnect (Skupper) con HTTPRoutes Gateway API en el hub crea una red lógica de aplicación: frontends en el hub enrutan a servicios spoke por enlaces cifrados.
@@ -17,16 +17,16 @@ Observa recursos `HTTPRoute` y estado Skupper en la consola; el módulo 13 despl
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Industrial Edge (vía hub gateway) | `https://industrial-edge.{hub_domain}` | Pública (sin login)
-| Skupper network observer | `https://field-content-skupper-network-observer-service-interconnect.{hub_domain}` | OAuth OpenShift
-| Rutas Hub Gateway | `https://console-openshift-console.{hub_domain}/k8s/ns/hub-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute` | Usuario taller
-| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
+| Industrial Edge (vía hub gateway) | `https://industrial-edge.%HUB_DOMAIN%` | Pública (sin login)
+| Skupper network observer | `https://field-content-skupper-network-observer-service-interconnect.%HUB_DOMAIN%` | OAuth OpenShift
+| Rutas Hub Gateway | `https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/hub-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute` | Usuario taller
+| Kiali | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OAuth OpenShift
 |===
 
 == Demostración
@@ -35,7 +35,7 @@ NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer 
 . Mostrar estado site/connector Skupper en consola.
 . Relacionar con narrativa ALB ROSA + private link de Parte A.
 
-== Tu TODO (usuario {user_name})
+== Tu TODO (usuario %USER_NAME%)
 
 * [ ] Inspeccionar HTTPRoute hub y recursos Skupper en consola
 * [ ] Trazar cómo tráfico externo alcanza frontends IE en spokes

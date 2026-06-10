@@ -4,7 +4,9 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+image::images/04-aws-ai-integration.png[AWS and AI integration on OpenShift,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 AWS customers often pair ROSA with native AI services — Amazon Bedrock for foundation models, SageMaker for training pipelines, and IAM OIDC for secure workload identity. Red Hat's hybrid approach keeps inference and data pipelines on OpenShift AI while still allowing optional AWS service integration via credentials and external endpoints where policy permits.
@@ -15,14 +17,14 @@ Module 22 onward activates this stack hands-on. Executives should recognize that
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| OpenShift AI dashboard | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OpenShift OAuth
-| Developer Hub (Lightspeed / catalog) | `https://developer-hub.{hub_domain}` | Workshop user
+| OpenShift AI dashboard | `https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%` | OpenShift OAuth
+| Developer Hub (Lightspeed / catalog) | `https://developer-hub.%HUB_DOMAIN%` | Workshop user
 | MaaS endpoint (lab) | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Facilitator token
 |===
 
@@ -32,7 +34,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Show MaaS credential secret location conceptually (no secret values).
 . Explain portable inference when AWS residency or pricing changes.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] Compare your AWS AI services with OpenShift AI + MaaS lab pattern
 * [ ] Locate module 22 for hands-on DSC and MaaS setup

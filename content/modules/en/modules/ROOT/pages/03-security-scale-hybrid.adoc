@@ -4,26 +4,28 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
+image::images/03-security-scale-hybrid.png[Hybrid cloud security and scale,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 == Overview
 
 Security and scale in hybrid OpenShift environments require defense in depth: identity federation, network segmentation, runtime threat detection, and policy-driven compliance across every cluster in the fleet. Red Hat Advanced Cluster Security (ACS) centralizes vulnerability management and runtime policies while OpenShift Service Mesh adds zero-trust connectivity between microservices.
 
 In this lab, ACS Central runs on the hub with SecuredCluster agents on spokes — note that the `stackrox` namespace deliberately avoids ambient mesh labels so ACS sensors are not disrupted. NetworkPolicy demos in module 19 use OVN on spokes, analogous to security groups plus Kubernetes NP on ROSA. Kuadrant AuthPolicy at the hub gateway shows how API traffic is authenticated and rate-limited before it reaches Industrial Edge backends.
 
-Scaling hybrid fleets means automating placement and capacity: ACM policies, Kairos SmartScalingPolicy, Kafka buffering, and HPA together handle sensor spikes without manual ticket queues. As `{user_name}`, you will observe these controls in modules 14 and 18 on workloads that simulate factory telemetry bursts.
+Scaling hybrid fleets means automating placement and capacity: ACM policies, Kairos SmartScalingPolicy, Kafka buffering, and HPA together handle sensor spikes without manual ticket queues. As `%USER_NAME%`, you will observe these controls in modules 14 and 18 on workloads that simulate factory telemetry bursts.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| ACS Central | `https://central-stackrox.{hub_domain}` | OpenShift OAuth
-| OpenShift Console — Security | `https://console-openshift-console.{hub_domain}/security` | Workshop user
-| Kiali (mesh policies) | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OpenShift OAuth
+| ACS Central | `https://central-stackrox.%HUB_DOMAIN%` | OpenShift OAuth
+| OpenShift Console — Security | `https://console-openshift-console.%HUB_DOMAIN%/security` | Workshop user
+| Kiali (mesh policies) | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -32,7 +34,7 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer H
 . Preview NetworkPolicy (19) and Kuadrant (20) as defense layers.
 . Discuss factory edge scale events and Kairos approval workflow.
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
 * [ ] List three security layers you will verify in Part B (ACS, NP, Kuadrant)
 * [ ] Note why `stackrox` avoids ambient mesh in this lab

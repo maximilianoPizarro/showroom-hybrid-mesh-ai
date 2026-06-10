@@ -16,7 +16,7 @@
 
 == Contexto
 
-NetworkPolicy demo en namespace IE; verify `oc get networkpolicy`.
+NetworkPolicy demo en namespace IE.
 
 == Show and Tell
 
@@ -32,6 +32,32 @@ NetworkPolicy demo en namespace IE; verify `oc get networkpolicy`.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| NP demo IE | components/workshop-demos/templates/network-policy-demo.yaml | NetworkPolicy |
+| OVN | OpenShift SDN/OVN | CNI |
+|===
+
+[source,yaml]
+----
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ie-workshop-allow-dashboard
+  namespace: industrial-edge-tst-all
+----
+
+Verify:
+
+[source,bash]
+----
+oc get networkpolicy -n industrial-edge-tst-all
+----
 
 == Verify
 

@@ -33,6 +33,32 @@ OSSM3 ambient; Kiali; ztunnel metrics.
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| OSSM3 | components/operators/templates/servicemeshoperator3.yaml | Subscription |
+| Kiali | components/kiali/ | Kiali CR |
+|===
+
+[source,yaml]
+----
+spec:
+  values:
+    meshConfig:
+      defaultConfig:
+        tracing: {}
+----
+
+Verify:
+
+[source,bash]
+----
+oc get servicemeshcontrolplane -n istio-system
+----
+
 == Verify
 
 [cols="1,2,1"]

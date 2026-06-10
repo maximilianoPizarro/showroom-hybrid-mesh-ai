@@ -1,4 +1,4 @@
-= ACS y Kuadrant
+= ACS & Connectivity Link
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -32,6 +32,29 @@ ACS Central; AuthPolicy; APIProduct demo.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| ACS init bundles | components/acs-init-bundle-sync/ | Job |
+| Kuadrant | components/hub-gateway/ | AuthPolicy |
+|===
+
+[source,yaml]
+----
+# Secret acs-init-credentials required in stackrox
+# roxctl central init-bundles generate hub --output-secrets -
+----
+
+Verify:
+
+[source,bash]
+----
+oc get securedcluster -n stackrox
+----
 
 == Verify
 

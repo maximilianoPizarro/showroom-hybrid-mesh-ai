@@ -1,5 +1,7 @@
 = Hybrid Mesh AI Workshop
 
+image::images/00-index-hybrid-mesh.png[Workshop illustration,600]
+
 == Nube híbrida — ROSA/AWS vs este lab
 
 [cols="1,1"]
@@ -14,9 +16,38 @@
 | Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
 |===
 
+== Agenda dual
+
+.Parte A — Ejecutiva (01–05)
+[cols="1,3"]
+|===
+| 01 | Hybrid Cloud Strategy
+| 02 | ROSA Architecture & Benefits
+| 03 | Security & Scale in Hybrid
+| 04 | AWS Services & AI Integration
+| 05 | Real Cases & Roadmap
+|===
+
+.Parte B — Hands-on (10–28)
+[cols="1,3"]
+|===
+| 10–14 | Foundation — ACM, mesh, templates, IE, Kairos
+| 15–18 | Operations — observability, GitOps, mesh, scale
+| 19–21 | Security & FinOps — NP, ACS/Kuadrant, Kubecost
+| 22–26 | Hybrid Mesh AI — ODS, LLM, NeuroFace
+| 27–28 | Verification & recording runbook
+|===
+
+== Registro y demos Plan B
+
+* Registro: `https://workshop-registration.{hub_domain}` → redirect Showroom con `USER_NAME=userN`
+* Console OpenShift: **Hybrid Mesh AI Workshop** (ApplicationMenu)
+* Developer Hub → System `hybrid-mesh-shared-demos` (Plan B sin scaffolder)
+* NeuroFace: `https://neuroface.{hub_domain}` (no LibreChat)
+
 == Contexto
 
-Agenda Parte A (01–05) y Parte B (10–27). Registro: `https://workshop-registration.{hub_domain}`. Showroom live con terminal `oc`.
+Agenda Parte A (01–05) y Parte B (10–28). Registro: `https://workshop-registration.{hub_domain}`. Showroom live con terminal `oc`.
 
 == Show and Tell
 
@@ -29,9 +60,6 @@ Agenda Parte A (01–05) y Parte B (10–27). Registro: `https://workshop-regist
 * [ ] Leer callout nube híbrida
 * [ ] Registrarse en workshop-registration
 * [ ] Marcar progreso al final del módulo
-
-
-
 
 == Verify
 

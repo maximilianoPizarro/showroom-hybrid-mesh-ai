@@ -33,6 +33,30 @@ Developer Hub Create; golden paths. Plan B: demos compartidos en catálogo.
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Developer Hub Create | docs/assets/backstage/software-templates/ | SoftwareTemplate |
+| Plan B catalog | components/workshop-demos/files/catalog/ | System |
+|===
+
+[source,yaml]
+----
+metadata:
+  name: hybrid-mesh-shared-demos
+  title: Hybrid Mesh AI — Shared Demos (Plan B)
+----
+
+Verify:
+
+[source,bash]
+----
+oc get configmap developer-hub-catalog-demos -n developer-hub
+----
+
 == Verify
 
 [cols="1,2,1"]

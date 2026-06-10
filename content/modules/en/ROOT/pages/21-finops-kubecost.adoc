@@ -33,6 +33,28 @@ Kubecost hub primary + spoke agents; allocations by namespace.
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Kubecost hub | components/kubecost/templates/all.yaml | Kubecost |
+| Federated ETL | MinIO bucket kubecost | Object storage |
+|===
+
+[source,yaml]
+----
+# Kubecost primary on hub, agents on spokes
+----
+
+Verify:
+
+[source,bash]
+----
+oc get deploy -n kubecost
+----
+
 == Verify
 
 [cols="1,2,1"]

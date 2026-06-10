@@ -1,5 +1,7 @@
 = Hybrid Cloud Strategy
 
+image::images/01-hybrid-strategy.png[Workshop illustration,600]
+
 == Nube híbrida — ROSA/AWS vs este lab
 
 [cols="1,1"]
@@ -30,8 +32,28 @@ Modernizar apps, escalar híbrido, automatización/seguridad, time-to-market.
 * [ ] Completar pasos hands-on o usar demo compartido Plan B
 * [ ] Marcar progreso al final del módulo
 
+== YAML behind the scenes
 
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
 
+| Estrategia ejecutiva | docs/workshop/parte-a/ | Narrative |
+| Fleet ACM | components/acm-hub-spoke/ | ManagedCluster |
+|===
+
+[source,yaml]
+----
+# Executive track — no CR required on cluster for Parte A
+# Reference: https://docs.redhat.com/en/documentation/rosa/
+----
+
+Verify:
+
+[source,bash]
+----
+oc get managedclusters 2>/dev/null | head -5
+----
 
 == Verify
 

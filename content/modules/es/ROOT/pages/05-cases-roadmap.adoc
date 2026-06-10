@@ -1,4 +1,4 @@
-= Casos reales y roadmap
+= Real Cases & Roadmap
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -30,8 +30,27 @@ Industrial Edge IoT; Hybrid Mesh AI roadmap; transición a Parte B hands-on.
 * [ ] Completar pasos hands-on o usar demo compartido Plan B
 * [ ] Marcar progreso al final del módulo
 
+== YAML behind the scenes
 
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
 
+| Industrial Edge | components/industrial-edge-tst/ | Kafka + dashboard |
+| Workshop | components/showroom/ | Showroom |
+|===
+
+[source,yaml]
+----
+# Transition to Parte B — register at workshop-registration
+----
+
+Verify:
+
+[source,bash]
+----
+curl -sk -o /dev/null -w '%{http_code}' https://workshop-registration.${HUB_DOMAIN}/api/health
+----
 
 == Verify
 

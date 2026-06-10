@@ -1,4 +1,4 @@
-= Deploy Industrial Edge
+= Deploy Industrial Edge Apps
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -32,6 +32,31 @@ Scaffold IE east/west; Gitea `ws-{user_name}`; Argo CD Application on spoke.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Scaffold IE | software-templates/industrial-edge/template.yaml | SoftwareTemplate |
+| Spoke deploy | east/templates/component-applications.yaml | Application |
+|===
+
+[source,yaml]
+----
+# Argo CD Application on spoke after scaffold
+spec:
+  destination:
+    namespace: industrial-edge-tst-all
+----
+
+Verify:
+
+[source,bash]
+----
+oc get applications -n openshift-gitops | grep industrial
+----
 
 == Verify
 

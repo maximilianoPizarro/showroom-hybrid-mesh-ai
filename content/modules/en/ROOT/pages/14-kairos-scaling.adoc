@@ -33,6 +33,32 @@ SmartScalingPolicy sensor-scan; approve flow en Kairos Console.
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Kairos Console | components/kairos/templates/console-rbac.yaml | ClusterRole |
+| Sensor scan SSP | components/kairos/templates/sensor-scan-policies.yaml | SmartScalingPolicy |
+|===
+
+[source,yaml]
+----
+apiVersion: kairos.io/v1alpha1
+kind: SmartScalingPolicy
+metadata:
+  name: scan-policy-machine-sensor
+# approve scaling in Kairos Console
+----
+
+Verify:
+
+[source,bash]
+----
+oc get smartscalingpolicy -A
+----
+
 == Verify
 
 [cols="1,2,1"]

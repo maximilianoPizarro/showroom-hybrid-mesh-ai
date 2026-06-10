@@ -1,4 +1,6 @@
-= NeuroFace
+= Face & Object AI + Chat
+
+image::images/25-neuroface-dashboard.png[Workshop illustration,600]
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -32,6 +34,37 @@ Webcam; YOLO + face detection; `/api/chat` → MaaS. URL: `https://neuroface.{hu
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| NeuroFace UI | components/neuroface/ | Helm wrapper |
+| MaaS chat | neuroface.chat.modelEndpoint | Config |
+| No LibreChat | — | Decision |
+|===
+
+[source,yaml]
+----
+chat:
+  enabled: true
+  modelEndpoint: "https://maas-rhdp.apps.maas.redhatworkshops.io/v1"
+  modelName: "llama-scout-17b"
+ovms:
+  modelmesh:
+    enabled: true
+litellm:
+  enabled: false
+----
+
+Verify:
+
+[source,bash]
+----
+curl -sk https://neuroface.${HUB_DOMAIN}/api/health
+----
 
 == Verify
 

@@ -1,4 +1,4 @@
-= LLMs y RAG
+= LLMs & RAG
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -32,6 +32,28 @@ Developer Lightspeed; Kairos agents; Continue AI DevSpaces.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Lightspeed | components/developer-hub/templates/lightspeed.yaml | Deployment |
+| Kairos agents | components/kairos/ | Console |
+|===
+
+[source,yaml]
+----
+# MaaS endpoint shared with NeuroFace and Continue AI on spokes
+----
+
+Verify:
+
+[source,bash]
+----
+oc get deploy -n developer-hub | grep lightspeed
+----
 
 == Verify
 

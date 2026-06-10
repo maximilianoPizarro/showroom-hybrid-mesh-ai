@@ -1,4 +1,4 @@
-= Flota multicluster y ACM
+= Multicluster Fleet & ACM
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -16,7 +16,7 @@
 
 == Contexto
 
-ACM Clusters; ManagedCluster; GitOpsCluster. YAML: `components/acm-hub-spoke/templates/managed-clusters.yaml`.
+ACM Clusters; ManagedCluster; GitOpsCluster.
 
 == Show and Tell
 
@@ -32,6 +32,33 @@ ACM Clusters; ManagedCluster; GitOpsCluster. YAML: `components/acm-hub-spoke/tem
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| ACM Clusters UI | components/acm-hub-spoke/templates/managed-clusters.yaml | ManagedCluster |
+| GitOpsCluster | components/acm-hub-spoke/templates/gitops-cluster.yaml | GitOpsCluster |
+|===
+
+[source,yaml]
+----
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: east
+spec:
+  hubAcceptsClient: true
+----
+
+Verify:
+
+[source,bash]
+----
+oc get managedclusters
+----
 
 == Verify
 

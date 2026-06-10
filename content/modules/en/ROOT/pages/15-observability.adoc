@@ -33,6 +33,29 @@ Grafana multicluster; OTEL; Kafka Console.
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Grafana | components/grafana-dashboards/ | ConfigMap |
+| OTEL | components/opentelemetry/ | Instrumentation |
+|===
+
+[source,yaml]
+----
+# Grafana multicluster dashboards on hub
+# Kafka Console: components/kafka-console/
+----
+
+Verify:
+
+[source,bash]
+----
+oc get grafanadashboard -A | head
+----
+
 == Verify
 
 [cols="1,2,1"]

@@ -1,4 +1,4 @@
-= Taller OpenShift AI
+= OpenShift AI Workshop
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -32,6 +32,31 @@ DSC hub; maas-workshop; demo-ods-workspace.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| DSC | components/openshift-ai-hub/templates/all.yaml | DataScienceCluster |
+| MaaS workshop | maas-workshop namespace | Secret |
+|===
+
+[source,yaml]
+----
+apiVersion: datasciencecluster.opendatahub.io/v1
+kind: DataScienceCluster
+metadata:
+  name: default-dsc
+----
+
+Verify:
+
+[source,bash]
+----
+oc get dsc
+----
 
 == Verify
 

@@ -30,8 +30,29 @@ IAM/OIDC; Bedrock/SageMaker narrativa; patrón OpenShift AI + MaaS en lab.
 * [ ] Completar pasos hands-on o usar demo compartido Plan B
 * [ ] Marcar progreso al final del módulo
 
+== YAML behind the scenes
 
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
 
+| Bedrock/SageMaker (narrativa) | AWS docs | External |
+| MaaS lab | components/openshift-ai-hub/ | DataScienceCluster |
+|===
+
+[source,yaml]
+----
+stringData:
+  OPENAI_API_BASE: "https://maas-rhdp.apps.maas.redhatworkshops.io/v1"
+# Secret openshift-ai-maas-credentials in maas-workshop
+----
+
+Verify:
+
+[source,bash]
+----
+oc get dsc -A
+----
 
 == Verify
 

@@ -1,5 +1,7 @@
 = ROSA Architecture & Benefits
 
+image::images/02-rosa-architecture.png[Workshop illustration,600]
+
 == Nube híbrida — ROSA/AWS vs este lab
 
 [cols="1,1"]
@@ -30,8 +32,35 @@ Control plane gestionado AWS; workers; SLA; mismo operador en on-prem y ROSA.
 * [ ] Completar pasos hands-on o usar demo compartido Plan B
 * [ ] Marcar progreso al final del módulo
 
+== YAML behind the scenes
 
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
 
+| ROSA control plane AWS | docs.redhat.com ROSA | Managed service |
+| Lab hub-spoke | components/acm-hub-spoke/templates/managed-clusters.yaml | ManagedCluster |
+|===
+
+[source,yaml]
+----
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: east
+  labels:
+    region: east
+    vendor: OpenShift
+spec:
+  hubAcceptsClient: true
+----
+
+Verify:
+
+[source,bash]
+----
+oc get managedclusters
+----
 
 == Verify
 

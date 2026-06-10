@@ -1,4 +1,4 @@
-= Seguridad y escala híbrida
+= Security & Scale in Hybrid
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -30,8 +30,31 @@ ACM governance; mesh zero-trust; observabilidad multicluster; FinOps.
 * [ ] Completar pasos hands-on o usar demo compartido Plan B
 * [ ] Marcar progreso al final del módulo
 
+== YAML behind the scenes
 
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
 
+| ACS Central | components/acs-operator/ | Central |
+| Mesh ambient | components/operators/templates/servicemeshoperator3.yaml | Subscription |
+|===
+
+[source,yaml]
+----
+# stackrox namespace must NOT use istio ambient
+metadata:
+  name: stackrox
+  labels:
+    # no istio.io/dataplane-mode: ambient
+----
+
+Verify:
+
+[source,bash]
+----
+oc get central -n stackrox
+----
 
 == Verify
 

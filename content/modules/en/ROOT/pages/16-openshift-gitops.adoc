@@ -33,6 +33,31 @@ Argo CD Applications hub + spoke; ApplicationSet.
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| ApplicationSet | components/acm-hub-spoke/templates/applicationset.yaml | ApplicationSet |
+| Hub apps | templates/component-applications.yaml | Application |
+|===
+
+[source,yaml]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: industrial-edge-spoke
+----
+
+Verify:
+
+[source,bash]
+----
+oc get applicationset -n openshift-gitops
+----
+
 == Verify
 
 [cols="1,2,1"]

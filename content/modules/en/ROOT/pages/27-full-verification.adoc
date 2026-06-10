@@ -33,6 +33,29 @@ Checklist Parte A + B; Plan B demos; progress API summary.
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Registration | components/workshop-registration/ | Deployment |
+| Showroom | components/showroom/ | Deployment |
+| Progress API | POST /api/progress | HTTP |
+|===
+
+[source,yaml]
+----
+# verification/progress-checklist.yaml — user1 east Parte B
+----
+
+Verify:
+
+[source,bash]
+----
+bash scripts/verify-workshop-e2e.sh
+----
+
 == Verify
 
 [cols="1,2,1"]

@@ -1,4 +1,4 @@
-= IA en apps finales
+= AI in End-User Apps
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -32,6 +32,28 @@ line-dashboard; Camel alerts; NeuroFace + IE stack integration.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| line-dashboard | industrial-edge-tst-all | Deployment |
+| Camel | Camel K Integration | Integration |
+|===
+
+[source,yaml]
+----
+# End-user apps consume IE + AI stack on spoke
+----
+
+Verify:
+
+[source,bash]
+----
+oc get deploy -n industrial-edge-tst-all line-dashboard
+----
 
 == Verify
 

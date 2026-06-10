@@ -1,4 +1,4 @@
-= Arquitectura Hybrid Mesh
+= Hybrid Mesh Architecture
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -16,7 +16,7 @@
 
 == Contexto
 
-Hub gateway, Skupper, spoke gateways. YAML: hub-gateway + service-interconnect.
+Hub gateway, Skupper, spoke gateways.
 
 == Show and Tell
 
@@ -32,6 +32,32 @@ Hub gateway, Skupper, spoke gateways. YAML: hub-gateway + service-interconnect.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Hub gateway | components/hub-gateway/templates/httproute.yaml | HTTPRoute |
+| Skupper | components/service-interconnect/ | Site/Connector |
+|===
+
+[source,yaml]
+----
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: industrial-edge-front
+# routes hub ingress to spoke gateways via Skupper
+----
+
+Verify:
+
+[source,bash]
+----
+oc get httproute -A | head
+----
 
 == Verify
 

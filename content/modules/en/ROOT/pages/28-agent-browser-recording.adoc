@@ -33,6 +33,30 @@ Agent Browser YAML en `verification/agent-browser/`. Grabaciones **no** se commi
 == Live lab
 * Showroom: terminal `oc` integrada
 
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Agent Browser | verification/agent-browser/*.yaml | Scripts |
+| Recordings | NOT in Git | Local only |
+|===
+
+[source,yaml]
+----
+# recording-runbook.md — Win+G / OBS, no MP4 in repo
+recordings/
+*.mp4  # gitignored
+----
+
+Verify:
+
+[source,bash]
+----
+test -f showroom-hybrid-mesh-ai/verification/recording-runbook.md
+----
+
 == Verify
 
 [cols="1,2,1"]

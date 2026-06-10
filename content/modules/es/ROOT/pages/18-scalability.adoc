@@ -1,4 +1,4 @@
-= Escalabilidad
+= Scalability HPA Kafka
 
 == Nube híbrida — ROSA/AWS vs este lab
 
@@ -32,6 +32,31 @@ HPA workloads; KafkaNodePool; Kairos policies.
 
 == Live lab
 * Showroom: terminal `oc` integrada
+
+== YAML behind the scenes
+
+[cols="2,3,1"]
+|===
+| UI action | Git source | Kind
+
+| Kafka | components/industrial-edge-tst/templates/kafka-cluster.yaml | Kafka |
+| HPA | workload manifests | HorizontalPodAutoscaler |
+|===
+
+[source,yaml]
+----
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: line-dashboard
+----
+
+Verify:
+
+[source,bash]
+----
+oc get hpa -n industrial-edge-tst-all
+----
 
 == Verify
 

@@ -4,6 +4,8 @@ span.workshop-time-badge[~10 min]
 
 image::images/00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture diagram,600]
 
+== Bienvenida
+
 Bienvenido al **Taller Hybrid Mesh AI** — una experiencia dual que refleja cómo los clientes de Red Hat operan nube híbrida en OpenShift. La Parte A (módulos 01–05) es ejecutiva: estrategia, arquitectura ROSA, seguridad a escala, patrones de integración AWS y casos reales. La Parte B (módulos 10–28) es práctica en una flota hub-spoke RHDP con ACM, GitOps, Industrial Edge, OpenShift AI y NeuroFace.
 
 Regístrate en `https://workshop-registration.{hub_domain}` para recibir tu identidad de lab `pass:[%USER_NAME%]`. El Showroom en `https://showroom-showroom.{hub_domain}` incluye terminal `oc` autenticada para seguir la Parte B sin kubeconfig local. Si el scaffolder falla, usa demos compartidos **Plan B** en Developer Hub → System `hybrid-mesh-shared-demos`.

@@ -1,0 +1,10 @@
+name: en
+title: Hybrid Mesh AI Workshop (English)
+version: ~
+asciidoc:
+  attributes:
+    hub_domain: YOUR_HUB_DOMAIN
+    east_domain: YOUR_EAST_DOMAIN
+    west_domain: YOUR_WEST_DOMAIN
+nav:
+  - modules/ROOT/nav.adoc

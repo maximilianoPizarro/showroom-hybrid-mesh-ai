@@ -1,0 +1,55 @@
+= Generative & Predictive Text
+
+== Nube híbrida — ROSA/AWS vs este lab
+
+[cols="1,1"]
+|===
+| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+
+| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
+| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
+| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
+| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
+| AWS Cost Explorer + tags | Kubecost federated ETL
+| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
+|===
+
+== Contexto
+
+Anomaly alerter; KServe optional; MaaS playground.
+
+== Show and Tell
+
+. Facilitador presenta objetivos del módulo **24**.
+. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
+. Demostrar en Developer Hub / consola / Showroom terminal.
+
+== Your TODO (user `{user_name}`)
+
+* [ ] Leer callout nube híbrida
+* [ ] Completar pasos hands-on o usar demo compartido Plan B
+* [ ] Marcar progreso al final del módulo
+
+== Live lab
+* Showroom: terminal `oc` integrada
+
+== Verify
+
+[cols="1,2,1"]
+|===
+| Check | Action | Expected
+
+| Progress | Guardar checkbox al final | `POST /api/progress` OK
+|===
+
+
+++++
+<div class="workshop-progress" data-module="24-text-ai-predictive">
+  <label><input type="checkbox" data-completed> Completé este módulo</label>
+  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
+  <button type="button" onclick="saveWorkshopProgress('24-text-ai-predictive')">Guardar progreso</button>
+</div>
+++++
+
+
+TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.

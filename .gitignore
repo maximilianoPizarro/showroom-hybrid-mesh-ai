@@ -1,0 +1,8 @@
+# Workshop screen recordings — local only, never commit
+recordings/
+workshop-recordings/
+captures/
+*.mp4
+*.mkv
+*.webm
+*.mov

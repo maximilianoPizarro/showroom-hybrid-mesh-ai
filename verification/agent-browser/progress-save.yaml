@@ -1,0 +1,12 @@
+# Agent Browser — save module progress via Showroom UI
+name: hybrid-mesh-progress-module-12
+steps:
+  - action: navigate
+    url: "https://showroom-showroom.YOUR_HUB_DOMAIN/?USER_NAME=user1&CLUSTER_DOMAIN=YOUR_HUB_DOMAIN#12-software-templates"
+  - action: click
+    selector: "[data-module='12-software-templates'] [data-completed]"
+  - action: click
+    selector: "[data-module='12-software-templates'] button"
+  - action: http_post
+    url: "https://workshop-registration.YOUR_HUB_DOMAIN/api/progress/user1"
+    expect_json_key: "12-software-templates"

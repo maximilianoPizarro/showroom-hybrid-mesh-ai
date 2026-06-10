@@ -1,0 +1,14 @@
+# Agent Browser — NeuroFace health + UI load
+name: hybrid-mesh-neuroface-demo
+steps:
+  - action: navigate
+    url: "https://neuroface.YOUR_HUB_DOMAIN"
+  - action: wait
+    timeout_ms: 8000
+  - action: assert_text
+    selector: "body"
+    value: "NeuroFace"
+    optional: true
+  - action: http_get
+    url: "https://neuroface.YOUR_HUB_DOMAIN/api/health"
+    expect_status: 200

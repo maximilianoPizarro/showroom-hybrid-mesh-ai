@@ -1,0 +1,25 @@
+# E2E progress checklist — user1 east (Parte B)
+workshop_user: user1
+password: Welcome123!
+spoke: east
+
+modules:
+  - id: "00-index"
+    verify: "Showroom loads with USER_NAME=user1"
+  - id: "12-software-templates"
+    verify: "Developer Hub catalog shows hybrid-mesh-shared-demos"
+  - id: "13-deploy-industrial-edge"
+    verify: "Plan B line-dashboard URL on east OR ws-user1 repo in Gitea"
+  - id: "19-network-policies"
+    verify: "oc get networkpolicy -n industrial-edge-tst-all | grep ie-workshop"
+  - id: "25-neuroface"
+    verify: "curl -sk https://neuroface.${HUB_DOMAIN}/api/health"
+  - id: "27-full-verification"
+    verify: "POST /api/progress returns ok for each module"
+
+registration:
+  url: "https://workshop-registration.${HUB_DOMAIN}"
+  admin: "https://workshop-registration.${HUB_DOMAIN}/admin"
+
+showroom:
+  url: "https://showroom-showroom.${HUB_DOMAIN}/?USER_NAME=user1#shared-demos"

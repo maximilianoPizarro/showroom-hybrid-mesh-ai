@@ -1,0 +1,9 @@
+.workshop-progress {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  border-radius: 4px;
+}
+.workshop-lang-bar a {
+  font-weight: 600;
+}

@@ -1,0 +1,23 @@
+---
+site:
+  title: "Hybrid Mesh AI Workshop"
+  url: https://github.com/maximilianoPizarro/showroom-hybrid-mesh-ai
+  start_page: en::00-index.adoc
+
+content:
+  sources:
+    - url: .
+      start_path: content/modules/en
+      branches: HEAD
+    - url: .
+      start_path: content/modules/es
+      branches: HEAD
+
+ui:
+  bundle:
+    url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/patternfly-6/ui-bundle.zip
+    snapshot: true
+  supplemental_files: ./content/supplemental-ui
+
+output:
+  dir: ./www

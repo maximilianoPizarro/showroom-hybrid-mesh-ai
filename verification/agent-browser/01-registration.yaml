@@ -1,0 +1,16 @@
+# Agent Browser — workshop registration → Showroom redirect (user1)
+name: hybrid-mesh-registration-user1
+steps:
+  - action: navigate
+    url: "https://workshop-registration.YOUR_HUB_DOMAIN"
+  - action: fill
+    selector: "input[name=email]"
+    value: "user1@workshop.example.com"
+  - action: click
+    selector: "button[type=submit]"
+  - action: wait
+    timeout_ms: 5000
+  - action: assert_url_contains
+    value: "USER_NAME=user1"
+  - action: assert_url_contains
+    value: "showroom-showroom"

@@ -1,0 +1,55 @@
+= Taller Hybrid Mesh AI
+
+== Nube híbrida — ROSA/AWS vs este lab
+
+[cols="1,1"]
+|===
+| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+
+| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
+| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
+| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
+| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
+| AWS Cost Explorer + tags | Kubecost federated ETL
+| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
+|===
+
+== Contexto
+
+Agenda Parte A (01–05) y Parte B (10–27). Registro: `https://workshop-registration.{hub_domain}`. Showroom live con terminal `oc`.
+
+== Show and Tell
+
+. Facilitador presenta objetivos del módulo **00**.
+. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
+. Enlazar registro y demos Plan B.
+
+== Tu TODO (user `{user_name}`)
+
+* [ ] Leer callout nube híbrida
+* [ ] Registrarse en workshop-registration
+* [ ] Marcar progreso al final del módulo
+
+
+
+
+== Verify
+
+[cols="1,2,1"]
+|===
+| Check | Action | Expected
+
+| Progress | Guardar checkbox al final | `POST /api/progress` OK
+|===
+
+
+++++
+<div class="workshop-progress" data-module="00-index">
+  <label><input type="checkbox" data-completed> Completé este módulo</label>
+  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
+  <button type="button" onclick="saveWorkshopProgress('00-index')">Guardar progreso</button>
+</div>
+++++
+
+
+TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.

@@ -19,5 +19,12 @@ ui:
     snapshot: true
   supplemental_files: ./content/supplemental-ui
 
+asciidoc:
+  attributes:
+    hub_domain: YOUR_HUB_DOMAIN
+    east_domain: YOUR_EAST_DOMAIN
+    west_domain: YOUR_WEST_DOMAIN
+    user_name: pass:[%USER_NAME%]
+
 output:
   dir: ./www

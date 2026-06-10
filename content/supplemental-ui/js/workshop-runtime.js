@@ -3,19 +3,37 @@
     var p = new URLSearchParams(window.location.search);
     return p.get('USER_NAME') || p.get('user_name') || '';
   }
+  function hubDomainFromMeta() {
+    var hub = document.querySelector('meta[name="workshop-hub-domain"]');
+    if (hub && hub.content && hub.content.indexOf('YOUR_HUB') === -1) {
+      return hub.content.replace(/^\./, '');
+    }
+    var host = window.location.hostname || '';
+    var idx = host.indexOf('.apps.');
+    if (idx !== -1) {
+      return host.slice(idx + 1);
+    }
+    return '';
+  }
   function registrationUrl() {
     var m = document.querySelector('meta[name="workshop-registration-url"]');
     if (m && m.content && m.content.indexOf('YOUR_HUB') === -1) {
       return m.content.replace(/\/$/, '');
     }
-    var hub = document.querySelector('meta[name="workshop-hub-domain"]');
-    if (hub && hub.content && hub.content.indexOf('YOUR_HUB') === -1) {
-      return 'https://workshop-registration.' + hub.content.replace(/^\./, '');
-    }
-    return '';
+    var domain = hubDomainFromMeta();
+    return domain ? 'https://workshop-registration.' + domain : '';
+  }
+  function replaceHubPlaceholders(domain) {
+    if (!domain) return;
+    document.querySelectorAll('a[href*="YOUR_HUB_DOMAIN"]').forEach(function (a) {
+      a.href = a.href.replace(/YOUR_HUB_DOMAIN/g, domain);
+    });
+    document.body.innerHTML = document.body.innerHTML.replace(/YOUR_HUB_DOMAIN/g, domain);
   }
   function applyUser() {
     var user = queryUser();
+    var domain = hubDomainFromMeta();
+    replaceHubPlaceholders(domain);
     document.querySelectorAll('.workshop-user-name').forEach(function (el) {
       el.textContent = user || 'guest (register first)';
     });
@@ -32,8 +50,12 @@
         ? null
         : function (e) {
             e.preventDefault();
-            alert('Registration URL not configured. Open OpenShift Console → Hybrid Mesh AI Workshop.');
+            alert('Open OpenShift Console → Hybrid Mesh AI Workshop to register.');
           };
+    }
+    var regMeta = document.querySelector('meta[name="workshop-registration-url"]');
+    if (regMeta && domain && regMeta.content.indexOf('YOUR_HUB') !== -1) {
+      regMeta.content = 'https://workshop-registration.' + domain;
     }
   }
   if (document.readyState === 'loading') {

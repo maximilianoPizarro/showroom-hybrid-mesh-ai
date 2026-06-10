@@ -1,4 +1,4 @@
-# Root descriptor for RHDP Showroom user_data merge (antora-builder reads content/antora.yml).
+# Shared runtime attributes — merged from user_data at build (hub_domain, east/west, user_name).
 name: workshop-runtime
 title: Workshop runtime attributes
 version: ~

@@ -1,37 +1,32 @@
 = LLMs & RAG
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~22 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Large language models and retrieval-augmented generation (RAG) on OpenShift combine centralized inference with domain-specific context from factory docs, runbooks, and sensor logs — without exporting proprietary data to public SaaS. Red Hat Developer Hub Lightspeed assists developers in-catalog; Kairos Console agents answer scaling questions; Continue AI in DevSpaces suggests code inline using the same MaaS backend.
 
-Developer Lightspeed; Kairos agents; Continue AI DevSpaces.
+RAG architecture in hybrid manufacturing typically indexes PDFs and SOPs into a vector store (customer choice) while the LLM runs on OpenShift AI ModelMesh or external MaaS. In this lab, you configure Lightspeed deployment in `components/developer-hub/templates/lightspeed.yaml` and test prompts against the shared MaaS endpoint — observe latency and token usage suitable for shop-floor Wi-Fi constraints.
+
+As `pass:[%USER_NAME%]`, open Developer Hub, trigger Lightspeed on a catalog Component, and compare responses with Continue AI in a DevSpaces workspace. Module 25 extends the same MaaS path to multimodal NeuroFace chat — proving one governance model serves dev, ops, and end-user AI surfaces.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **23**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Trigger Developer Hub Lightspeed on a catalog Component live.
+. Optional DevSpaces Continue AI inline suggestion using MaaS.
+. Discuss RAG index placement (customer choice) vs LLM on OpenShift AI.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Trigger Lightspeed in Developer Hub on a catalog entity
+* [ ] Send one MaaS prompt and note latency/response quality
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -39,20 +34,20 @@ Developer Lightspeed; Kairos agents; Continue AI DevSpaces.
 |===
 | UI action | Git source | Kind
 
-| Lightspeed | components/developer-hub/templates/lightspeed.yaml | Deployment |
-| Kairos agents | components/kairos/ | Console |
+| Lightspeed | components/developer-hub/ | Plugin |
+| MaaS | openshift-ai-hub | Credentials |
 |===
 
 [source,yaml]
 ----
-# MaaS endpoint shared with NeuroFace and Continue AI on spokes
+# Developer Hub → Lightspeed uses MaaS llama-scout-17b
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get deploy -n developer-hub | grep lightspeed
+oc get deploy -n developer-hub 2>/dev/null | grep -i lightspeed || echo 'Lightspeed via RHDH plugin'
 ----
 
 == Verify
@@ -61,17 +56,25 @@ oc get deploy -n developer-hub | grep lightspeed
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="23-llm-rag">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('23-llm-rag')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('23-llm-rag')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="24-text-ai-predictive.html">Next → 24 text ai predictive</a>
+</div>
+++++
+

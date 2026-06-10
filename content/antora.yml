@@ -1,5 +1,6 @@
-name: es
-title: Hybrid Mesh AI Workshop (Español)
+# Root descriptor for RHDP Showroom user_data merge (antora-builder reads content/antora.yml).
+name: workshop-runtime
+title: Workshop runtime attributes
 version: ~
 asciidoc:
   attributes:
@@ -7,5 +8,3 @@ asciidoc:
     east_domain: YOUR_EAST_DOMAIN
     west_domain: YOUR_WEST_DOMAIN
     user_name: pass:[%USER_NAME%]
-nav:
-  - modules/ROOT/nav.adoc

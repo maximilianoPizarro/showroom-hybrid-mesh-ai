@@ -6,5 +6,6 @@ asciidoc:
     hub_domain: YOUR_HUB_DOMAIN
     east_domain: YOUR_EAST_DOMAIN
     west_domain: YOUR_WEST_DOMAIN
+    user_name: pass:[%USER_NAME%]
 nav:
   - modules/ROOT/nav.adoc

@@ -1,7 +1,85 @@
-= Hybrid Mesh AI Workshop
+= Taller Hybrid Mesh AI
 
-image::images/00-index-hybrid-mesh.png[Workshop illustration,600]
+span.workshop-time-badge[~10 min]
 
+image::images/00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture diagram,600]
+
+Bienvenido al **Taller Hybrid Mesh AI** — una experiencia dual que refleja cómo los clientes de Red Hat operan nube híbrida en OpenShift. La Parte A (módulos 01–05) es ejecutiva: estrategia, arquitectura ROSA, seguridad a escala, patrones de integración AWS y casos reales. La Parte B (módulos 10–28) es práctica en una flota hub-spoke RHDP con ACM, GitOps, Industrial Edge, OpenShift AI y NeuroFace.
+
+Regístrate en `https://workshop-registration.{hub_domain}` para recibir tu identidad de lab `pass:[%USER_NAME%]`. El Showroom en `https://showroom-showroom.{hub_domain}` incluye terminal `oc` autenticada para seguir la Parte B sin kubeconfig local. Si el scaffolder falla, usa demos compartidos **Plan B** en Developer Hub → System `hybrid-mesh-shared-demos`.
+== Catálogo de productos Red Hat en este taller
+
+=== OpenShift Container Platform
+* **Advanced Cluster Management (ACM)** — gobernanza de flota, políticas y placement GitOps entre hub y spokes.
+* **OpenShift GitOps** — Applications y ApplicationSets de Argo CD sincronizan componentes del taller desde Git.
+* **Red Hat Advanced Cluster Security (ACS)** — detección de amenazas y cumplimiento sin mesh ambient en `stackrox`.
+* **Kairos** — recomendaciones SmartScalingPolicy para cargas de sensores Industrial Edge.
+OpenShift es el plano de control consistente on-prem, edge o ROSA en AWS.
+
+=== Red Hat Application Foundation
+* **OpenShift Service Mesh (OSSM 3)** — mesh ambient con ztunnel, Kiali y trazas distribuidas para apps IE.
+* **Apache Camel on Kubernetes** — integraciones y pipelines CDC en el demo Industrial Edge.
+* **Connectivity Link / Kuadrant** — APIProduct, AuthPolicy y rate limiting en el gateway del hub.
+Application Foundation entrega conectividad, integración y gestión de APIs como operadores nativos de OpenShift.
+
+=== Red Hat Advanced Developer Suite
+* **Developer Hub (Backstage)** — catálogo, plantillas scaffolder y Topology multicluster.
+* **Software Templates** — golden paths para Industrial Edge, Camel, CNV y workspaces OpenShift AI.
+* **Red Hat Dev Spaces** — IDE en la nube para Kaoto, Continue AI y desarrollo guiado por plantillas.
+Developer Hub convierte OpenShift en plataforma interna de desarrollo con guardrails en cada plantilla.
+
+=== OpenShift AI
+* **DataScienceCluster (DSC)** — operador unificado para notebooks, serving y model mesh en el hub.
+* **Model-as-a-Service (MaaS)** — endpoint LLM compartido por NeuroFace, Lightspeed y DevSpaces.
+* **NeuroFace** — detección objeto/rostro por webcam más chat vía MaaS (no LibreChat).
+OpenShift AI mantiene modelos, pipelines e inferencia en el mismo sustrato Kubernetes que tus aplicaciones.
+
+=== OpenShift Virtualization
+* **Virtualización nativa de contenedores (CNV)** — cargas VM junto a contenedores vía plantilla demo CNV.
+CNV permite lift-and-shift de sistemas legacy de fábrica mientras microservicios nuevos corren en el mismo proyecto OpenShift.
+
+=== Comunidad y terceros
+* **Gitea** — org por usuario `ws-pass:[%USER_NAME%]` almacena repos Git generados para Argo CD.
+* **MinIO** — almacenamiento objeto para ETL federado Kubecost y artefactos de modelos.
+* **Kubecost** — asignaciones FinOps entre primario hub y agentes spoke.
+* **Quay** — registro de contenedores referenciado por GitOps y salidas de plantillas.
+Estos componentes se integran vía operadores OpenShift y GitOps, como en stacks best-of-breed sobre OCP.
+== Prerrequisitos
+
+* Navegador moderno (Chrome o Firefox recomendado) con acceso a webcam para módulos NeuroFace.
+* Acceso a la consola OpenShift del hub — iniciar **Hybrid Mesh AI Workshop** desde el menú Application.
+* Registro en `https://workshop-registration.{hub_domain}` para obtener `pass:[%USER_NAME%]` y redirect al Showroom.
+* Opcional: terminal Showroom integrada para comandos `oc`; no se requiere kubeconfig local para la Parte B.
+== Agenda dual
+
+.Parte A — Ejecutiva (01–05)
+[cols="1,3"]
+|===
+| 01 | Estrategia nube híbrida
+| 02 | Arquitectura y beneficios ROSA
+| 03 | Seguridad y escala híbrida
+| 04 | Integración AWS e IA
+| 05 | Casos reales y roadmap
+|===
+
+.Parte B — Hands-on (10–28)
+[cols="1,3"]
+|===
+| 10–14 | Foundation — ACM, mesh, templates, IE, Kairos
+| 15–18 | Operations — observabilidad, GitOps, mesh, escala
+| 19–21 | Security & FinOps — NP, ACS/Kuadrant, Kubecost
+| 22–26 | Hybrid Mesh AI — ODS, LLM, NeuroFace
+| 27–28 | Verificación y runbook de grabación
+|===
+
+== Registro y demos Plan B
+
+* Registro: `https://workshop-registration.{hub_domain}` → redirect con `USER_NAME=pass:[%USER_NAME%]`
+* Consola OpenShift: **Hybrid Mesh AI Workshop** (ApplicationMenu)
+* Developer Hub → System `hybrid-mesh-shared-demos` (Plan B sin scaffolder)
+* NeuroFace: `https://neuroface.{hub_domain}`
+* API keys Kuadrant: `https://developer-hub.{hub_domain}/kuadrant` + `https://workshop-apis.{hub_domain}/`
+[[#hybrid-callout]]
 == Nube híbrida — ROSA/AWS vs este lab
 
 [cols="1,1"]
@@ -16,58 +94,33 @@ image::images/00-index-hybrid-mesh.png[Workshop illustration,600]
 | Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
 |===
 
-== Agenda dual
+== Panorama
 
-.Parte A — Ejecutiva (01–05)
-[cols="1,3"]
-|===
-| 01 | Hybrid Cloud Strategy
-| 02 | ROSA Architecture & Benefits
-| 03 | Security & Scale in Hybrid
-| 04 | AWS Services & AI Integration
-| 05 | Real Cases & Roadmap
-|===
+Este taller demuestra cómo los clientes de Red Hat unifican estrategia y operaciones en nube híbrida usando OpenShift como plataforma común. Verás los mismos patrones usados con ROSA en AWS aplicados a un lab hub-spoke RHDP con spokes east y west gestionados por ACM.
 
-.Parte B — Hands-on (10–28)
-[cols="1,3"]
-|===
-| 10–14 | Foundation — ACM, mesh, templates, IE, Kairos
-| 15–18 | Operations — observability, GitOps, mesh, scale
-| 19–21 | Security & FinOps — NP, ACS/Kuadrant, Kubecost
-| 22–26 | Hybrid Mesh AI — ODS, LLM, NeuroFace
-| 27–28 | Verification & recording runbook
-|===
+La Parte A enmarca el caso de negocio: modernización, seguridad, FinOps e IA sin lock-in. La Parte B te permite desplegar cargas Industrial Edge, observarlas multicluster, asegurar APIs con Kuadrant y ejecutar inferencia con OpenShift AI y NeuroFace — todo como `pass:[%USER_NAME%]` en un slice de namespace aislado.
 
-== Registro y demos Plan B
-
-* Registro: `https://workshop-registration.{hub_domain}` → redirect Showroom con `USER_NAME=userN`
-* Console OpenShift: **Hybrid Mesh AI Workshop** (ApplicationMenu)
-* Developer Hub → System `hybrid-mesh-shared-demos` (Plan B sin scaffolder)
-* NeuroFace: `https://neuroface.{hub_domain}` (no LibreChat)
-
-== Contexto
-
-Agenda Parte A (01–05) y Parte B (10–28). Registro: `https://workshop-registration.{hub_domain}`. Showroom live con terminal `oc`.
+Usa la tabla callout híbrida de esta página cuando el facilitador compare topología ROSA de producción con lo que ves en la consola. El registro en `https://workshop-registration.{hub_domain}` es obligatorio antes de los módulos hands-on.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **00**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Enlazar registro y demos Plan B.
+. Recorrer agenda dual: Parte A estrategia (01–05) luego Parte B hands-on (10–28).
+. Demo flujo de registro en `https://workshop-registration.{hub_domain}` y redirect Showroom.
+. Señalar demos compartidos Plan B en Developer Hub System `hybrid-mesh-shared-demos`.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Registrarse en workshop-registration
-* [ ] Marcar progreso al final del módulo
+* [ ] Leer la tabla callout nube híbrida
+* [ ] Registrarse en `https://workshop-registration.{hub_domain}` y abrir Showroom
+* [ ] Guardar progreso al final de este módulo
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -80,4 +133,12 @@ Agenda Parte A (01–05) y Parte B (10–28). Registro: `https://workshop-regist
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="01-hybrid-cloud-strategy.html">Siguiente → 01 hybrid cloud strategy</a>
+</div>
+++++
+

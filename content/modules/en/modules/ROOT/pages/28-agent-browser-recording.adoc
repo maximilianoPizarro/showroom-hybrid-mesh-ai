@@ -1,37 +1,32 @@
 = Agent Browser & Recording
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~12 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Agent Browser automations in `verification/agent-browser/` replay workshop flows for CI-style smoke testing — navigating Developer Hub, ACM, and NeuroFace without manual clicks. Recordings support facilitator dry-runs and post-event highlights but are intentionally gitignored (`*.mp4`) per `verification/recording-runbook.md`.
 
-Agent Browser YAML en `verification/agent-browser/`. Grabaciones **no** se commitean — ver runbook.
+Use Win+G or OBS locally to capture demos; never commit MP4 assets to `platform-hub-spoke-config`. Agent Browser YAML scripts document expected selectors and URLs with `{hub_domain}` placeholders for forked environments.
+
+As `pass:[%USER_NAME%]`, optionally execute a read-only Agent Browser script against your assigned namespaces to validate UI regressions before executive sessions. This module closes the workshop loop: human learners, automated verification, and reproducible demo capture on OpenShift.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **28**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Show Agent Browser YAML in `verification/agent-browser/` (read-only).
+. Review recording-runbook.md — no MP4 in Git policy.
+. Optional: run one smoke script headlessly if environment allows.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Read `verification/recording-runbook.md` (no MP4 in Git)
+* [ ] Browse one Agent Browser YAML under `verification/agent-browser/`
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -39,22 +34,21 @@ Agent Browser YAML en `verification/agent-browser/`. Grabaciones **no** se commi
 |===
 | UI action | Git source | Kind
 
-| Agent Browser | verification/agent-browser/*.yaml | Scripts |
-| Recordings | NOT in Git | Local only |
+| Agent Browser | verification/agent-browser/*.yaml | YAML flows |
+| Runbook | verification/recording-runbook.md | Doc |
 |===
 
 [source,yaml]
 ----
-# recording-runbook.md — Win+G / OBS, no MP4 in repo
-recordings/
-*.mp4  # gitignored
+# Recordings stay local — *.mp4 gitignored
+# Naming: YYYY-MM-DD-userN-module-slug.mp4
 ----
 
 Verify:
 
 [source,bash]
 ----
-test -f showroom-hybrid-mesh-ai/verification/recording-runbook.md
+test -f verification/recording-runbook.md && test -d verification/agent-browser
 ----
 
 == Verify
@@ -63,17 +57,19 @@ test -f showroom-hybrid-mesh-ai/verification/recording-runbook.md
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="28-agent-browser-recording">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('28-agent-browser-recording')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('28-agent-browser-recording')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+

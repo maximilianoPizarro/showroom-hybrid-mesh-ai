@@ -1,37 +1,32 @@
 = OpenShift GitOps
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~15 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+OpenShift GitOps instala Argo CD como operador gestionado e integra con ApplicationSets ACM para propagar manifiestos hub-to-spoke con destinos seguros por política. Los equipos de plataforma commitean estado deseado a Git; controladores reconcilian drift — la misma disciplina GitOps que clientes ROSA usan al combinar clusters ROSA con repos hub ACM.
 
-Argo CD Applications hub + spoke; ApplicationSet.
+En este lab, Applications hub bajo `templates/component-applications.yaml` despliegan servicios compartidos mientras Applications spoke (por ejemplo Industrial Edge) sincronizan desde repos Gitea de usuario creados en el módulo 13. ApplicationSet `industrial-edge-spoke` demuestra generadores matrix apuntando a labels east/west.
+
+Inspecciona estado de sync en UI Argo CD como `pass:[%USER_NAME%]` e identifica qué revisión de repo disparó tu despliegue. GitOps es la columna operativa: cada módulo de producto (mesh, ACS, IA) resuelve en YAML rastreado en `platform-hub-spoke-config`.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **16**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. UI Argo CD: Application hub vs fuentes Application spoke usuario.
+. Destacar generador ApplicationSet matrix east/west.
+. Mostrar sync wave o estado health para app IE.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Encontrar tu Application IE en Argo CD y anotar estado sync
+* [ ] Identificar fuente repo Git (Gitea usuario vs repo plataforma hub)
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -58,13 +53,13 @@ Verify:
 oc get applicationset -n openshift-gitops
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -77,4 +72,12 @@ oc get applicationset -n openshift-gitops
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="17-service-mesh.html">Siguiente → 17 service mesh</a>
+</div>
+++++
+

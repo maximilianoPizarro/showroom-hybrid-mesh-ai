@@ -1,36 +1,30 @@
-= Hybrid Cloud Strategy
+= Estrategia nube híbrida
 
-image::images/01-hybrid-strategy.png[Workshop illustration,600]
+span.workshop-time-badge[~10 min]
 
-== Nube híbrida — ROSA/AWS vs este lab
+image::images/01-hybrid-strategy.png[Hybrid cloud strategy overview,600]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+La estrategia de nube híbrida comienza con la ubicación de cargas: sistemas de fábrica sensibles a latencia en el edge, analytics e IA en regiones cloud, y gobernanza central desde un hub OpenShift. Red Hat OpenShift Container Platform ofrece una API Kubernetes y modelo de operadores únicos on-prem, edge o ROSA en AWS.
 
-Modernizar apps, escalar híbrido, automatización/seguridad, time-to-market.
+En este lab, ACM en el hub representa esa capa de gobernanza — políticas, federación de observabilidad y placement GitOps hacia spokes east y west como un cliente hacia clusters ROSA y on-prem. No aprendes diapositivas abstractas; cada módulo de la Parte B refuerza un pilar estratégico: automatización, seguridad, velocidad de desarrollo o preparación para IA.
+
+Los ejecutivos deben notar que OpenShift evita replatformear dos veces: microservicios, VMs (CNV) e pipelines de IA comparten RBAC, red y CI/CD. Al registrarte como `pass:[%USER_NAME%]`, tu ruta hands-on refleja cómo los equipos de plataforma incorporan squads en producción.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **01**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Enmarcar cuatro pilares estratégicos: modernizar, asegurar, automatizar, monetizar IA en OpenShift.
+. Mapear cada pilar a un número de módulo Parte B en la tabla agenda.
+. Preguntar split híbrido actual de asistentes (ROSA vs on-prem vs edge).
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Mapear cargas de tu organización a placement hub vs spoke vs ROSA
+* [ ] Identificar qué módulo Parte B aborda tu pilar prioritario
+* [ ] Guardar progreso al final de este módulo
 
 == YAML behind the scenes
 
@@ -38,14 +32,14 @@ Modernizar apps, escalar híbrido, automatización/seguridad, time-to-market.
 |===
 | UI action | Git source | Kind
 
-| Estrategia ejecutiva | docs/workshop/parte-a/ | Narrative |
+| Executive narrative | docs/workshop/parte-a/ | Narrative |
 | Fleet ACM | components/acm-hub-spoke/ | ManagedCluster |
 |===
 
 [source,yaml]
 ----
-# Executive track — no CR required on cluster for Parte A
-# Reference: https://docs.redhat.com/en/documentation/rosa/
+# Executive track — reference ROSA docs
+# https://docs.redhat.com/en/documentation/rosa/
 ----
 
 Verify:
@@ -55,13 +49,13 @@ Verify:
 oc get managedclusters 2>/dev/null | head -5
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -74,4 +68,12 @@ oc get managedclusters 2>/dev/null | head -5
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="02-rosa-architecture.html">Siguiente → 02 rosa architecture</a>
+</div>
+++++
+

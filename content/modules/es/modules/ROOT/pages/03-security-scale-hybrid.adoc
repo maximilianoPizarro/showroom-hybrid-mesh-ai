@@ -1,34 +1,28 @@
-= Security & Scale in Hybrid
+= Seguridad y escala híbrida
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~12 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+Seguridad y escala en entornos OpenShift híbridos requieren defensa en profundidad: federación de identidad, segmentación de red, detección de amenazas en runtime y cumplimiento basado en políticas en toda la flota. Red Hat Advanced Cluster Security (ACS) centraliza gestión de vulnerabilidades y políticas runtime mientras OpenShift Service Mesh añade conectividad zero-trust entre microservicios.
 
-ACM governance; mesh zero-trust; observabilidad multicluster; FinOps.
+En este lab, ACS Central corre en el hub con agentes SecuredCluster en spokes — el namespace `stackrox` evita deliberadamente labels de mesh ambient para no interferir con sensores ACS. Los demos NetworkPolicy del módulo 19 usan OVN en spokes, análogos a security groups más NP Kubernetes en ROSA. AuthPolicy Kuadrant en el gateway del hub muestra autenticación y rate limiting antes de backends Industrial Edge.
+
+Escalar flotas híbridas implica automatizar placement y capacidad: políticas ACM, Kairos SmartScalingPolicy, buffering Kafka y HPA manejan picos de sensores sin colas manuales. Como `pass:[%USER_NAME%]`, observarás estos controles en los módulos 14 y 18 en cargas que simulan ráfagas de telemetría de fábrica.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **03**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Destacar coexistencia ACS + mesh (`stackrox` sin labels ambient).
+. Preview NetworkPolicy (19) y Kuadrant (20) como capas de defensa.
+. Discutir eventos de escala edge fábrica y workflow aprobación Kairos.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Listar tres capas de seguridad que verificarás en Parte B (ACS, NP, Kuadrant)
+* [ ] Anotar por qué `stackrox` evita mesh ambient en este lab
+* [ ] Guardar progreso al final de este módulo
 
 == YAML behind the scenes
 
@@ -37,16 +31,14 @@ ACM governance; mesh zero-trust; observabilidad multicluster; FinOps.
 | UI action | Git source | Kind
 
 | ACS Central | components/acs-operator/ | Central |
-| Mesh ambient | components/operators/templates/servicemeshoperator3.yaml | Subscription |
+| Mesh ambient | components/servicemeshoperator3/ | Subscription |
 |===
 
 [source,yaml]
 ----
-# stackrox namespace must NOT use istio ambient
+# stackrox namespace must NOT use istio ambient label
 metadata:
   name: stackrox
-  labels:
-    # no istio.io/dataplane-mode: ambient
 ----
 
 Verify:
@@ -56,13 +48,13 @@ Verify:
 oc get central -n stackrox
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -75,4 +67,12 @@ oc get central -n stackrox
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="04-aws-ai-integration.html">Siguiente → 04 aws ai integration</a>
+</div>
+++++
+

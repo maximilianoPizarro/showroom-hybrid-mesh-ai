@@ -1,37 +1,32 @@
-= Generative & Predictive Text
+= Texto gen y predictivo
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~18 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+La IA generativa asiste operadores con resúmenes en lenguaje natural de alarmas; la IA predictiva pronostica fallos antes del downtime. En OpenShift, el despliegue ie-anomaly-alerter observa métricas Prometheus de sensores Industrial Edge y emite alertas cuando umbrales estadísticos se violan — un patrón predictivo ligero sin KServe obligatorio en esta pista del taller.
 
-Anomaly alerter; KServe optional; MaaS playground.
+Recursos opcionales KServe InferenceService en el hub demuestran model serving completo para modelos scikit-learn u ONNX entrenados en workspaces DS. Endpoints playground MaaS permiten a `pass:[%USER_NAME%]` probar prompts generativos para postmortems de incidentes: "Resume lag Kafka y violaciones ACS de la última hora para mi namespace."
+
+Conecta alertas predictivas al módulo 26 de apps finales: rutas Camel pueden distribuir eventos de anomalía a overlays line-dashboard y notificaciones NeuroFace. Esto cierra el loop telemetría → detección ML/estadística → respuesta humana + IA generativa en el mismo footprint OpenShift.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **24**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Mostrar ie-anomaly-alerter disparando en violación umbral en métricas.
+. Prompt MaaS: resumen generativo de alertas IE recientes.
+. Mencionar ruta KServe opcional para modelos custom.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Confirmar despliegue ie-anomaly-alerter corriendo en tu spoke
+* [ ] Generar un prompt resumen de alarma vía playground MaaS
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -40,28 +35,28 @@ Anomaly alerter; KServe optional; MaaS playground.
 | UI action | Git source | Kind
 
 | Anomaly alerter | components/ie-anomaly-alerter/ | Deployment |
-| KServe optional | openshift-ai-hub | InferenceService |
+| Kafka metrics | industrial-edge-tst-all | Topic |
 |===
 
 [source,yaml]
 ----
-# ie-anomaly-alerter watches sensor metrics
+# ie-anomaly-alerter correlates sensor anomalies
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get deploy -n industrial-edge-tst-all | grep anomaly
+oc get deploy -n industrial-edge-tst-all | grep -i anomaly
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -74,4 +69,12 @@ oc get deploy -n industrial-edge-tst-all | grep anomaly
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="25-neuroface.html">Siguiente → 25 neuroface</a>
+</div>
+++++
+

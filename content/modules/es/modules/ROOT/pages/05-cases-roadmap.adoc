@@ -1,34 +1,28 @@
-= Real Cases & Roadmap
+= Casos reales y roadmap
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~12 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+**Caso industrial — IoT de manufactura de precisión:** Un proveedor automotriz global desplegó OpenShift en tres sitios edge de fábrica más un hub ROSA para analytics. Sensores de vibración emiten 12.000 eventos/minuto por línea; el downtime no planificado costaba 47.000 USD/hora. Tras migrar a Industrial Edge en OpenShift con Kafka, integraciones Camel y políticas runtime ACS, el tiempo medio de detección de anomalías bajó de 18 minutos a 90 segundos, y el escalado aprobado por Kairos redujo nodos edge sobreaprovisionados un 34%.
 
-Industrial Edge IoT; Hybrid Mesh AI roadmap; transición a Parte B hands-on.
+El roadmap de ese cliente llevó a OpenShift AI para modelos de mantenimiento predictivo y plantillas Developer Hub para que cada planta scaffoldeara pipelines conformes sin shadow IT. Este taller reproduce ese recorrido a escala lab: módulos 13–18 despliegan IE en spokes east/west, módulos 22–26 añaden MaaS y NeuroFace, módulo 21 añade chargeback Kubecost por namespace.
+
+Tu siguiente paso es verificar registro Parte B — confirma que `pass:[%USER_NAME%]` funciona en Showroom, luego continúa al módulo 10 para visibilidad de flota ACM. Los demos compartidos Plan B siguen disponibles si tu slot de scaffold no está libre.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **05**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Presentar métricas caso IoT automotriz (12k eventos/min, 47k USD/hr downtime, 34% ahorro nodos).
+. Dibujar timeline roadmap cliente sobre números de módulo del taller.
+. Transicionar sala a Parte B: verificar login `pass:[%USER_NAME%]` antes del módulo 10.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Escribir una métrica del caso manufactura relevante para tu industria
+* [ ] Confirmar login Showroom como `pass:[%USER_NAME%]` antes del módulo 10
+* [ ] Guardar progreso al final de este módulo
 
 == YAML behind the scenes
 
@@ -36,29 +30,30 @@ Industrial Edge IoT; Hybrid Mesh AI roadmap; transición a Parte B hands-on.
 |===
 | UI action | Git source | Kind
 
-| Industrial Edge | components/industrial-edge-tst/ | Kafka + dashboard |
-| Workshop | components/showroom/ | Showroom |
+| Industrial Edge | components/industrial-edge-tst/ | Deployments |
+| Showroom | components/showroom/ | Deployment |
+| Registration | components/workshop-registration/ | Deployment |
 |===
 
 [source,yaml]
 ----
-# Transition to Parte B — register at workshop-registration
+# Transition to Parte B after registration
 ----
 
 Verify:
 
 [source,bash]
 ----
-curl -sk -o /dev/null -w '%{http_code}' https://workshop-registration.${HUB_DOMAIN}/api/health
+curl -sk -o /dev/null -w '%{http_code}' https://workshop-registration.{hub_domain}/api/health
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -71,4 +66,12 @@ curl -sk -o /dev/null -w '%{http_code}' https://workshop-registration.${HUB_DOMA
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="10-acm-multicluster.html">Siguiente → 10 acm multicluster</a>
+</div>
+++++
+

@@ -1,37 +1,32 @@
 = AI in End-User Apps
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~20 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+End-user applications — operator dashboards, mobile alerts, MES integrations — consume AI insights where work happens, not only in data science notebooks. line-dashboard on the east spoke visualizes Kafka sensor streams; Camel integrations route anomaly events; NeuroFace and MaaS summaries embed into the same UX `pass:[%USER_NAME%]` sees in production rollouts.
 
-line-dashboard; Camel alerts; NeuroFace + IE stack integration.
+This module integrates modules 13–25: verify line-dashboard displays live IE data, trigger ie-anomaly-alerter thresholds, and optionally embed a NeuroFace iframe or chat link for contextual AI help. Camel K Integrations from templates `demo-camel-kaoto-east` and `demo-camel-cdc-east` show event-driven patterns factory teams deploy on OpenShift alongside OT systems.
+
+Platform teams win when AI is invisible infrastructure: OpenShift AI, MaaS, and NeuroFace become services catalog entries — app squads bind them through Developer Hub dependencies without rebuilding ML pipelines per plant.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **26**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. line-dashboard live data + anomaly overlay or alert badge.
+. Optional Camel integration status in Topology.
+. Story: operator sees telemetry, prediction, and AI help in one UX.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Verify line-dashboard shows live IE telemetry
+* [ ] Connect one anomaly or AI insight to operator workflow
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -40,12 +35,12 @@ line-dashboard; Camel alerts; NeuroFace + IE stack integration.
 | UI action | Git source | Kind
 
 | line-dashboard | industrial-edge-tst-all | Deployment |
-| Camel | Camel K Integration | Integration |
+| Camel K | industrial-edge-pipelines | Integration |
 |===
 
 [source,yaml]
 ----
-# End-user apps consume IE + AI stack on spoke
+# End-user apps on spoke consume IE + AI stack
 ----
 
 Verify:
@@ -61,17 +56,25 @@ oc get deploy -n industrial-edge-tst-all line-dashboard
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="26-ai-end-user-apps">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('26-ai-end-user-apps')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('26-ai-end-user-apps')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="27-full-verification.html">Next → 27 full verification</a>
+</div>
+++++
+

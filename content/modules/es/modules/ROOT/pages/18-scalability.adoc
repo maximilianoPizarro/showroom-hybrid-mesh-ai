@@ -1,37 +1,32 @@
-= Scalability HPA Kafka
+= Escalabilidad
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~15 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+La escalabilidad en OpenShift abarca autoscaling horizontal de pods, escalado de particiones Kafka y recomendaciones a nivel nodo de Kairos. HPA v2 observa CPU, memoria o métricas custom de adaptadores Prometheus; KafkaNodePool expande capacidad de brokers cuando topics IE saturan lag de consumidores.
 
-HPA workloads; KafkaNodePool; Kairos policies.
+En este lab, line-dashboard y despliegues IE relacionados incluyen HPAs en manifiestos bajo `components/industrial-edge-tst/`. Dispara carga vía scripts del taller o tasas simuladas de sensores, luego observa pods escalar en Topology como `pass:[%USER_NAME%]`. El escalado Kafka complementa HPA absorbiendo ráfagas de eventos antes de que pods rechacen tráfico.
+
+Este módulo completa la historia de capacidad iniciada en el módulo 14: Kairos propone nodos, HPA añade pods, Kafka bufferiza eventos — juntos reflejan cómo un cliente ROSA escala edge de fábrica en picos de producción sin intervención manual del admin de cluster.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **18**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Observar HPA escalar pods line-dashboard bajo carga simulada.
+. Mostrar consumer lag Kafka recuperándose tras capacidad buffer.
+. Conectar capas pod-scale (HPA) vs node-scale (Kairos).
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Revisar estado HPA para line-dashboard u otro despliegue IE
+* [ ] Observar consumer lag Kafka bajo carga o tráfico simulado
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -39,8 +34,8 @@ HPA workloads; KafkaNodePool; Kairos policies.
 |===
 | UI action | Git source | Kind
 
-| Kafka | components/industrial-edge-tst/templates/kafka-cluster.yaml | Kafka |
-| HPA | workload manifests | HorizontalPodAutoscaler |
+| Kafka | components/industrial-edge-tst/ | KafkaNodePool |
+| HPA | industrial-edge manifests | HorizontalPodAutoscaler |
 |===
 
 [source,yaml]
@@ -58,13 +53,13 @@ Verify:
 oc get hpa -n industrial-edge-tst-all
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -77,4 +72,12 @@ oc get hpa -n industrial-edge-tst-all
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="19-network-policies.html">Siguiente → 19 network policies</a>
+</div>
+++++
+

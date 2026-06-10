@@ -1,37 +1,32 @@
 = Deploy Industrial Edge Apps
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~25 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Industrial Edge on OpenShift combines event streaming, integration, and visualization for factory and IoT scenarios. Apache Kafka buffers high-volume sensor topics; Camel K integrations transform and route events; line-dashboard provides operators a live view — all deployed via GitOps to spoke clusters after Developer Hub scaffolding.
 
-Scaffold IE east/west; Gitea `ws-{user_name}`; Argo CD Application on spoke.
+Run the Industrial Edge template as `pass:[%USER_NAME%]` and confirm your Gitea organization `ws-pass:[%USER_NAME%]` contains the generated repository. Argo CD on east syncs the Application into namespace `industrial-edge-tst-all` (or your user-scoped equivalent). Plan B demo `demo-industrial-edge-east` offers the same topology if scaffolding is skipped.
+
+This module is the operational heart of Part B: later observability, scaling, network policy, anomaly detection, and AI modules all assume IE workloads are running on your spoke. Verify the line-dashboard route and Kafka topics before proceeding to Kairos scaling.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **13**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Confirm Gitea org `ws-pass:[%USER_NAME%]` and Argo CD sync on east.
+. Open line-dashboard route and Kafka Console topics.
+. Offer Plan B `demo-industrial-edge-east` if scaffold fails.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Scaffold IE or open Plan B `demo-industrial-edge-east`
+* [ ] Verify Gitea org `ws-pass:[%USER_NAME%]` and Argo CD sync Healthy
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -45,7 +40,6 @@ Scaffold IE east/west; Gitea `ws-{user_name}`; Argo CD Application on spoke.
 
 [source,yaml]
 ----
-# Argo CD Application on spoke after scaffold
 spec:
   destination:
     namespace: industrial-edge-tst-all
@@ -55,7 +49,7 @@ Verify:
 
 [source,bash]
 ----
-oc get applications -n openshift-gitops | grep industrial
+oc get applications -n openshift-gitops | grep -E 'industrial|east-spoke'
 ----
 
 == Verify
@@ -64,17 +58,25 @@ oc get applications -n openshift-gitops | grep industrial
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="13-deploy-industrial-edge">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('13-deploy-industrial-edge')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('13-deploy-industrial-edge')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="14-kairos-scaling.html">Next → 14 kairos scaling</a>
+</div>
+++++
+

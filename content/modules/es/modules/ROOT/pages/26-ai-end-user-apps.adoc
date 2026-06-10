@@ -1,37 +1,32 @@
-= AI in End-User Apps
+= IA en apps finales
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~20 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+Las aplicaciones finales — dashboards de operador, alertas móviles, integraciones MES — consumen insights de IA donde ocurre el trabajo, no solo en notebooks de data science. line-dashboard en spoke east visualiza streams Kafka de sensores; integraciones Camel enrutan eventos de anomalía; NeuroFace y resúmenes MaaS se embeben en la misma UX que `pass:[%USER_NAME%]` ve en rollouts de producción.
 
-line-dashboard; Camel alerts; NeuroFace + IE stack integration.
+Este módulo integra módulos 13–25: verifica que line-dashboard muestra datos IE en vivo, dispara umbrales ie-anomaly-alerter y opcionalmente embebe iframe NeuroFace o enlace chat para ayuda IA contextual. Integraciones Camel K de plantillas `demo-camel-kaoto-east` y `demo-camel-cdc-east` muestran patrones event-driven que equipos de fábrica despliegan en OpenShift junto a sistemas OT.
+
+Los equipos de plataforma ganan cuando la IA es infraestructura invisible: OpenShift AI, MaaS y NeuroFace son entradas de catálogo — squads de app los vinculan vía dependencias Developer Hub sin reconstruir pipelines ML por planta.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **26**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Datos en vivo line-dashboard + overlay anomalía o badge alerta.
+. Opcional estado integración Camel en Topology.
+. Historia: operador ve telemetría, predicción y ayuda IA en una UX.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Verificar que line-dashboard muestra telemetría IE en vivo
+* [ ] Conectar un insight de anomalía o IA al flujo del operador
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -40,12 +35,12 @@ line-dashboard; Camel alerts; NeuroFace + IE stack integration.
 | UI action | Git source | Kind
 
 | line-dashboard | industrial-edge-tst-all | Deployment |
-| Camel | Camel K Integration | Integration |
+| Camel K | industrial-edge-pipelines | Integration |
 |===
 
 [source,yaml]
 ----
-# End-user apps consume IE + AI stack on spoke
+# End-user apps on spoke consume IE + AI stack
 ----
 
 Verify:
@@ -55,13 +50,13 @@ Verify:
 oc get deploy -n industrial-edge-tst-all line-dashboard
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -74,4 +69,12 @@ oc get deploy -n industrial-edge-tst-all line-dashboard
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="27-full-verification.html">Siguiente → 27 full verification</a>
+</div>
+++++
+

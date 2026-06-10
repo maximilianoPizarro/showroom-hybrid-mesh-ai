@@ -1,39 +1,34 @@
 = Face & Object AI + Chat
 
-image::images/25-neuroface-dashboard.png[Workshop illustration,600]
+span.workshop-time-badge[~25 min]
 
-== Nube híbrida — ROSA/AWS vs este lab
+image::images/25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,600]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+NeuroFace delivers computer vision and conversational AI on OpenShift without bundling LibreChat: browser webcam feeds YOLO object detection and face recognition pipelines while `/api/chat` proxies to the shared MaaS LLM (llama-scout-17b). OVMS ModelMesh serves vision models locally; chat stays centralized for token governance — the hybrid AI pattern manufacturing customers request for quality inspection lines.
 
-Webcam; YOLO + face detection; `/api/chat` → MaaS. URL: `https://neuroface.{hub_domain}`.
+Access NeuroFace at `https://neuroface.{hub_domain}` after registering as `pass:[%USER_NAME%]`. Helm values in `components/neuroface/` disable LiteLLM and external LibreChat dependencies; model endpoint and modelName align with maas-workshop credentials. Plan B catalog entity `demo-neuroface` maps to the same route if you skip scaffolding.
+
+In the lab, test webcam inference latency on spoke network paths and ask chat questions about detected objects — simulating a shop-floor assistant that explains vision alerts in natural language. Module 26 wires these signals into Industrial Edge dashboards for unified operator experience.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **25**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Open `https://neuroface.{hub_domain}` — webcam object detection live.
+. Send chat question about detected object; show MaaS backend (not LibreChat).
+. Highlight OVMS local vision + centralized chat governance.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Open `https://neuroface.{hub_domain}` and test webcam detection
+* [ ] Ask `/api/chat` one question about a detected object
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -41,9 +36,8 @@ Webcam; YOLO + face detection; `/api/chat` → MaaS. URL: `https://neuroface.{hu
 |===
 | UI action | Git source | Kind
 
-| NeuroFace UI | components/neuroface/ | Helm wrapper |
-| MaaS chat | neuroface.chat.modelEndpoint | Config |
-| No LibreChat | — | Decision |
+| NeuroFace | components/neuroface/ | Helm chart |
+| MaaS chat | neuroface.chat | Config |
 |===
 
 [source,yaml]
@@ -51,10 +45,6 @@ Webcam; YOLO + face detection; `/api/chat` → MaaS. URL: `https://neuroface.{hu
 chat:
   enabled: true
   modelEndpoint: "https://maas-rhdp.apps.maas.redhatworkshops.io/v1"
-  modelName: "llama-scout-17b"
-ovms:
-  modelmesh:
-    enabled: true
 litellm:
   enabled: false
 ----
@@ -63,7 +53,7 @@ Verify:
 
 [source,bash]
 ----
-curl -sk https://neuroface.${HUB_DOMAIN}/api/health
+curl -sk -o /dev/null -w '%{http_code}' https://neuroface.{hub_domain}/api/health
 ----
 
 == Verify
@@ -72,17 +62,25 @@ curl -sk https://neuroface.${HUB_DOMAIN}/api/health
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="25-neuroface">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('25-neuroface')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('25-neuroface')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="26-ai-end-user-apps.html">Next → 26 ai end user apps</a>
+</div>
+++++
+

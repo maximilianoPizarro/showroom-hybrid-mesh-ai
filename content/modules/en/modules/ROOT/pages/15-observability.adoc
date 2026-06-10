@@ -1,37 +1,32 @@
 = Metrics Logging Dashboards
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~18 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+OpenShift observability spans cluster metrics, logs, traces, and custom dashboards federated across ACM-managed clusters. Red Hat builds on Prometheus, Loki or Elasticsearch patterns, Grafana, and OpenTelemetry Instrumentation CRs so application teams inherit platform-wide collectors without sidecar sprawl on every pod.
 
-Grafana multicluster; OTEL; Kafka Console.
+This workshop deploys multicluster Grafana dashboards on the hub, OpenTelemetry collectors via `components/opentelemetry/`, and Kafka Console for IE topic inspection. As `pass:[%USER_NAME%]`, filter dashboards to your namespace and correlate latency spikes with mesh traces in module 17.
+
+Executives should connect this module to module 21 (Kubecost): metrics prove SLO compliance while cost metrics prove efficiency — both required for hybrid FinOps. Use Showroom `oc` to list `GrafanaDashboard` CRs and confirm IE workloads emit scrape targets.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **15**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Open multicluster Grafana dashboard filtered to IE namespace.
+. Show Kafka Console and a sample OTEL trace (or metrics gap if trace pending).
+. Link metrics SLO story to upcoming Kubecost module.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Open a multicluster Grafana dashboard for your IE namespace
+* [ ] Inspect Kafka Console topics for sensor data
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -39,21 +34,21 @@ Grafana multicluster; OTEL; Kafka Console.
 |===
 | UI action | Git source | Kind
 
-| Grafana | components/grafana-dashboards/ | ConfigMap |
+| Grafana dashboards | components/grafana-dashboards/ | ConfigMap |
 | OTEL | components/opentelemetry/ | Instrumentation |
+| Kafka Console | components/kafka-console/ | Deployment |
 |===
 
 [source,yaml]
 ----
-# Grafana multicluster dashboards on hub
-# Kafka Console: components/kafka-console/
+# Open Grafana from ConsoleLink; filter by cluster label
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get grafanadashboard -A | head
+oc get grafanadashboard -A 2>/dev/null | head -5; oc get route -n openshift-cluster-observability-operator 2>/dev/null | head -3
 ----
 
 == Verify
@@ -62,17 +57,25 @@ oc get grafanadashboard -A | head
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="15-observability">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('15-observability')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('15-observability')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="16-openshift-gitops.html">Next → 16 openshift gitops</a>
+</div>
+++++
+

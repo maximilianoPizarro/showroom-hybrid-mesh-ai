@@ -1,37 +1,32 @@
 = Worker Scaling with Kairos
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~20 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Kairos Community on OpenShift analyzes workload metrics and recommends node or machine set adjustments through SmartScalingPolicy resources — bridging the gap between Kubernetes HPA (pod-level) and infrastructure provisioning (cluster-level). Operators approve recommendations in Kairos Console, preserving human oversight for factory edge sites where sudden scale-down is risky.
 
-SmartScalingPolicy sensor-scan; approve flow en Kairos Console.
+In this lab, the sensor-scan policy watches Industrial Edge metrics and proposes scaling when scan rates spike — analogous to ROSA MachineSet autoscaling triggered by custom CloudWatch metrics. Pair this module with module 18 (HPA + Kafka) to show two layers: pods scale horizontally while Kairos evaluates node capacity.
+
+Open Kairos Console from the OpenShift menu, locate pending recommendations tied to `pass:[%USER_NAME%]` namespaces, and approve or discuss trade-offs with the facilitator. Run `oc get smartscalingpolicy -A` to correlate CRDs with UI actions.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **14**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Open Kairos Console and walk through a pending SmartScalingPolicy recommendation.
+. Correlate UI action with `oc get smartscalingpolicy -A`.
+. Discuss human-in-the-loop approval for factory edge.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Open Kairos Console and review one SmartScalingPolicy
+* [ ] Run `oc get smartscalingpolicy -A` from Showroom terminal
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -40,7 +35,7 @@ SmartScalingPolicy sensor-scan; approve flow en Kairos Console.
 | UI action | Git source | Kind
 
 | Kairos Console | components/kairos/templates/console-rbac.yaml | ClusterRole |
-| Sensor scan SSP | components/kairos/templates/sensor-scan-policies.yaml | SmartScalingPolicy |
+| SmartScalingPolicy | components/kairos/templates/sensor-scan-policies.yaml | SmartScalingPolicy |
 |===
 
 [source,yaml]
@@ -49,7 +44,6 @@ apiVersion: kairos.io/v1alpha1
 kind: SmartScalingPolicy
 metadata:
   name: scan-policy-machine-sensor
-# approve scaling in Kairos Console
 ----
 
 Verify:
@@ -65,17 +59,25 @@ oc get smartscalingpolicy -A
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="14-kairos-scaling">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('14-kairos-scaling')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('14-kairos-scaling')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="15-observability.html">Next → 15 observability</a>
+</div>
+++++
+

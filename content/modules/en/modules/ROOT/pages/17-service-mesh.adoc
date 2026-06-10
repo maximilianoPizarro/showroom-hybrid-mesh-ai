@@ -1,37 +1,32 @@
 = OpenShift Service Mesh
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~18 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+OpenShift Service Mesh 3 introduces ambient mode: a shared ztunnel layer handles mTLS and L4 telemetry without injecting sidecars into every workload pod by default. Kiali visualizes traffic graphs; mesh config enables distributed tracing for Industrial Edge microservices traversing east spoke namespaces.
 
-OSSM3 ambient; Kiali; ztunnel metrics.
+In this workshop, OSSM3 is subscribed via `components/operators/templates/servicemeshoperator3.yaml` and configured for ambient dataplane mode on IE namespaces — excluding `stackrox` where ACS requires direct network visibility. Compare this to ROSA deployments using App Mesh or third-party meshes: OpenShift keeps mesh CRDs and policies native to the platform lifecycle.
+
+Use Kiali from the OpenShift console to view live traffic for `pass:[%USER_NAME%]` deployments and validate mTLS between line-dashboard and Kafka-facing services. Module 17 pairs with observability dashboards from module 15 for end-to-end latency analysis.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **17**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Open Kiali graph for IE namespace — point out ambient ztunnel edges.
+. Note `stackrox` exclusion from ambient mesh.
+. Optional: show mTLS lock icon on service edges.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Open Kiali and view traffic for your IE deployments
+* [ ] Confirm ambient mesh enabled on IE namespace (not stackrox)
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -39,24 +34,22 @@ OSSM3 ambient; Kiali; ztunnel metrics.
 |===
 | UI action | Git source | Kind
 
-| OSSM3 | components/operators/templates/servicemeshoperator3.yaml | Subscription |
+| OSSM3 | components/servicemeshoperator3/ | Subscription |
 | Kiali | components/kiali/ | Kiali CR |
 |===
 
 [source,yaml]
 ----
-spec:
-  values:
-    meshConfig:
-      defaultConfig:
-        tracing: {}
+metadata:
+  labels:
+    istio.io/dataplane-mode: ambient
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get servicemeshcontrolplane -n istio-system
+oc get istio -n istio-system; oc get kiali -A
 ----
 
 == Verify
@@ -65,17 +58,25 @@ oc get servicemeshcontrolplane -n istio-system
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="17-service-mesh">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('17-service-mesh')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('17-service-mesh')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="18-scalability.html">Next → 18 scalability</a>
+</div>
+++++
+

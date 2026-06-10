@@ -1,36 +1,30 @@
-= ROSA Architecture & Benefits
+= ROSA arquitectura y beneficios
 
-image::images/02-rosa-architecture.png[Workshop illustration,600]
+span.workshop-time-badge[~12 min]
 
-== Nube híbrida — ROSA/AWS vs este lab
+image::images/02-rosa-architecture.png[ROSA and OpenShift hub-spoke architecture,600]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+Red Hat OpenShift Service on AWS (ROSA) ofrece un plano de control totalmente gestionado en tu cuenta AWS mientras Red Hat maneja upgrades, parches de seguridad y operaciones SRE. Los workers escalan vía MachineSets; el ingress integra Route 53 y ALB; IAM y STS habilitan acceso seguro a servicios cloud — la arquitectura de referencia para clientes híbridos que estandarizan OpenShift.
 
-Control plane gestionado AWS; workers; SLA; mismo operador en on-prem y ROSA.
+El layout hub-spoke de este taller mapea a conceptos ROSA: el hub es tu cluster de gestión de flota (como un hub ACM en ROSA), los spokes son clusters regionales o edge que importan vía ManagedCluster. Inspeccionarás objetos `ManagedCluster` y enlaces GitOpsCluster en el módulo 10 — los mismos CRDs que un cliente ROSA usa al unir clusters edge de fábrica a un hub de gobernanza.
+
+Entender la arquitectura ROSA ayuda a explicar límites de SLA: Red Hat gestiona el plano de control; tú el sizing de workers, red y datos. En el lab, Kairos y HPA en spokes simulan decisiones de autoscaling ROSA sin facturación AWS, preparándote para módulos FinOps posteriores.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **02**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Pizarra split plano de control ROSA vs responsabilidad workers.
+. Mostrar lista ManagedCluster ACM como equivalente lab de unir ROSA a hub de flota.
+. Mencionar límites SLA y soporte Red Hat vs ops cliente.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Esbozar responsabilidades plano control ROSA vs workers para tu cuenta
+* [ ] Preview ManagedCluster ACM en lectura previa módulo 10
+* [ ] Guardar progreso al final de este módulo
 
 == YAML behind the scenes
 
@@ -38,8 +32,9 @@ Control plane gestionado AWS; workers; SLA; mismo operador en on-prem y ROSA.
 |===
 | UI action | Git source | Kind
 
-| ROSA control plane AWS | docs.redhat.com ROSA | Managed service |
+| ROSA control plane | docs.redhat.com ROSA | Managed service |
 | Lab hub-spoke | components/acm-hub-spoke/templates/managed-clusters.yaml | ManagedCluster |
+| West spoke | same chart | ManagedCluster west |
 |===
 
 [source,yaml]
@@ -50,7 +45,15 @@ metadata:
   name: east
   labels:
     region: east
-    vendor: OpenShift
+spec:
+  hubAcceptsClient: true
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: west
+  labels:
+    region: west
 spec:
   hubAcceptsClient: true
 ----
@@ -62,13 +65,13 @@ Verify:
 oc get managedclusters
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -81,4 +84,12 @@ oc get managedclusters
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="03-security-scale-hybrid.html">Siguiente → 03 security scale hybrid</a>
+</div>
+++++
+

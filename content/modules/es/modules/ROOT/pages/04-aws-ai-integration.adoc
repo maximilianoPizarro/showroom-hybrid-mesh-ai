@@ -1,34 +1,28 @@
-= AWS Services & AI Integration
+= Integración AWS e IA
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~10 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+Los clientes AWS suelen combinar ROSA con servicios nativos de IA — Amazon Bedrock para modelos foundation, SageMaker para pipelines de entrenamiento e IAM OIDC para identidad segura de cargas. El enfoque híbrido de Red Hat mantiene inferencia y pipelines de datos en OpenShift AI permitiendo integración opcional con servicios AWS vía credenciales y endpoints externos donde la política lo permita.
 
-IAM/OIDC; Bedrock/SageMaker narrativa; patrón OpenShift AI + MaaS en lab.
+Este taller sustituye intencionalmente OpenShift AI más Model-as-a-Service (MaaS) por Bedrock/SageMaker para que experimentes un patrón portable: `DataScienceCluster` en el hub, endpoint LLM compartido y apps consumidoras (NeuroFace, Developer Hub Lightspeed) en spokes. El secret `openshift-ai-maas-credentials` y la URL base MaaS reflejan cómo los equipos centralizan acceso a modelos en lugar de incrustar API keys en cada despliegue.
+
+Desde el módulo 22 se activa este stack hands-on. Los ejecutivos deben reconocer que OpenShift AI en ROSA u on-prem evita reescribir aplicaciones cuando cambian precios o reglas de residencia — la capa de serving nativa Kubernetes se mueve con el cluster.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **04**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Contrastar Bedrock/SageMaker con OpenShift AI + MaaS en este lab.
+. Mostrar ubicación conceptual del secret MaaS (sin valores de secret).
+. Explicar inferencia portable cuando cambian residencia o precios AWS.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Comparar tus servicios IA AWS con patrón lab OpenShift AI + MaaS
+* [ ] Localizar módulo 22 para setup hands-on DSC y MaaS
+* [ ] Guardar progreso al final de este módulo
 
 == YAML behind the scenes
 
@@ -36,7 +30,7 @@ IAM/OIDC; Bedrock/SageMaker narrativa; patrón OpenShift AI + MaaS en lab.
 |===
 | UI action | Git source | Kind
 
-| Bedrock/SageMaker (narrativa) | AWS docs | External |
+| Bedrock/SageMaker (narrative) | AWS docs | External |
 | MaaS lab | components/openshift-ai-hub/ | DataScienceCluster |
 |===
 
@@ -54,13 +48,13 @@ Verify:
 oc get dsc -A
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -73,4 +67,12 @@ oc get dsc -A
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="05-cases-roadmap.html">Siguiente → 05 cases roadmap</a>
+</div>
+++++
+

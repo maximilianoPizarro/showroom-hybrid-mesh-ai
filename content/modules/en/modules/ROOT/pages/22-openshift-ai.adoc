@@ -1,37 +1,32 @@
 = OpenShift AI Workshop
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~20 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+OpenShift AI unifies data science workflows on OpenShift through the DataScienceCluster operator: notebooks, pipeline runtime, model serving, and ModelMesh for multi-framework inference. On the workshop hub, `default-dsc` enables DS projects, workbenches, and serving runtimes consumed by downstream modules.
 
-DSC hub; maas-workshop; demo-ods-workspace.
+Model-as-a-Service (MaaS) provides a shared OpenAI-compatible endpoint (`OPENAI_API_BASE`) stored in `openshift-ai-maas-credentials` — NeuroFace, Developer Hub Lightspeed, and DevSpaces Continue AI all consume this endpoint instead of public cloud keys. Plan B demo `demo-ods-workspace` opens a pre-provisioned DS workspace if your template quota is exhausted.
+
+As `pass:[%USER_NAME%]`, confirm `oc get dsc` reports Ready and locate the MaaS URL in the maas-workshop namespace. This hub-spoke AI pattern mirrors ROSA customers who centralize inference on a governance cluster while edge spokes run lightweight consumers.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **22**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. `oc get dsc` — confirm Ready; open DS workspace or Plan B demo-ods-workspace.
+. Show MaaS endpoint URL in maas-workshop (no keys on screen).
+. Explain hub-centralized inference, spoke consumers pattern.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Run `oc get dsc` and confirm DataScienceCluster Ready
+* [ ] Open DS workspace or Plan B `demo-ods-workspace`
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -39,8 +34,8 @@ DSC hub; maas-workshop; demo-ods-workspace.
 |===
 | UI action | Git source | Kind
 
-| DSC | components/openshift-ai-hub/templates/all.yaml | DataScienceCluster |
-| MaaS workshop | maas-workshop namespace | Secret |
+| DSC | components/openshift-ai-hub/ | DataScienceCluster |
+| MaaS | maas-workshop namespace | Secret |
 |===
 
 [source,yaml]
@@ -55,7 +50,7 @@ Verify:
 
 [source,bash]
 ----
-oc get dsc
+oc get dsc; oc get ns maas-workshop demo-ods-workspace 2>/dev/null
 ----
 
 == Verify
@@ -64,17 +59,25 @@ oc get dsc
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="22-openshift-ai">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('22-openshift-ai')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('22-openshift-ai')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="23-llm-rag.html">Next → 23 llm rag</a>
+</div>
+++++
+

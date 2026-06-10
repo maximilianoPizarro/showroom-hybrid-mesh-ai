@@ -1,37 +1,32 @@
-= Metrics Logging Dashboards
+= Métricas y logging
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~18 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+La observabilidad OpenShift abarca métricas de cluster, logs, trazas y dashboards custom federados en clusters gestionados por ACM. Red Hat se apoya en Prometheus, patrones Loki o Elasticsearch, Grafana e Instrumentation CRs OpenTelemetry para que equipos de aplicación hereden collectors de plataforma sin sidecar sprawl en cada pod.
 
-Grafana multicluster; OTEL; Kafka Console.
+Este taller despliega dashboards Grafana multicluster en el hub, collectors OpenTelemetry vía `components/opentelemetry/` y Kafka Console para inspección de topics IE. Como `pass:[%USER_NAME%]`, filtra dashboards a tu namespace y correlaciona picos de latencia con trazas mesh en el módulo 17.
+
+Los ejecutivos deben conectar este módulo con el 21 (Kubecost): métricas demuestran cumplimiento SLO mientras métricas de costo demuestran eficiencia — ambos requeridos para FinOps híbrido. Usa `oc` en Showroom para listar CRs `GrafanaDashboard` y confirmar que cargas IE emiten targets de scrape.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **15**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Abrir dashboard Grafana multicluster filtrado a namespace IE.
+. Mostrar Kafka Console y traza OTEL de ejemplo (o gap métricas si trace pendiente).
+. Enlazar historia SLO métricas al próximo módulo Kubecost.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Abrir dashboard Grafana multicluster para tu namespace IE
+* [ ] Inspeccionar topics Kafka Console para datos de sensores
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -39,30 +34,30 @@ Grafana multicluster; OTEL; Kafka Console.
 |===
 | UI action | Git source | Kind
 
-| Grafana | components/grafana-dashboards/ | ConfigMap |
+| Grafana dashboards | components/grafana-dashboards/ | ConfigMap |
 | OTEL | components/opentelemetry/ | Instrumentation |
+| Kafka Console | components/kafka-console/ | Deployment |
 |===
 
 [source,yaml]
 ----
-# Grafana multicluster dashboards on hub
-# Kafka Console: components/kafka-console/
+# Open Grafana from ConsoleLink; filter by cluster label
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get grafanadashboard -A | head
+oc get grafanadashboard -A 2>/dev/null | head -5; oc get route -n openshift-cluster-observability-operator 2>/dev/null | head -3
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -75,4 +70,12 @@ oc get grafanadashboard -A | head
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="16-openshift-gitops.html">Siguiente → 16 openshift gitops</a>
+</div>
+++++
+

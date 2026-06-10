@@ -1,37 +1,32 @@
-= Deploy Industrial Edge Apps
+= Deploy Industrial Edge
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~25 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+Industrial Edge en OpenShift combina streaming de eventos, integración y visualización para escenarios de fábrica e IoT. Apache Kafka bufferiza topics de sensores de alto volumen; integraciones Camel K transforman y enrutan eventos; line-dashboard ofrece vista en vivo a operadores — todo desplegado vía GitOps a spokes tras scaffolding Developer Hub.
 
-Scaffold IE east/west; Gitea `ws-{user_name}`; Argo CD Application on spoke.
+Ejecuta la plantilla Industrial Edge como `pass:[%USER_NAME%]` y confirma que tu organización Gitea `ws-pass:[%USER_NAME%]` contiene el repositorio generado. Argo CD en east sincroniza la Application al namespace `industrial-edge-tst-all` (o equivalente con alcance de usuario). El demo Plan B `demo-industrial-edge-east` ofrece la misma topología si se omite scaffolding.
+
+Este módulo es el corazón operativo de la Parte B: observabilidad, escalado, network policy, detección de anomalías e IA posteriores asumen cargas IE en tu spoke. Verifica la ruta line-dashboard y topics Kafka antes de continuar a escalado Kairos.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **13**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Confirmar org Gitea `ws-pass:[%USER_NAME%]` y sync Argo CD en east.
+. Abrir ruta line-dashboard y topics Kafka Console.
+. Ofrecer Plan B `demo-industrial-edge-east` si falla scaffold.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Scaffoldear IE o abrir Plan B `demo-industrial-edge-east`
+* [ ] Verificar org Gitea `ws-pass:[%USER_NAME%]` y sync Argo CD Healthy
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -45,7 +40,6 @@ Scaffold IE east/west; Gitea `ws-{user_name}`; Argo CD Application on spoke.
 
 [source,yaml]
 ----
-# Argo CD Application on spoke after scaffold
 spec:
   destination:
     namespace: industrial-edge-tst-all
@@ -55,16 +49,16 @@ Verify:
 
 [source,bash]
 ----
-oc get applications -n openshift-gitops | grep industrial
+oc get applications -n openshift-gitops | grep -E 'industrial|east-spoke'
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -77,4 +71,12 @@ oc get applications -n openshift-gitops | grep industrial
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="14-kairos-scaling.html">Siguiente → 14 kairos scaling</a>
+</div>
+++++
+

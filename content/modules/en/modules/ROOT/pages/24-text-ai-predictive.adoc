@@ -1,37 +1,32 @@
 = Generative & Predictive Text
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~18 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Generative AI assists operators with natural-language summaries of alarms; predictive AI forecasts failures before downtime. On OpenShift, the ie-anomaly-alerter deployment watches Prometheus metrics from Industrial Edge sensors and emits alerts when statistical thresholds breach — a lightweight predictive pattern without mandatory KServe for this workshop track.
 
-Anomaly alerter; KServe optional; MaaS playground.
+Optional KServe InferenceService resources on the hub demonstrate full model serving for custom scikit-learn or ONNX models trained in DS workspaces. MaaS playground endpoints let `pass:[%USER_NAME%]` test generative prompts for incident postmortems: "Summarize last hour Kafka lag and ACS violations for my namespace."
+
+Connect predictive alerts to module 26 end-user apps: Camel routes can fan out anomaly events to line-dashboard overlays and NeuroFace notifications. This closes the loop from telemetry → ML/statistical detection → human + generative AI response on the same OpenShift footprint.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **24**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Show ie-anomaly-alerter firing on threshold breach in metrics.
+. MaaS prompt: generative summary of recent IE alerts.
+. Mention optional KServe path for custom models.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Confirm ie-anomaly-alerter deployment running on your spoke
+* [ ] Generate one alarm summary prompt via MaaS playground
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -40,19 +35,19 @@ Anomaly alerter; KServe optional; MaaS playground.
 | UI action | Git source | Kind
 
 | Anomaly alerter | components/ie-anomaly-alerter/ | Deployment |
-| KServe optional | openshift-ai-hub | InferenceService |
+| Kafka metrics | industrial-edge-tst-all | Topic |
 |===
 
 [source,yaml]
 ----
-# ie-anomaly-alerter watches sensor metrics
+# ie-anomaly-alerter correlates sensor anomalies
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get deploy -n industrial-edge-tst-all | grep anomaly
+oc get deploy -n industrial-edge-tst-all | grep -i anomaly
 ----
 
 == Verify
@@ -61,17 +56,25 @@ oc get deploy -n industrial-edge-tst-all | grep anomaly
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="24-text-ai-predictive">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('24-text-ai-predictive')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('24-text-ai-predictive')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="25-neuroface.html">Next → 25 neuroface</a>
+</div>
+++++
+

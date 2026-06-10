@@ -1,34 +1,28 @@
 = AWS Services & AI Integration
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~10 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+AWS customers often pair ROSA with native AI services — Amazon Bedrock for foundation models, SageMaker for training pipelines, and IAM OIDC for secure workload identity. Red Hat's hybrid approach keeps inference and data pipelines on OpenShift AI while still allowing optional AWS service integration via credentials and external endpoints where policy permits.
 
-IAM/OIDC; Bedrock/SageMaker narrativa; patrón OpenShift AI + MaaS en lab.
+This workshop intentionally substitutes OpenShift AI plus Model-as-a-Service (MaaS) for Bedrock/SageMaker so you experience a portable pattern: a `DataScienceCluster` on the hub, shared LLM endpoint, and consumer apps (NeuroFace, Developer Hub Lightspeed) on spokes. The secret `openshift-ai-maas-credentials` and MaaS base URL mirror how production teams centralize model access instead of embedding API keys in every deployment.
+
+Module 22 onward activates this stack hands-on. Executives should recognize that OpenShift AI on ROSA or on-prem avoids rewriting applications when cloud AI pricing or residency rules change — the Kubernetes-native serving layer moves with the cluster.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **04**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Contrast Bedrock/SageMaker with OpenShift AI + MaaS in this lab.
+. Show MaaS credential secret location conceptually (no secret values).
+. Explain portable inference when AWS residency or pricing changes.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Compare your AWS AI services with OpenShift AI + MaaS lab pattern
+* [ ] Locate module 22 for hands-on DSC and MaaS setup
+* [ ] Save progress at the end of this module
 
 == YAML behind the scenes
 
@@ -36,7 +30,7 @@ IAM/OIDC; Bedrock/SageMaker narrativa; patrón OpenShift AI + MaaS en lab.
 |===
 | UI action | Git source | Kind
 
-| Bedrock/SageMaker (narrativa) | AWS docs | External |
+| Bedrock/SageMaker (narrative) | AWS docs | External |
 | MaaS lab | components/openshift-ai-hub/ | DataScienceCluster |
 |===
 
@@ -60,17 +54,25 @@ oc get dsc -A
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="04-aws-ai-integration">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('04-aws-ai-integration')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('04-aws-ai-integration')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="05-cases-roadmap.html">Next → 05 cases roadmap</a>
+</div>
+++++
+

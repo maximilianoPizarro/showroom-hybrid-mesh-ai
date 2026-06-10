@@ -1,37 +1,32 @@
 = Full Stack Verification
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~15 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Full stack verification confirms Part A narrative comprehension and Part B hands-on outcomes for `pass:[%USER_NAME%]`: registration redirect, Showroom terminal `oc`, ACM spoke visibility, IE sync, Kubecost allocations, DSC Ready, NeuroFace health, and progress API persistence.
 
-Checklist Parte A + B; Plan B demos; progress API summary.
+Run `bash scripts/verify-workshop-e2e.sh` from the repo or follow the checklist in `verification/progress-checklist.yaml`. The workshop registration service at `https://workshop-registration.{hub_domain}` and Showroom progress endpoint (`POST /api/progress`) must accept your module completions — facilitators use aggregate progress to pace the room.
+
+Treat this module as your graduation gate: if any check fails, revisit the linked module or switch to Plan B shared demos documented in Developer Hub System `hybrid-mesh-shared-demos`.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **27**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Walk checklist items and run verify script excerpt live.
+. Confirm progress API save from Showroom checkbox UI.
+. Celebrate completion; share Plan B paths for any failed checks.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Complete checklist in `verification/progress-checklist.yaml`
+* [ ] Run or review output of `scripts/verify-workshop-e2e.sh`
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -39,21 +34,21 @@ Checklist Parte A + B; Plan B demos; progress API summary.
 |===
 | UI action | Git source | Kind
 
-| Registration | components/workshop-registration/ | Deployment |
-| Showroom | components/showroom/ | Deployment |
-| Progress API | POST /api/progress | HTTP |
+| Progress API | workshop-registration | POST /api/progress |
+| E2E script | scripts/verify-workshop-e2e.sh | Shell |
+| Checklist | verification/progress-checklist.yaml | YAML |
 |===
 
 [source,yaml]
 ----
-# verification/progress-checklist.yaml — user1 east Parte B
+# Checks: registration, showroom, ACM clusters, IE deploy, NeuroFace route
 ----
 
 Verify:
 
 [source,bash]
 ----
-bash scripts/verify-workshop-e2e.sh
+bash scripts/verify-workshop-e2e.sh 2>/dev/null || oc get managedclusters
 ----
 
 == Verify
@@ -62,17 +57,25 @@ bash scripts/verify-workshop-e2e.sh
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="27-full-verification">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('27-full-verification')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('27-full-verification')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="28-agent-browser-recording.html">Next → 28 agent browser recording</a>
+</div>
+++++
+

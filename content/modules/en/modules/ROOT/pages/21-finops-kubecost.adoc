@@ -1,37 +1,32 @@
 = FinOps with Kubecost
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~15 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Kubecost on OpenShift allocates Kubernetes spend by namespace, label, and cluster — federating data from hub primary and spoke agents into MinIO-backed ETL storage. Platform teams charge back factory edge tenants and compare ROSA node costs versus on-prem depreciation using consistent Kubernetes unit economics.
 
-Kubecost hub primary + spoke agents; allocations by namespace.
+In this lab, Kubecost deploys from `components/kubecost/` with agents on east/west reporting to the hub primary. Filter allocations to namespaces owned by `pass:[%USER_NAME%]` and correlate idle capacity with Kairos recommendations from module 14.
+
+FinOps closes the executive loop from module 01: hybrid strategy without cost visibility fails in CFO review. Kubecost complements AWS Cost Explorer tags on ROSA by exposing pod-level waste inside the cluster boundary.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **21**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Kubecost UI: allocation by namespace for `pass:[%USER_NAME%]`.
+. Show federated cluster dropdown (hub + spokes).
+. Compare idle cost with Kairos over-provision narrative.
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Open Kubecost and filter allocations to your namespace
+* [ ] Compare hub vs spoke cluster costs in federated view
+* [ ] Save progress at the end of this module
 
 == Live lab
-* Showroom: terminal `oc` integrada
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
 == YAML behind the scenes
 
@@ -39,20 +34,20 @@ Kubecost hub primary + spoke agents; allocations by namespace.
 |===
 | UI action | Git source | Kind
 
-| Kubecost hub | components/kubecost/templates/all.yaml | Kubecost |
-| Federated ETL | MinIO bucket kubecost | Object storage |
+| Kubecost | components/kubecost/ | CostAnalyzer |
+| MinIO ETL | components/industrial-edge-minio/ | Bucket |
 |===
 
 [source,yaml]
 ----
-# Kubecost primary on hub, agents on spokes
+# Free tier: single-cluster Kubecost on hub
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get deploy -n kubecost
+oc get deploy -n kubecost kubecost-cost-analyzer
 ----
 
 == Verify
@@ -61,17 +56,25 @@ oc get deploy -n kubecost
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="21-finops-kubecost">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('21-finops-kubecost')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('21-finops-kubecost')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="22-openshift-ai.html">Next → 22 openshift ai</a>
+</div>
+++++
+

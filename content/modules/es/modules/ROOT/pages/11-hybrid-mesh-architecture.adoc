@@ -1,37 +1,34 @@
-= Hybrid Mesh Architecture
+= Arquitectura Hybrid Mesh
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~15 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+image::images/11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,600]
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-== Contexto
+== Panorama
 
-Hub gateway, Skupper, spoke gateways.
+La arquitectura hybrid mesh conecta redes de aplicación entre clusters sin aplanar VPCs ni exponer endpoints kube-apiserver públicamente. Red Hat Service Interconnect (Skupper) con HTTPRoutes Gateway API en el hub crea una red lógica de aplicación: frontends en el hub enrutan a servicios spoke por enlaces cifrados.
+
+En este taller, el gateway del hub termina tráfico externo y reenvía a frontends Industrial Edge en east/west vía Sites y Connectors Skupper en `components/service-interconnect/` y `components/hub-gateway/`. Es el análogo lab a ALB ROSA más conectividad privada a redes de fábrica — mismas rutas y políticas OpenShift, distinto underlay.
+
+Observa recursos `HTTPRoute` y estado Skupper en la consola; el módulo 13 despliega apps IE alcanzables por esta malla. Entender esta capa explica por qué las políticas Kuadrant se adjuntan en el gateway del hub en el módulo 20.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **11**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Trazar URL externa → HTTPRoute hub → Skupper → frontend IE spoke.
+. Mostrar estado site/connector Skupper en consola.
+. Relacionar con narrativa ALB ROSA + private link de Parte A.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Inspeccionar HTTPRoute hub y recursos Skupper en consola
+* [ ] Trazar cómo tráfico externo alcanza frontends IE en spokes
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -48,24 +45,24 @@ Hub gateway, Skupper, spoke gateways.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: industrial-edge-front
-# routes hub ingress to spoke gateways via Skupper
+  name: industrial-edge-lb
+# hub ingress → spoke gateways via Skupper
 ----
 
 Verify:
 
 [source,bash]
 ----
-oc get httproute -A | head
+oc get httproute -n hub-gateway-system
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -78,4 +75,12 @@ oc get httproute -A | head
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="12-software-templates.html">Siguiente → 12 software templates</a>
+</div>
+++++
+

@@ -1,37 +1,34 @@
-= Multicluster Fleet & ACM
+= Flota multicluster y ACM
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~15 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+image::images/10-acm-multicluster.png[ACM multicluster fleet management,600]
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-== Contexto
+== Panorama
 
-ACM Clusters; ManagedCluster; GitOpsCluster.
+Red Hat Advanced Cluster Management for Kubernetes convierte OpenShift en plano de control de flota: importar spokes, aplicar políticas, visualizar salud y delegar GitOps con RBAC consistente. ManagedCluster y agentes Klusterlet reflejan cómo clusters ROSA y on-prem se unen al hub de gobernanza sin compartir kube-admin ampliamente.
+
+En este lab, abre ACM Clusters en el hub y localiza east y west — cada spoke se bootstrapeó desde manifiestos GitOps de `components/acm-hub-spoke/`. Como `pass:[%USER_NAME%]`, tus cargas aterrizan en east por defecto; Topology en Developer Hub usa APIs OCM para mostrar el mismo grafo que ACM.
+
+Este módulo establece el modelo mental para cada ejercicio Parte B: el hub posee ingress, política, agregación FinOps y planos de control IA; los spokes ejecutan Industrial Edge y namespaces con alcance de usuario. Verifica con `oc get managedclusters` desde la terminal Showroom.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **10**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Abrir UI ACM Clusters — identificar spokes east y west.
+. Ejecutar `oc get managedclusters` en terminal Showroom en vivo.
+. Mostrar Topology Developer Hub reflejando grafo OCM.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Ejecutar `oc get managedclusters` e identificar east/west
+* [ ] Abrir UI ACM Clusters y Topology Developer Hub para la misma flota
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -39,7 +36,7 @@ ACM Clusters; ManagedCluster; GitOpsCluster.
 |===
 | UI action | Git source | Kind
 
-| ACM Clusters UI | components/acm-hub-spoke/templates/managed-clusters.yaml | ManagedCluster |
+| ACM Clusters UI | components/acm-hub-spoke/ | ManagedCluster |
 | GitOpsCluster | components/acm-hub-spoke/templates/gitops-cluster.yaml | GitOpsCluster |
 |===
 
@@ -57,16 +54,16 @@ Verify:
 
 [source,bash]
 ----
-oc get managedclusters
+oc get managedclusters && oc get gitopscluster -A
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -79,4 +76,12 @@ oc get managedclusters
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="11-hybrid-mesh-architecture.html">Siguiente → 11 hybrid mesh architecture</a>
+</div>
+++++
+

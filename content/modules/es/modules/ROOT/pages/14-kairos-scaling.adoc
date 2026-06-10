@@ -1,37 +1,32 @@
-= Worker Scaling with Kairos
+= Escalado con Kairos
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~20 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+Kairos Community en OpenShift analiza métricas de cargas y recomienda ajustes de nodos o machine sets vía SmartScalingPolicy — cerrando la brecha entre HPA Kubernetes (nivel pod) y aprovisionamiento de infraestructura (nivel cluster). Los operadores aprueban recomendaciones en Kairos Console, preservando supervisión humana en edge de fábrica donde un scale-down brusco es riesgoso.
 
-SmartScalingPolicy sensor-scan; approve flow en Kairos Console.
+En este lab, la política sensor-scan observa métricas Industrial Edge y propone escalado cuando las tasas de scan disparan — análogo a autoscaling MachineSet ROSA por métricas CloudWatch custom. Combina este módulo con el 18 (HPA + Kafka) para mostrar dos capas: pods escalan horizontalmente mientras Kairos evalúa capacidad de nodos.
+
+Abre Kairos Console desde el menú OpenShift, localiza recomendaciones pendientes en namespaces de `pass:[%USER_NAME%]` y aprueba o debate trade-offs con el facilitador. Ejecuta `oc get smartscalingpolicy -A` para correlacionar CRDs con acciones UI.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **14**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Abrir Kairos Console y recorrer recomendación SmartScalingPolicy pendiente.
+. Correlacionar acción UI con `oc get smartscalingpolicy -A`.
+. Discutir aprobación human-in-the-loop para edge de fábrica.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Abrir Kairos Console y revisar una SmartScalingPolicy
+* [ ] Ejecutar `oc get smartscalingpolicy -A` desde terminal Showroom
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -40,7 +35,7 @@ SmartScalingPolicy sensor-scan; approve flow en Kairos Console.
 | UI action | Git source | Kind
 
 | Kairos Console | components/kairos/templates/console-rbac.yaml | ClusterRole |
-| Sensor scan SSP | components/kairos/templates/sensor-scan-policies.yaml | SmartScalingPolicy |
+| SmartScalingPolicy | components/kairos/templates/sensor-scan-policies.yaml | SmartScalingPolicy |
 |===
 
 [source,yaml]
@@ -49,7 +44,6 @@ apiVersion: kairos.io/v1alpha1
 kind: SmartScalingPolicy
 metadata:
   name: scan-policy-machine-sensor
-# approve scaling in Kairos Console
 ----
 
 Verify:
@@ -59,13 +53,13 @@ Verify:
 oc get smartscalingpolicy -A
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -78,4 +72,12 @@ oc get smartscalingpolicy -A
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="15-observability.html">Siguiente → 15 observability</a>
+</div>
+++++
+

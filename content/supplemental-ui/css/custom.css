@@ -1,9 +1,59 @@
+.workshop-rhds-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0 0.25rem;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0.5rem;
+}
+.workshop-rhds-brand img {
+  height: 36px;
+  width: auto;
+}
+.workshop-rhds-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #151515;
+}
+.workshop-lang-bar {
+  margin: 0.5rem 0 1rem;
+  text-align: right;
+  font-size: 0.9rem;
+}
+.workshop-lang-bar a {
+  font-weight: 600;
+}
+.workshop-user-badge {
+  color: #6a6e73;
+}
+.workshop-user-badge--active {
+  color: #151515;
+}
 .workshop-progress {
   border: 1px solid #ccc;
   padding: 1rem;
   margin-top: 1.5rem;
   border-radius: 4px;
 }
-.workshop-lang-bar a {
+.workshop-progress-status {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+}
+.workshop-progress-status.is-success {
+  color: #3e8635;
+}
+.workshop-progress-status.is-error {
+  color: #c9190b;
+}
+.workshop-next-nav {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+.workshop-next-nav a {
   font-weight: 600;
+}
+.workshop-time-badge {
+  color: #6a6e73;
+  font-size: 0.95rem;
 }

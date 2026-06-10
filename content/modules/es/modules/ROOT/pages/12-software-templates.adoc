@@ -1,37 +1,32 @@
-= Software Templates
+= Plantillas software
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~18 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+Las plantillas software de Red Hat Developer Hub codifican golden paths: acciones scaffolder parametrizadas crean repos Git, registran entidades de catálogo y disparan Applications Argo CD con guardrails (namespaces, quotas, network policies) ya cableados. Los equipos de plataforma publican plantillas una vez; los desarrolladores se autoatienden vía Create sin tickets de infraestructura.
 
-Developer Hub Create; golden paths. Plan B: demos compartidos en catálogo.
+Este taller incluye plantillas para Industrial Edge, Camel Kaoto, API products, workspaces OpenShift AI, VMs CNV y NeuroFace. Si el scaffold de `pass:[%USER_NAME%]` falla por quota o timing de Gitea, cambia a Plan B — Developer Hub System `hybrid-mesh-shared-demos` expone Components pre-desplegados con las mismas URLs y entradas Topology.
+
+Las plantillas son el puente entre estrategia ejecutiva (módulo 01) y despliegues spoke (módulo 13). Inspecciona `docs/assets/backstage/software-templates/` y ConfigMaps de catálogo para ver cómo OpenShift GitOps recoge repos generados automáticamente.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **12**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Flujo Create Developer Hub en vivo para plantilla Industrial Edge.
+. Mostrar fuente YAML catálogo y patrón URL repo Gitea generado.
+. Demostrar entidad fallback Plan B en `hybrid-mesh-shared-demos`.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Explorar lista plantillas Create en Developer Hub
+* [ ] Localizar System Plan B `hybrid-mesh-shared-demos` como fallback
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -54,16 +49,16 @@ Verify:
 
 [source,bash]
 ----
-oc get configmap developer-hub-catalog-demos -n developer-hub
+oc get configmap developer-hub-catalog-demos -n developer-hub 2>/dev/null || oc get application -n openshift-gitops | grep workshop
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -76,4 +71,12 @@ oc get configmap developer-hub-catalog-demos -n developer-hub
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="13-deploy-industrial-edge.html">Siguiente → 13 deploy industrial edge</a>
+</div>
+++++
+

@@ -1,36 +1,30 @@
 = Hybrid Cloud Strategy
 
-image::images/01-hybrid-strategy.png[Workshop illustration,600]
+span.workshop-time-badge[~10 min]
 
-== Nube híbrida — ROSA/AWS vs este lab
+image::images/01-hybrid-strategy.png[Hybrid cloud strategy overview,600]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Overview
 
-== Contexto
+Hybrid cloud strategy starts with workload placement: keep latency-sensitive factory systems at the edge, burst analytics and AI training to cloud regions, and govern everything from a central OpenShift hub. Red Hat OpenShift Container Platform delivers a single Kubernetes API and operator model whether clusters run on-prem, at edge sites, or as ROSA in AWS.
 
-Modernizar apps, escalar híbrido, automatización/seguridad, time-to-market.
+In this lab, ACM on the hub represents that governance layer — policies, observability federation, and GitOps placement target east and west spokes the same way a customer would target ROSA and on-prem clusters. You are not learning abstract slides; every Part B module reinforces a strategic pillar: automation, security, developer velocity, or AI readiness.
+
+Executives should note that OpenShift avoids replatforming twice: microservices, VMs (CNV), and AI pipelines share the same RBAC, networking, and CI/CD patterns. When you register as `pass:[%USER_NAME%]`, your hands-on path mirrors how platform teams onboard application squads in production.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **01**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Frame the four strategic pillars: modernize, secure, automate, monetize AI on OpenShift.
+. Map each pillar to a Part B module number on the agenda table.
+. Ask attendees their current hybrid split (ROSA vs on-prem vs edge).
 
-== Your TODO (user `{user_name}`)
+== Your TODO (user pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Map your organization's workloads to hub vs spoke vs ROSA placement
+* [ ] Identify which Part B module addresses your top priority pillar
+* [ ] Save progress at the end of this module
 
 == YAML behind the scenes
 
@@ -38,14 +32,14 @@ Modernizar apps, escalar híbrido, automatización/seguridad, time-to-market.
 |===
 | UI action | Git source | Kind
 
-| Estrategia ejecutiva | docs/workshop/parte-a/ | Narrative |
+| Executive narrative | docs/workshop/parte-a/ | Narrative |
 | Fleet ACM | components/acm-hub-spoke/ | ManagedCluster |
 |===
 
 [source,yaml]
 ----
-# Executive track — no CR required on cluster for Parte A
-# Reference: https://docs.redhat.com/en/documentation/rosa/
+# Executive track — reference ROSA docs
+# https://docs.redhat.com/en/documentation/rosa/
 ----
 
 Verify:
@@ -61,17 +55,25 @@ oc get managedclusters 2>/dev/null | head -5
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
 ++++
 <div class="workshop-progress" data-module="01-hybrid-cloud-strategy">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('01-hybrid-cloud-strategy')">Guardar progreso</button>
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('01-hybrid-cloud-strategy')">Save progress</button>
 </div>
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="02-rosa-architecture.html">Next → 02 rosa architecture</a>
+</div>
+++++
+

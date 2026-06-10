@@ -1,37 +1,32 @@
-= Full Stack Verification
+= Verificación completa
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~15 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+La verificación full stack confirma comprensión narrativa Parte A y resultados hands-on Parte B para `pass:[%USER_NAME%]`: redirect de registro, terminal Showroom `oc`, visibilidad spoke ACM, sync IE, asignaciones Kubecost, DSC Ready, salud NeuroFace y persistencia API de progreso.
 
-Checklist Parte A + B; Plan B demos; progress API summary.
+Ejecuta `bash scripts/verify-workshop-e2e.sh` desde el repo o sigue el checklist en `verification/progress-checklist.yaml`. El servicio de registro en `https://workshop-registration.{hub_domain}` y el endpoint de progreso Showroom (`POST /api/progress`) deben aceptar tus completados de módulo — facilitadores usan progreso agregado para marcar ritmo de sala.
+
+Trata este módulo como puerta de graduación: si algún check falla, revisita el módulo enlazado o cambia a demos compartidos Plan B documentados en Developer Hub System `hybrid-mesh-shared-demos`.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **27**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. Recorrer ítems checklist y ejecutar extracto script verify en vivo.
+. Confirmar guardado API progreso desde UI checkbox Showroom.
+. Celebrar completado; compartir rutas Plan B para checks fallidos.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Completar checklist en `verification/progress-checklist.yaml`
+* [ ] Ejecutar o revisar salida de `scripts/verify-workshop-e2e.sh`
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -39,30 +34,30 @@ Checklist Parte A + B; Plan B demos; progress API summary.
 |===
 | UI action | Git source | Kind
 
-| Registration | components/workshop-registration/ | Deployment |
-| Showroom | components/showroom/ | Deployment |
-| Progress API | POST /api/progress | HTTP |
+| Progress API | workshop-registration | POST /api/progress |
+| E2E script | scripts/verify-workshop-e2e.sh | Shell |
+| Checklist | verification/progress-checklist.yaml | YAML |
 |===
 
 [source,yaml]
 ----
-# verification/progress-checklist.yaml — user1 east Parte B
+# Checks: registration, showroom, ACM clusters, IE deploy, NeuroFace route
 ----
 
 Verify:
 
 [source,bash]
 ----
-bash scripts/verify-workshop-e2e.sh
+bash scripts/verify-workshop-e2e.sh 2>/dev/null || oc get managedclusters
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -75,4 +70,12 @@ bash scripts/verify-workshop-e2e.sh
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="28-agent-browser-recording.html">Siguiente → 28 agent browser recording</a>
+</div>
+++++
+

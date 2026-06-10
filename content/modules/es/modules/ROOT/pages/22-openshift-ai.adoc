@@ -1,37 +1,32 @@
-= OpenShift AI Workshop
+= Taller OpenShift AI
 
-== Nube híbrida — ROSA/AWS vs este lab
+span.workshop-time-badge[~20 min]
 
-[cols="1,1"]
-|===
-| En producción (ROSA + AWS) | En este lab (RHDP hub-spoke)
+NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
 
-| Clúster ROSA gestionado en cuenta AWS (Multi-AZ) | Hub pre-provisionado; spokes east/west vía ACM
-| ROSA MachineSets / autoscaling workers | Kairos SmartScalingPolicy + HPA + Kafka
-| Security Groups + IAM + NP en VPC | OVN NetworkPolicy + ACS + Kuadrant
-| Amazon Bedrock / SageMaker | OpenShift AI + MaaS + NeuroFace + Lightspeed
-| AWS Cost Explorer + tags | Kubecost federated ETL
-| Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
-|===
+== Panorama
 
-== Contexto
+OpenShift AI unifica flujos de data science en OpenShift mediante el operador DataScienceCluster: notebooks, runtime de pipelines, model serving y ModelMesh para inferencia multi-framework. En el hub del taller, `default-dsc` habilita proyectos DS, workbenches y runtimes de serving consumidos por módulos posteriores.
 
-DSC hub; maas-workshop; demo-ods-workspace.
+Model-as-a-Service (MaaS) ofrece un endpoint compartido compatible OpenAI (`OPENAI_API_BASE`) almacenado en `openshift-ai-maas-credentials` — NeuroFace, Developer Hub Lightspeed y DevSpaces Continue AI consumen este endpoint en lugar de claves cloud públicas. El demo Plan B `demo-ods-workspace` abre un workspace DS pre-provisionado si tu quota de plantilla se agotó.
+
+Como `pass:[%USER_NAME%]`, confirma que `oc get dsc` reporta Ready y localiza la URL MaaS en el namespace maas-workshop. Este patrón IA hub-spoke refleja clientes ROSA que centralizan inferencia en un cluster de gobernanza mientras spokes edge ejecutan consumidores ligeros.
 
 == Show and Tell
 
-. Facilitador presenta objetivos del módulo **22**.
-. Señalar analogía ROSA/AWS vs lab en la tabla anterior.
-. Demostrar en Developer Hub / consola / Showroom terminal.
+. `oc get dsc` — confirmar Ready; abrir workspace DS o Plan B demo-ods-workspace.
+. Mostrar URL endpoint MaaS en maas-workshop (sin keys en pantalla).
+. Explicar patrón inferencia centralizada hub, consumidores spoke.
 
-== Tu TODO (user `{user_name}`)
+== Tu TODO (usuario pass:[%USER_NAME%])
 
-* [ ] Leer callout nube híbrida
-* [ ] Completar pasos hands-on o usar demo compartido Plan B
-* [ ] Marcar progreso al final del módulo
+* [ ] Ejecutar `oc get dsc` y confirmar DataScienceCluster Ready
+* [ ] Abrir workspace DS o Plan B `demo-ods-workspace`
+* [ ] Guardar progreso al final de este módulo
 
-== Live lab
-* Showroom: terminal `oc` integrada
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
 == YAML behind the scenes
 
@@ -39,8 +34,8 @@ DSC hub; maas-workshop; demo-ods-workspace.
 |===
 | UI action | Git source | Kind
 
-| DSC | components/openshift-ai-hub/templates/all.yaml | DataScienceCluster |
-| MaaS workshop | maas-workshop namespace | Secret |
+| DSC | components/openshift-ai-hub/ | DataScienceCluster |
+| MaaS | maas-workshop namespace | Secret |
 |===
 
 [source,yaml]
@@ -55,16 +50,16 @@ Verify:
 
 [source,bash]
 ----
-oc get dsc
+oc get dsc; oc get ns maas-workshop demo-ods-workspace 2>/dev/null
 ----
 
-== Verify
+== Verificar
 
 [cols="1,2,1"]
 |===
 | Check | Action | Expected
 
-| Progress | Guardar checkbox al final | `POST /api/progress` OK
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
 
@@ -77,4 +72,12 @@ oc get dsc
 ++++
 
 
-TIP: Plan B — Demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si el scaffolder falla.
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="23-llm-rag.html">Siguiente → 23 llm rag</a>
+</div>
+++++
+

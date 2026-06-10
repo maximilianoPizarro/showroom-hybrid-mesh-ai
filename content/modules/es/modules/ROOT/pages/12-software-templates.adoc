@@ -1,20 +1,21 @@
 = Plantillas software
 
-span.workshop-time-badge[~18 min]
+++++
+<span class="workshop-time-badge">~18 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 Las plantillas software de Red Hat Developer Hub codifican golden paths: acciones scaffolder parametrizadas crean repos Git, registran entidades de catálogo y disparan Applications Argo CD con guardrails (namespaces, quotas, network policies) ya cableados. Los equipos de plataforma publican plantillas una vez; los desarrolladores se autoatienden vía Create sin tickets de infraestructura.
 
-Este taller incluye plantillas para Industrial Edge, Camel Kaoto, API products, workspaces OpenShift AI, VMs CNV y NeuroFace. Si el scaffold de `pass:[%USER_NAME%]` falla por quota o timing de Gitea, cambia a Plan B — Developer Hub System `hybrid-mesh-shared-demos` expone Components pre-desplegados con las mismas URLs y entradas Topology.
+Este taller incluye plantillas para Industrial Edge, Camel Kaoto, API products, workspaces OpenShift AI, VMs CNV y NeuroFace. Si el scaffold de `{user_name}` falla por quota o timing de Gitea, cambia a Plan B — Developer Hub System `hybrid-mesh-shared-demos` expone Components pre-desplegados con las mismas URLs y entradas Topology.
 
 Las plantillas son el puente entre estrategia ejecutiva (módulo 01) y despliegues spoke (módulo 13). Inspecciona `docs/assets/backstage/software-templates/` y ConfigMaps de catálogo para ver cómo OpenShift GitOps recoge repos generados automáticamente.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -26,13 +27,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | Gitea (repos del scaffold) | `https://gitea-gitea.{hub_domain}` | Usuario taller
 |===
 
-== Show and Tell
+== Demostración
 
 . Flujo Create Developer Hub en vivo para plantilla Industrial Edge.
 . Mostrar fuente YAML catálogo y patrón URL repo Gitea generado.
 . Demostrar entidad fallback Plan B en `hybrid-mesh-shared-demos`.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Explorar lista plantillas Create en Developer Hub
 * [ ] Localizar System Plan B `hybrid-mesh-shared-demos` como fallback

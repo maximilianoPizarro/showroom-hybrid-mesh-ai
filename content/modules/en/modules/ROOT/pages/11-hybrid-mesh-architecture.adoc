@@ -1,11 +1,12 @@
 = Hybrid Mesh Architecture
 
-span.workshop-time-badge[~15 min]
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
 
 image::images/11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,600]
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 Hybrid mesh architecture connects application networks across clusters without flattening VPCs or exposing kube-apiserver endpoints publicly. Red Hat Service Interconnect (Skupper) paired with Gateway API HTTPRoutes on the hub creates a logical application network: frontends on the hub route to spoke services through encrypted links.
@@ -16,7 +17,7 @@ Observe `HTTPRoute` resources and Skupper status in the console; module 13 deplo
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -34,7 +35,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Display Skupper site/connector status in console.
 . Relate to ROSA ALB + private link narrative from Part A.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Inspect hub HTTPRoute and Skupper resources in console
 * [ ] Trace how external traffic reaches IE frontends on spokes

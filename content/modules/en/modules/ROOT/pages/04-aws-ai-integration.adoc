@@ -1,9 +1,10 @@
 = AWS Services & AI Integration
 
-span.workshop-time-badge[~10 min]
+++++
+<span class="workshop-time-badge">~10 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 AWS customers often pair ROSA with native AI services — Amazon Bedrock for foundation models, SageMaker for training pipelines, and IAM OIDC for secure workload identity. Red Hat's hybrid approach keeps inference and data pipelines on OpenShift AI while still allowing optional AWS service integration via credentials and external endpoints where policy permits.
@@ -14,7 +15,7 @@ Module 22 onward activates this stack hands-on. Executives should recognize that
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -31,7 +32,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Show MaaS credential secret location conceptually (no secret values).
 . Explain portable inference when AWS residency or pricing changes.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Compare your AWS AI services with OpenShift AI + MaaS lab pattern
 * [ ] Locate module 22 for hands-on DSC and MaaS setup

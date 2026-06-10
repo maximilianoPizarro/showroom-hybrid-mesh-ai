@@ -1,20 +1,21 @@
 = Network Policies
 
-span.workshop-time-badge[~12 min]
+++++
+<span class="workshop-time-badge">~12 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 NetworkPolicy Kubernetes en OpenShift OVN aplica micro-segmentación: solo pods y namespaces etiquetados que permitas explícitamente pueden comunicarse — esencial en redes zero-trust de fábrica donde sensores comprometidos no deben moverse lateralmente a backends MES. Red Hat OpenShift incluye OVN-Kubernetes como CNI por defecto con enrutamiento consciente de políticas.
 
-Este taller aplica una NetworkPolicy demo en `industrial-edge-tst-all` desde `components/workshop-demos/templates/network-policy-demo.yaml`, permitiendo ingress al dashboard mientras niega tráfico cross-namespace inesperado. Como `pass:[%USER_NAME%]`, prueba rutas permitidas y denegadas con probes curl `oc exec` desde la terminal Showroom.
+Este taller aplica una NetworkPolicy demo en `industrial-edge-tst-all` desde `components/workshop-demos/templates/network-policy-demo.yaml`, permitiendo ingress al dashboard mientras niega tráfico cross-namespace inesperado. Como `{user_name}`, prueba rutas permitidas y denegadas con probes curl `oc exec` desde la terminal Showroom.
 
 Compara con security groups ROSA más NP Kubernetes: defensa en profundidad en VPC cloud y capas pod. Combina este módulo con ACS (módulo 20) para detección runtime de anomalías cuando políticas están mal configuradas o bypassed.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -25,13 +26,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | NeuroFace (objetivo demo NP) | `https://neuroface.{hub_domain}` | Pública (sin login)
 |===
 
-== Show and Tell
+== Demostración
 
 . Aplicar o revisar NetworkPolicy demo en `industrial-edge-tst-all`.
 . Ejecutar curl permitido vs denegado desde pods terminal Showroom.
 . Relacionar con security groups ROSA + NP defensa en profundidad.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Revisar NetworkPolicy en `industrial-edge-tst-all`
 * [ ] Probar una conexión pod-a-pod permitida y una denegada

@@ -1,22 +1,23 @@
 = Face & Object AI + Chat
 
-span.workshop-time-badge[~25 min]
+++++
+<span class="workshop-time-badge">~25 min</span>
+++++
 
 image::images/25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,600]
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 NeuroFace delivers computer vision and conversational AI on OpenShift without bundling LibreChat: browser webcam feeds YOLO object detection and face recognition pipelines while `/api/chat` proxies to the shared MaaS LLM (llama-scout-17b). OVMS ModelMesh serves vision models locally; chat stays centralized for token governance — the hybrid AI pattern manufacturing customers request for quality inspection lines.
 
-Access NeuroFace at `https://neuroface.{hub_domain}` after registering as `pass:[%USER_NAME%]`. Helm values in `components/neuroface/` disable LiteLLM and external LibreChat dependencies; model endpoint and modelName align with maas-workshop credentials. Plan B catalog entity `demo-neuroface` maps to the same route if you skip scaffolding.
+Access NeuroFace at `https://neuroface.{hub_domain}` after registering as `{user_name}`. Helm values in `components/neuroface/` disable LiteLLM and external LibreChat dependencies; model endpoint and modelName align with maas-workshop credentials. Plan B catalog entity `demo-neuroface` maps to the same route if you skip scaffolding.
 
 In the lab, test webcam inference latency on spoke network paths and ask chat questions about detected objects — simulating a shop-floor assistant that explains vision alerts in natural language. Module 26 wires these signals into Industrial Edge dashboards for unified operator experience.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -33,7 +34,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Send chat question about detected object; show MaaS backend (not LibreChat).
 . Highlight OVMS local vision + centralized chat governance.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Open `https://neuroface.{hub_domain}` and test webcam detection
 * [ ] Ask `/api/chat` one question about a detected object

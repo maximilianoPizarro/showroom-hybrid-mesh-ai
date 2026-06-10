@@ -1,20 +1,21 @@
 = Deploy Industrial Edge
 
-span.workshop-time-badge[~25 min]
+++++
+<span class="workshop-time-badge">~25 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 Industrial Edge en OpenShift combina streaming de eventos, integración y visualización para escenarios de fábrica e IoT. Apache Kafka bufferiza topics de sensores de alto volumen; integraciones Camel K transforman y enrutan eventos; line-dashboard ofrece vista en vivo a operadores — todo desplegado vía GitOps a spokes tras scaffolding Developer Hub.
 
-Ejecuta la plantilla Industrial Edge como `pass:[%USER_NAME%]` y confirma que tu organización Gitea `ws-pass:[%USER_NAME%]` contiene el repositorio generado. Argo CD en east sincroniza la Application al namespace `industrial-edge-tst-all` (o equivalente con alcance de usuario). El demo Plan B `demo-industrial-edge-east` ofrece la misma topología si se omite scaffolding.
+Ejecuta la plantilla Industrial Edge como `{user_name}` y confirma que tu organización Gitea `ws-{user_name}` contiene el repositorio generado. Argo CD en east sincroniza la Application al namespace `industrial-edge-tst-all` (o equivalente con alcance de usuario). El demo Plan B `demo-industrial-edge-east` ofrece la misma topología si se omite scaffolding.
 
 Este módulo es el corazón operativo de la Parte B: observabilidad, escalado, network policy, detección de anomalías e IA posteriores asumen cargas IE en tu spoke. Verifica la ruta line-dashboard y topics Kafka antes de continuar a escalado Kairos.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -27,16 +28,16 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | Kafka Console | `https://kafka-console.{hub_domain}` | OAuth OpenShift
 |===
 
-== Show and Tell
+== Demostración
 
-. Confirmar org Gitea `ws-pass:[%USER_NAME%]` y sync Argo CD en east.
+. Confirmar org Gitea `ws-{user_name}` y sync Argo CD en east.
 . Abrir ruta line-dashboard y topics Kafka Console.
 . Ofrecer Plan B `demo-industrial-edge-east` si falla scaffold.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Scaffoldear IE o abrir Plan B `demo-industrial-edge-east`
-* [ ] Verificar org Gitea `ws-pass:[%USER_NAME%]` y sync Argo CD Healthy
+* [ ] Verificar org Gitea `ws-{user_name}` y sync Argo CD Healthy
 * [ ] Guardar progreso al final de este módulo
 
 == Lab en vivo

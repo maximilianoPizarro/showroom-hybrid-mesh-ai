@@ -1,20 +1,21 @@
 = Texto gen y predictivo
 
-span.workshop-time-badge[~18 min]
+++++
+<span class="workshop-time-badge">~18 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 La IA generativa asiste operadores con resúmenes en lenguaje natural de alarmas; la IA predictiva pronostica fallos antes del downtime. En OpenShift, el despliegue ie-anomaly-alerter observa métricas Prometheus de sensores Industrial Edge y emite alertas cuando umbrales estadísticos se violan — un patrón predictivo ligero sin KServe obligatorio en esta pista del taller.
 
-Recursos opcionales KServe InferenceService en el hub demuestran model serving completo para modelos scikit-learn u ONNX entrenados en workspaces DS. Endpoints playground MaaS permiten a `pass:[%USER_NAME%]` probar prompts generativos para postmortems de incidentes: "Resume lag Kafka y violaciones ACS de la última hora para mi namespace."
+Recursos opcionales KServe InferenceService en el hub demuestran model serving completo para modelos scikit-learn u ONNX entrenados en workspaces DS. Endpoints playground MaaS permiten a `{user_name}` probar prompts generativos para postmortems de incidentes: "Resume lag Kafka y violaciones ACS de la última hora para mi namespace."
 
 Conecta alertas predictivas al módulo 26 de apps finales: rutas Camel pueden distribuir eventos de anomalía a overlays line-dashboard y notificaciones NeuroFace. Esto cierra el loop telemetría → detección ML/estadística → respuesta humana + IA generativa en el mismo footprint OpenShift.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -22,16 +23,16 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 
 | Playground MaaS | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Token facilitador
 | Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OAuth OpenShift
-| Anomaly alerter (spoke east) | ACM → `east` → `industrial-edge-tst-pass:[%USER_NAME%]` | Usuario taller
+| Anomaly alerter (spoke east) | ACM → `east` → `industrial-edge-tst-{user_name}` | Usuario taller
 |===
 
-== Show and Tell
+== Demostración
 
 . Mostrar ie-anomaly-alerter disparando en violación umbral en métricas.
 . Prompt MaaS: resumen generativo de alertas IE recientes.
 . Mencionar ruta KServe opcional para modelos custom.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Confirmar despliegue ie-anomaly-alerter corriendo en tu spoke
 * [ ] Generar un prompt resumen de alarma vía playground MaaS

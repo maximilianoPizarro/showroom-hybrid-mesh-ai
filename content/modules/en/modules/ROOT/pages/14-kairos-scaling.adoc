@@ -1,20 +1,21 @@
 = Worker Scaling with Kairos
 
-span.workshop-time-badge[~20 min]
+++++
+<span class="workshop-time-badge">~20 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 Kairos Community on OpenShift analyzes workload metrics and recommends node or machine set adjustments through SmartScalingPolicy resources — bridging the gap between Kubernetes HPA (pod-level) and infrastructure provisioning (cluster-level). Operators approve recommendations in Kairos Console, preserving human oversight for factory edge sites where sudden scale-down is risky.
 
 In this lab, the sensor-scan policy watches Industrial Edge metrics and proposes scaling when scan rates spike — analogous to ROSA MachineSet autoscaling triggered by custom CloudWatch metrics. Pair this module with module 18 (HPA + Kafka) to show two layers: pods scale horizontally while Kairos evaluates node capacity.
 
-Open Kairos Console from the OpenShift menu, locate pending recommendations tied to `pass:[%USER_NAME%]` namespaces, and approve or discuss trade-offs with the facilitator. Run `oc get smartscalingpolicy -A` to correlate CRDs with UI actions.
+Open Kairos Console from the OpenShift menu, locate pending recommendations tied to `{user_name}` namespaces, and approve or discuss trade-offs with the facilitator. Run `oc get smartscalingpolicy -A` to correlate CRDs with UI actions.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -31,7 +32,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Correlate UI action with `oc get smartscalingpolicy -A`.
 . Discuss human-in-the-loop approval for factory edge.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Open Kairos Console and review one SmartScalingPolicy
 * [ ] Run `oc get smartscalingpolicy -A` from Showroom terminal

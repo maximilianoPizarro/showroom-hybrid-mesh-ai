@@ -1,27 +1,28 @@
 = Real Cases & Roadmap
 
-span.workshop-time-badge[~12 min]
+++++
+<span class="workshop-time-badge">~12 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 **Industry case — precision manufacturing IoT:** A global automotive supplier deployed OpenShift at three factory edge sites plus a ROSA hub for analytics. Machine vibration sensors emit 12,000 events/minute per line; unplanned downtime cost $47,000/hour. After migrating to Industrial Edge on OpenShift with Kafka, Camel integrations, and ACS runtime policies, mean time to detect anomalies dropped from 18 minutes to 90 seconds, and Kairos-approved scaling reduced over-provisioned edge nodes by 34%.
 
 That customer roadmap led to OpenShift AI for predictive maintenance models and Developer Hub templates so each plant could scaffold compliant pipelines without shadow IT. This workshop reproduces that journey at lab scale: modules 13–18 deploy IE on spoke east/west, modules 22–26 add MaaS and NeuroFace, module 21 adds Kubecost chargeback by namespace.
 
-Your next step is Part B registration verification — ensure `pass:[%USER_NAME%]` works in Showroom, then proceed to module 10 for ACM fleet visibility. Plan B shared demos remain available if your scaffold slot is unavailable.
+Your next step is Part B registration verification — ensure `{user_name}` works in Showroom, then proceed to module 10 for ACM fleet visibility. Plan B shared demos remain available if your scaffold slot is unavailable.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Registration (start Part B) | `https://workshop-registration.{hub_domain}/` | Email → pass:[%USER_NAME%]
-| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | After redirect
+| Registration (start Part B) | `https://workshop-registration.{hub_domain}/` | Email → {user_name}
+| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME={user_name}` | After redirect
 | Developer Hub — Plan B demos | `https://developer-hub.{hub_domain}/catalog/default/system/hybrid-mesh-shared-demos` | Workshop user
 | Industrial Edge demo | `https://industrial-edge.{hub_domain}` | Public (no login)
 | NeuroFace preview | `https://neuroface.{hub_domain}` | Public (no login)
@@ -31,12 +32,12 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 
 . Present the automotive IoT case metrics (12k events/min, $47k/hr downtime, 34% node savings).
 . Draw the customer roadmap timeline onto workshop module numbers.
-. Transition room to Part B: verify `pass:[%USER_NAME%]` login before module 10.
+. Transition room to Part B: verify `{user_name}` login before module 10.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Write one metric from the manufacturing case relevant to your industry
-* [ ] Confirm Showroom login as `pass:[%USER_NAME%]` before module 10
+* [ ] Confirm Showroom login as `{user_name}` before module 10
 * [ ] Save progress at the end of this module
 
 == YAML behind the scenes

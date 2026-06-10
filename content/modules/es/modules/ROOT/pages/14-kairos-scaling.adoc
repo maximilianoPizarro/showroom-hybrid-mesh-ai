@@ -1,20 +1,21 @@
 = Escalado con Kairos
 
-span.workshop-time-badge[~20 min]
+++++
+<span class="workshop-time-badge">~20 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 Kairos Community en OpenShift analiza métricas de cargas y recomienda ajustes de nodos o machine sets vía SmartScalingPolicy — cerrando la brecha entre HPA Kubernetes (nivel pod) y aprovisionamiento de infraestructura (nivel cluster). Los operadores aprueban recomendaciones en Kairos Console, preservando supervisión humana en edge de fábrica donde un scale-down brusco es riesgoso.
 
 En este lab, la política sensor-scan observa métricas Industrial Edge y propone escalado cuando las tasas de scan disparan — análogo a autoscaling MachineSet ROSA por métricas CloudWatch custom. Combina este módulo con el 18 (HPA + Kafka) para mostrar dos capas: pods escalan horizontalmente mientras Kairos evalúa capacidad de nodos.
 
-Abre Kairos Console desde el menú OpenShift, localiza recomendaciones pendientes en namespaces de `pass:[%USER_NAME%]` y aprueba o debate trade-offs con el facilitador. Ejecuta `oc get smartscalingpolicy -A` para correlacionar CRDs con acciones UI.
+Abre Kairos Console desde el menú OpenShift, localiza recomendaciones pendientes en namespaces de `{user_name}` y aprueba o debate trade-offs con el facilitador. Ejecuta `oc get smartscalingpolicy -A` para correlacionar CRDs con acciones UI.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -25,13 +26,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | Consola OpenShift — HPA | ACM → `east` → Workloads → HPA | Usuario taller
 |===
 
-== Show and Tell
+== Demostración
 
 . Abrir Kairos Console y recorrer recomendación SmartScalingPolicy pendiente.
 . Correlacionar acción UI con `oc get smartscalingpolicy -A`.
 . Discutir aprobación human-in-the-loop para edge de fábrica.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Abrir Kairos Console y revisar una SmartScalingPolicy
 * [ ] Ejecutar `oc get smartscalingpolicy -A` desde terminal Showroom

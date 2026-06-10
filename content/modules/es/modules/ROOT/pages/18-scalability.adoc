@@ -1,20 +1,21 @@
 = Escalabilidad
 
-span.workshop-time-badge[~15 min]
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 La escalabilidad en OpenShift abarca autoscaling horizontal de pods, escalado de particiones Kafka y recomendaciones a nivel nodo de Kairos. HPA v2 observa CPU, memoria o métricas custom de adaptadores Prometheus; KafkaNodePool expande capacidad de brokers cuando topics IE saturan lag de consumidores.
 
-En este lab, line-dashboard y despliegues IE relacionados incluyen HPAs en manifiestos bajo `components/industrial-edge-tst/`. Dispara carga vía scripts del taller o tasas simuladas de sensores, luego observa pods escalar en Topology como `pass:[%USER_NAME%]`. El escalado Kafka complementa HPA absorbiendo ráfagas de eventos antes de que pods rechacen tráfico.
+En este lab, line-dashboard y despliegues IE relacionados incluyen HPAs en manifiestos bajo `components/industrial-edge-tst/`. Dispara carga vía scripts del taller o tasas simuladas de sensores, luego observa pods escalar en Topology como `{user_name}`. El escalado Kafka complementa HPA absorbiendo ráfagas de eventos antes de que pods rechacen tráfico.
 
 Este módulo completa la historia de capacidad iniciada en el módulo 14: Kairos propone nodos, HPA añade pods, Kafka bufferiza eventos — juntos reflejan cómo un cliente ROSA escala edge de fábrica en picos de producción sin intervención manual del admin de cluster.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -25,13 +26,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | Grafana (lag Kafka) | `https://grafana.{hub_domain}` | OAuth OpenShift
 |===
 
-== Show and Tell
+== Demostración
 
 . Observar HPA escalar pods line-dashboard bajo carga simulada.
 . Mostrar consumer lag Kafka recuperándose tras capacidad buffer.
 . Conectar capas pod-scale (HPA) vs node-scale (Kairos).
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Revisar estado HPA para line-dashboard u otro despliegue IE
 * [ ] Observar consumer lag Kafka bajo carga o tráfico simulado

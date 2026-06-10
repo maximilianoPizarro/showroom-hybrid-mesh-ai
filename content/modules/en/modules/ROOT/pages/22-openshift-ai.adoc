@@ -1,20 +1,21 @@
 = OpenShift AI Workshop
 
-span.workshop-time-badge[~20 min]
+++++
+<span class="workshop-time-badge">~20 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 OpenShift AI unifies data science workflows on OpenShift through the DataScienceCluster operator: notebooks, pipeline runtime, model serving, and ModelMesh for multi-framework inference. On the workshop hub, `default-dsc` enables DS projects, workbenches, and serving runtimes consumed by downstream modules.
 
 Model-as-a-Service (MaaS) provides a shared OpenAI-compatible endpoint (`OPENAI_API_BASE`) stored in `openshift-ai-maas-credentials` — NeuroFace, Developer Hub Lightspeed, and DevSpaces Continue AI all consume this endpoint instead of public cloud keys. Plan B demo `demo-ods-workspace` opens a pre-provisioned DS workspace if your template quota is exhausted.
 
-As `pass:[%USER_NAME%]`, confirm `oc get dsc` reports Ready and locate the MaaS URL in the maas-workshop namespace. This hub-spoke AI pattern mirrors ROSA customers who centralize inference on a governance cluster while edge spokes run lightweight consumers.
+As `{user_name}`, confirm `oc get dsc` reports Ready and locate the MaaS URL in the maas-workshop namespace. This hub-spoke AI pattern mirrors ROSA customers who centralize inference on a governance cluster while edge spokes run lightweight consumers.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -31,7 +32,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Show MaaS endpoint URL in maas-workshop (no keys on screen).
 . Explain hub-centralized inference, spoke consumers pattern.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Run `oc get dsc` and confirm DataScienceCluster Ready
 * [ ] Open DS workspace or Plan B `demo-ods-workspace`

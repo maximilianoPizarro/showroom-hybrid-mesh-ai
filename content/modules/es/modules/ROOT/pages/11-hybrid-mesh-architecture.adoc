@@ -1,11 +1,12 @@
 = Arquitectura Hybrid Mesh
 
-span.workshop-time-badge[~15 min]
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
 
 image::images/11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,600]
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 La arquitectura hybrid mesh conecta redes de aplicación entre clusters sin aplanar VPCs ni exponer endpoints kube-apiserver públicamente. Red Hat Service Interconnect (Skupper) con HTTPRoutes Gateway API en el hub crea una red lógica de aplicación: frontends en el hub enrutan a servicios spoke por enlaces cifrados.
@@ -16,7 +17,7 @@ Observa recursos `HTTPRoute` y estado Skupper en la consola; el módulo 13 despl
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -28,13 +29,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
 |===
 
-== Show and Tell
+== Demostración
 
 . Trazar URL externa → HTTPRoute hub → Skupper → frontend IE spoke.
 . Mostrar estado site/connector Skupper en consola.
 . Relacionar con narrativa ALB ROSA + private link de Parte A.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Inspeccionar HTTPRoute hub y recursos Skupper en consola
 * [ ] Trazar cómo tráfico externo alcanza frontends IE en spokes

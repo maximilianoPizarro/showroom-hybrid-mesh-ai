@@ -1,20 +1,21 @@
 = FinOps with Kubecost
 
-span.workshop-time-badge[~15 min]
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 Kubecost on OpenShift allocates Kubernetes spend by namespace, label, and cluster — federating data from hub primary and spoke agents into MinIO-backed ETL storage. Platform teams charge back factory edge tenants and compare ROSA node costs versus on-prem depreciation using consistent Kubernetes unit economics.
 
-In this lab, Kubecost deploys from `components/kubecost/` with agents on east/west reporting to the hub primary. Filter allocations to namespaces owned by `pass:[%USER_NAME%]` and correlate idle capacity with Kairos recommendations from module 14.
+In this lab, Kubecost deploys from `components/kubecost/` with agents on east/west reporting to the hub primary. Filter allocations to namespaces owned by `{user_name}` and correlate idle capacity with Kairos recommendations from module 14.
 
 FinOps closes the executive loop from module 01: hybrid strategy without cost visibility fails in CFO review. Kubecost complements AWS Cost Explorer tags on ROSA by exposing pod-level waste inside the cluster boundary.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -26,11 +27,11 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 
 == Show and Tell
 
-. Kubecost UI: allocation by namespace for `pass:[%USER_NAME%]`.
+. Kubecost UI: allocation by namespace for `{user_name}`.
 . Show federated cluster dropdown (hub + spokes).
 . Compare idle cost with Kairos over-provision narrative.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Open Kubecost and filter allocations to your namespace
 * [ ] Compare hub vs spoke cluster costs in federated view

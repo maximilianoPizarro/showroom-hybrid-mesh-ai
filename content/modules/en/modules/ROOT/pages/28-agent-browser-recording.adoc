@@ -1,26 +1,27 @@
 = Agent Browser & Recording
 
-span.workshop-time-badge[~12 min]
+++++
+<span class="workshop-time-badge">~12 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 Agent Browser automations in `verification/agent-browser/` replay workshop flows for CI-style smoke testing — navigating Developer Hub, ACM, and NeuroFace without manual clicks. Recordings support facilitator dry-runs and post-event highlights but are intentionally gitignored (`*.mp4`) per `verification/recording-runbook.md`.
 
 Use Win+G or OBS locally to capture demos; never commit MP4 assets to `platform-hub-spoke-config`. Agent Browser YAML scripts document expected selectors and URLs with `{hub_domain}` placeholders for forked environments.
 
-As `pass:[%USER_NAME%]`, optionally execute a read-only Agent Browser script against your assigned namespaces to validate UI regressions before executive sessions. This module closes the workshop loop: human learners, automated verification, and reproducible demo capture on OpenShift.
+As `{user_name}`, optionally execute a read-only Agent Browser script against your assigned namespaces to validate UI regressions before executive sessions. This module closes the workshop loop: human learners, automated verification, and reproducible demo capture on OpenShift.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Showroom (record here) | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Workshop user
+| Showroom (record here) | `https://showroom-showroom.{hub_domain}/?USER_NAME={user_name}` | Workshop user
 | Developer Hub (catalog targets) | `https://developer-hub.{hub_domain}` | Workshop user
 | OpenShift Console | `https://console-openshift-console.{hub_domain}` | Workshop user
 |===
@@ -31,7 +32,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Review recording-runbook.md — no MP4 in Git policy.
 . Optional: run one smoke script headlessly if environment allows.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Read `verification/recording-runbook.md` (no MP4 in Git)
 * [ ] Browse one Agent Browser YAML under `verification/agent-browser/`

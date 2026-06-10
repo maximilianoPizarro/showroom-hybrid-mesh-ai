@@ -1,12 +1,13 @@
 = Full Stack Verification
 
-span.workshop-time-badge[~15 min]
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
-Full stack verification confirms Part A narrative comprehension and Part B hands-on outcomes for `pass:[%USER_NAME%]`: registration redirect, Showroom terminal `oc`, ACM spoke visibility, IE sync, Kubecost allocations, DSC Ready, NeuroFace health, and progress API persistence.
+Full stack verification confirms Part A narrative comprehension and Part B hands-on outcomes for `{user_name}`: registration redirect, Showroom terminal `oc`, ACM spoke visibility, IE sync, Kubecost allocations, DSC Ready, NeuroFace health, and progress API persistence.
 
 Run `bash scripts/verify-workshop-e2e.sh` from the repo or follow the checklist in `verification/progress-checklist.yaml`. The workshop registration service at `https://workshop-registration.{hub_domain}` and Showroom progress endpoint (`POST /api/progress`) must accept your module completions — facilitators use aggregate progress to pace the room.
 
@@ -14,17 +15,17 @@ Treat this module as your graduation gate: if any check fails, revisit the linke
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 .Re-run registration if needed
-* `https://workshop-registration.{hub_domain}/` → pass:[%USER_NAME%]
+* `https://workshop-registration.{hub_domain}/` → {user_name}
 
 .Checklist URLs (all products)
 [cols="2,3,2"]
 |===
 | Product | URL | Credentials
 
-| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Registered user
+| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME={user_name}` | Registered user
 | Developer Hub | `https://developer-hub.{hub_domain}` | Workshop user
 | Industrial Edge | `https://industrial-edge.{hub_domain}` | Public (no login)
 | Kuadrant + APIs | `https://developer-hub.{hub_domain}/kuadrant` + `https://workshop-apis.{hub_domain}` | API key
@@ -38,7 +39,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Confirm progress API save from Showroom checkbox UI.
 . Celebrate completion; share Plan B paths for any failed checks.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Complete checklist in `verification/progress-checklist.yaml`
 * [ ] Run or review output of `scripts/verify-workshop-e2e.sh`

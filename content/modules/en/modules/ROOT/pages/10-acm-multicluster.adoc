@@ -1,22 +1,23 @@
 = Multicluster Fleet & ACM
 
-span.workshop-time-badge[~15 min]
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
 
 image::images/10-acm-multicluster.png[ACM multicluster fleet management,600]
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 Red Hat Advanced Cluster Management for Kubernetes turns OpenShift into a fleet control plane: import spokes, enforce policies, visualize health, and delegate GitOps to cluster admins with consistent RBAC. ManagedCluster and Klusterlet agents mirror how ROSA and on-prem clusters join a customer's governance hub without sharing kube-admin credentials broadly.
 
-In this lab, open ACM Clusters on the hub and locate east and west — each spoke was bootstrapped from `components/acm-hub-spoke/` GitOps manifests. As `pass:[%USER_NAME%]`, your workloads land on east by default; Topology in Developer Hub uses OCM APIs to show the same graph ACM displays.
+In this lab, open ACM Clusters on the hub and locate east and west — each spoke was bootstrapped from `components/acm-hub-spoke/` GitOps manifests. As `{user_name}`, your workloads land on east by default; Topology in Developer Hub uses OCM APIs to show the same graph ACM displays.
 
 This module establishes the mental model for every subsequent Part B exercise: the hub owns ingress, policy, FinOps aggregation, and AI control planes; spokes run Industrial Edge and user-scoped namespaces. Verify with `oc get managedclusters` from the Showroom terminal.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -33,7 +34,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Run `oc get managedclusters` in Showroom terminal live.
 . Show Developer Hub Topology mirroring OCM graph.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Run `oc get managedclusters` and identify east/west
 * [ ] Open ACM Clusters UI and Developer Hub Topology for the same fleet

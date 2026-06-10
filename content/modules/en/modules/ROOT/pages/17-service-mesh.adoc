@@ -1,20 +1,21 @@
 = OpenShift Service Mesh
 
-span.workshop-time-badge[~18 min]
+++++
+<span class="workshop-time-badge">~18 min</span>
+++++
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 OpenShift Service Mesh 3 introduces ambient mode: a shared ztunnel layer handles mTLS and L4 telemetry without injecting sidecars into every workload pod by default. Kiali visualizes traffic graphs; mesh config enables distributed tracing for Industrial Edge microservices traversing east spoke namespaces.
 
 In this workshop, OSSM3 is subscribed via `components/operators/templates/servicemeshoperator3.yaml` and configured for ambient dataplane mode on IE namespaces — excluding `stackrox` where ACS requires direct network visibility. Compare this to ROSA deployments using App Mesh or third-party meshes: OpenShift keeps mesh CRDs and policies native to the platform lifecycle.
 
-Use Kiali from the OpenShift console to view live traffic for `pass:[%USER_NAME%]` deployments and validate mTLS between line-dashboard and Kafka-facing services. Module 17 pairs with observability dashboards from module 15 for end-to-end latency analysis.
+Use Kiali from the OpenShift console to view live traffic for `{user_name}` deployments and validate mTLS between line-dashboard and Kafka-facing services. Module 17 pairs with observability dashboards from module 15 for end-to-end latency analysis.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
@@ -31,7 +32,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Note `stackrox` exclusion from ambient mesh.
 . Optional: show mTLS lock icon on service edges.
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Open Kiali and view traffic for your IE deployments
 * [ ] Confirm ambient mesh enabled on IE namespace (not stackrox)

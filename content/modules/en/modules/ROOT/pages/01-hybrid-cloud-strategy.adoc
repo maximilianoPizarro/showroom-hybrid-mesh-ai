@@ -1,28 +1,29 @@
 = Hybrid Cloud Strategy
 
-span.workshop-time-badge[~10 min]
+++++
+<span class="workshop-time-badge">~10 min</span>
+++++
 
 image::images/01-hybrid-strategy.png[Hybrid cloud strategy overview,600]
 
 NOTE: For the ROSA/AWS vs lab mapping see xref:00-index.adoc#hybrid-callout[Module 00 — hybrid callout table].
-
 == Overview
 
 Hybrid cloud strategy starts with workload placement: keep latency-sensitive factory systems at the edge, burst analytics and AI training to cloud regions, and govern everything from a central OpenShift hub. Red Hat OpenShift Container Platform delivers a single Kubernetes API and operator model whether clusters run on-prem, at edge sites, or as ROSA in AWS.
 
 In this lab, ACM on the hub represents that governance layer — policies, observability federation, and GitOps placement target east and west spokes the same way a customer would target ROSA and on-prem clusters. You are not learning abstract slides; every Part B module reinforces a strategic pillar: automation, security, developer velocity, or AI readiness.
 
-Executives should note that OpenShift avoids replatforming twice: microservices, VMs (CNV), and AI pipelines share the same RBAC, networking, and CI/CD patterns. When you register as `pass:[%USER_NAME%]`, your hands-on path mirrors how platform teams onboard application squads in production.
+Executives should note that OpenShift avoids replatforming twice: microservices, VMs (CNV), and AI pipelines share the same RBAC, networking, and CI/CD patterns. When you register as `{user_name}`, your hands-on path mirrors how platform teams onboard application squads in production.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | After registration
+| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME={user_name}` | After registration
 | OpenShift Console (hub) | `https://console-openshift-console.{hub_domain}` | Workshop user
 | ACM fleet overview | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | Workshop user
 |===
@@ -33,7 +34,7 @@ NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Deve
 . Map each pillar to a Part B module number on the agenda table.
 . Ask attendees their current hybrid split (ROSA vs on-prem vs edge).
 
-== Your TODO (user pass:[%USER_NAME%])
+== Your TODO (user {user_name})
 
 * [ ] Map your organization's workloads to hub vs spoke vs ROSA placement
 * [ ] Identify which Part B module addresses your top priority pillar

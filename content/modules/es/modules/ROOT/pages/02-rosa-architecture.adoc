@@ -1,11 +1,12 @@
 = ROSA arquitectura y beneficios
 
-span.workshop-time-badge[~12 min]
+++++
+<span class="workshop-time-badge">~12 min</span>
+++++
 
 image::images/02-rosa-architecture.png[ROSA and OpenShift hub-spoke architecture,600]
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 Red Hat OpenShift Service on AWS (ROSA) ofrece un plano de control totalmente gestionado en tu cuenta AWS mientras Red Hat maneja upgrades, parches de seguridad y operaciones SRE. Los workers escalan vía MachineSets; el ingress integra Route 53 y ALB; IAM y STS habilitan acceso seguro a servicios cloud — la arquitectura de referencia para clientes híbridos que estandarizan OpenShift.
@@ -16,7 +17,7 @@ Entender la arquitectura ROSA ayuda a explicar límites de SLA: Red Hat gestiona
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -28,13 +29,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | Spoke west | UI ACM → cluster `west` | Usuario taller
 |===
 
-== Show and Tell
+== Demostración
 
 . Pizarra split plano de control ROSA vs responsabilidad workers.
 . Mostrar lista ManagedCluster ACM como equivalente lab de unir ROSA a hub de flota.
 . Mencionar límites SLA y soporte Red Hat vs ops cliente.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Esbozar responsabilidades plano control ROSA vs workers para tu cuenta
 * [ ] Preview ManagedCluster ACM en lectura previa módulo 10

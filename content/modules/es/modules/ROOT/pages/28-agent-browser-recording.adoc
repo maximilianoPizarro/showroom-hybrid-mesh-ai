@@ -1,37 +1,38 @@
 = Agent Browser y grabación
 
-span.workshop-time-badge[~12 min]
+++++
+<span class="workshop-time-badge">~12 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 Las automatizaciones Agent Browser en `verification/agent-browser/` reproducen flujos del taller para smoke testing estilo CI — navegando Developer Hub, ACM y NeuroFace sin clicks manuales. Las grabaciones apoyan dry-runs de facilitadores y highlights post-evento pero están intencionalmente en gitignore (`*.mp4`) según `verification/recording-runbook.md`.
 
 Usa Win+G u OBS localmente para capturar demos; nunca commitees assets MP4 a `platform-hub-spoke-config`. Scripts YAML Agent Browser documentan selectores y URLs esperados con placeholders `{hub_domain}` para entornos forked.
 
-Como `pass:[%USER_NAME%]`, opcionalmente ejecuta un script Agent Browser read-only contra tus namespaces asignados para validar regresiones UI antes de sesiones ejecutivas. Este módulo cierra el loop del taller: aprendices humanos, verificación automatizada y captura de demo reproducible en OpenShift.
+Como `{user_name}`, opcionalmente ejecuta un script Agent Browser read-only contra tus namespaces asignados para validar regresiones UI antes de sesiones ejecutivas. Este módulo cierra el loop del taller: aprendices humanos, verificación automatizada y captura de demo reproducible en OpenShift.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
-| Showroom (grabar aquí) | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Usuario taller
+| Showroom (grabar aquí) | `https://showroom-showroom.{hub_domain}/?USER_NAME={user_name}` | Usuario taller
 | Developer Hub (objetivos catálogo) | `https://developer-hub.{hub_domain}` | Usuario taller
 | Consola OpenShift | `https://console-openshift-console.{hub_domain}` | Usuario taller
 |===
 
-== Show and Tell
+== Demostración
 
 . Mostrar YAML Agent Browser en `verification/agent-browser/` (read-only).
 . Revisar recording-runbook.md — política sin MP4 en Git.
 . Opcional: ejecutar un script smoke headless si el entorno lo permite.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Leer `verification/recording-runbook.md` (sin MP4 en Git)
 * [ ] Explorar un YAML Agent Browser bajo `verification/agent-browser/`

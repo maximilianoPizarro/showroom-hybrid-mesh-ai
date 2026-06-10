@@ -1,20 +1,21 @@
 = OpenShift GitOps
 
-span.workshop-time-badge[~15 min]
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 OpenShift GitOps instala Argo CD como operador gestionado e integra con ApplicationSets ACM para propagar manifiestos hub-to-spoke con destinos seguros por política. Los equipos de plataforma commitean estado deseado a Git; controladores reconcilian drift — la misma disciplina GitOps que clientes ROSA usan al combinar clusters ROSA con repos hub ACM.
 
 En este lab, Applications hub bajo `templates/component-applications.yaml` despliegan servicios compartidos mientras Applications spoke (por ejemplo Industrial Edge) sincronizan desde repos Gitea de usuario creados en el módulo 13. ApplicationSet `industrial-edge-spoke` demuestra generadores matrix apuntando a labels east/west.
 
-Inspecciona estado de sync en UI Argo CD como `pass:[%USER_NAME%]` e identifica qué revisión de repo disparó tu despliegue. GitOps es la columna operativa: cada módulo de producto (mesh, ACS, IA) resuelve en YAML rastreado en `platform-hub-spoke-config`.
+Inspecciona estado de sync en UI Argo CD como `{user_name}` e identifica qué revisión de repo disparó tu despliegue. GitOps es la columna operativa: cada módulo de producto (mesh, ACS, IA) resuelve en YAML rastreado en `platform-hub-spoke-config`.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -25,13 +26,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | ACM GitOps cluster | ACM → Infrastructure → Clusters → GitOps | Usuario taller
 |===
 
-== Show and Tell
+== Demostración
 
 . UI Argo CD: Application hub vs fuentes Application spoke usuario.
 . Destacar generador ApplicationSet matrix east/west.
 . Mostrar sync wave o estado health para app IE.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Encontrar tu Application IE en Argo CD y anotar estado sync
 * [ ] Identificar fuente repo Git (Gitea usuario vs repo plataforma hub)

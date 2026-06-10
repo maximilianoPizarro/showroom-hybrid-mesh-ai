@@ -1,56 +1,55 @@
 = Taller Hybrid Mesh AI
 
-span.workshop-time-badge[~10 min]
+++++
+<span class="workshop-time-badge">~10 min</span>
+++++
 
 image::images/00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture diagram,600]
 
 == Bienvenida
 
-Bienvenido al **Taller Hybrid Mesh AI** — una experiencia dual que refleja cómo los clientes de Red Hat operan nube híbrida en OpenShift. La Parte A (módulos 01–05) es ejecutiva: estrategia, arquitectura ROSA, seguridad a escala, patrones de integración AWS y casos reales. La Parte B (módulos 10–28) es práctica en una flota hub-spoke RHDP con ACM, GitOps, Industrial Edge, OpenShift AI y NeuroFace.
+Bienvenido al **Taller Hybrid Mesh AI** — experiencia dual: Parte A (01–05) ejecutiva y Parte B (10–28) hands-on en flota hub-spoke RHDP.
 
-Regístrate en `https://workshop-registration.{hub_domain}` para recibir tu identidad de lab `pass:[%USER_NAME%]`. El Showroom en `https://showroom-showroom.{hub_domain}` incluye terminal `oc` autenticada para seguir la Parte B sin kubeconfig local. Si el scaffolder falla, usa demos compartidos **Plan B** en Developer Hub → System `hybrid-mesh-shared-demos`.
+Regístrate en `https://workshop-registration.{hub_domain}` para recibir la identidad **{user_name}**. El Showroom en `https://showroom-showroom.{hub_domain}` incluye terminal `oc` autenticada. Si falla el scaffolder, usa demos **Plan B** en Developer Hub → System `hybrid-mesh-shared-demos`.
 == Catálogo de productos Red Hat en este taller
 
 === OpenShift Container Platform
 * **Advanced Cluster Management (ACM)** — gobernanza de flota, políticas y placement GitOps entre hub y spokes.
-* **OpenShift GitOps** — Applications y ApplicationSets de Argo CD sincronizan componentes del taller desde Git.
-* **Red Hat Advanced Cluster Security (ACS)** — detección de amenazas y cumplimiento sin mesh ambient en `stackrox`.
-* **Kairos** — recomendaciones SmartScalingPolicy para cargas de sensores Industrial Edge.
-OpenShift es el plano de control consistente on-prem, edge o ROSA en AWS.
+* **Red Hat Advanced Cluster Security (ACS)** — detección runtime y cumplimiento (`stackrox`; fuera del mesh ambient).
+* **Quay** — registro de contenedores referenciado por GitOps y plantillas.
+* **OpenShift GitOps** — Applications y ApplicationSets de Argo CD sincronizan componentes desde Git.
+* **Red Hat OpenShift Dev Spaces** — IDE en la nube en spoke east (Kaoto, Continue AI, plantillas).
+* **OpenShift Pipelines** — pipelines Tekton en Industrial Edge y flujos de plantillas.
+* **Trazas distribuidas / observabilidad del cluster** — métricas, logging y trazas (Grafana, Kiali, OTEL).
+* **OpenShift Service Mesh 3** — mesh ambient con ztunnel y políticas L7 para apps Industrial Edge.
 
 === Red Hat Application Foundation
-* **OpenShift Service Mesh (OSSM 3)** — mesh ambient con ztunnel, Kiali y trazas distribuidas para apps IE.
 * **Apache Camel on Kubernetes** — integraciones y pipelines CDC en el demo Industrial Edge.
-* **Connectivity Link / Kuadrant** — APIProduct, AuthPolicy y rate limiting en el gateway del hub.
-Application Foundation entrega conectividad, integración y gestión de APIs como operadores nativos de OpenShift.
+* **Connectivity Link** — patrones Gateway API ingress/egress en hub gateway (Skupper, HTTPRoute, APIs externas).
+* **Kuadrant** — catálogo APIProduct, AuthPolicy, PlanPolicy y TokenRateLimitPolicy (separado de Connectivity Link).
 
 === Red Hat Advanced Developer Suite
 * **Developer Hub (Backstage)** — catálogo, plantillas scaffolder y Topology multicluster.
 * **Software Templates** — golden paths para Industrial Edge, Camel, CNV y workspaces OpenShift AI.
-* **Red Hat Dev Spaces** — IDE en la nube para Kaoto, Continue AI y desarrollo guiado por plantillas.
-Developer Hub convierte OpenShift en plataforma interna de desarrollo con guardrails en cada plantilla.
 
 === OpenShift AI
 * **DataScienceCluster (DSC)** — operador unificado para notebooks, serving y model mesh en el hub.
 * **Model-as-a-Service (MaaS)** — endpoint LLM compartido por NeuroFace, Lightspeed y DevSpaces.
-* **NeuroFace** — detección objeto/rostro por webcam más chat vía MaaS (no LibreChat).
-OpenShift AI mantiene modelos, pipelines e inferencia en el mismo sustrato Kubernetes que tus aplicaciones.
+* **NeuroFace** — detección objeto/rostro por webcam más chat vía MaaS.
 
 === OpenShift Virtualization
 * **Virtualización nativa de contenedores (CNV)** — cargas VM junto a contenedores vía plantilla demo CNV.
-CNV permite lift-and-shift de sistemas legacy de fábrica mientras microservicios nuevos corren en el mismo proyecto OpenShift.
 
 === Comunidad y terceros
-* **Gitea** — org por usuario `ws-pass:[%USER_NAME%]` almacena repos Git generados para Argo CD.
-* **MinIO** — almacenamiento objeto para ETL federado Kubecost y artefactos de modelos.
-* **Kubecost** — asignaciones FinOps entre primario hub y agentes spoke.
-* **Quay** — registro de contenedores referenciado por GitOps y salidas de plantillas.
-Estos componentes se integran vía operadores OpenShift y GitOps, como en stacks best-of-breed sobre OCP.
+* **Kairos Community** — SmartScalingPolicy para cargas de sensores IE (operador community).
+* **Gitea** — org por usuario `ws-{user_name}` para repos Git generados por Argo CD.
+* **MinIO** — almacenamiento objeto para artefactos y data lake.
+* **Kubecost** — asignaciones FinOps en el hub.
 == Prerrequisitos
 
 * Navegador moderno (Chrome o Firefox recomendado) con acceso a webcam para módulos NeuroFace.
 * Acceso a la consola OpenShift del hub — iniciar **Hybrid Mesh AI Workshop** desde el menú Application.
-* Registro en `https://workshop-registration.{hub_domain}` para obtener `pass:[%USER_NAME%]` y redirect al Showroom.
+* Registro en `https://workshop-registration.{hub_domain}` para obtener `{user_name}` y redirect al Showroom.
 * Opcional: terminal Showroom integrada para comandos `oc`; no se requiere kubeconfig local para la Parte B.
 == Agenda dual
 
@@ -76,7 +75,7 @@ Estos componentes se integran vía operadores OpenShift y GitOps, como en stacks
 
 == Registro y demos Plan B
 
-* Registro: `https://workshop-registration.{hub_domain}` → redirect con `USER_NAME=pass:[%USER_NAME%]`
+* Registro: `https://workshop-registration.{hub_domain}` → redirect con `USER_NAME={user_name}`
 * Consola OpenShift: **Hybrid Mesh AI Workshop** (ApplicationMenu)
 * Developer Hub → System `hybrid-mesh-shared-demos` (Plan B sin scaffolder)
 * NeuroFace: `https://neuroface.{hub_domain}`
@@ -95,15 +94,6 @@ Estos componentes se integran vía operadores OpenShift y GitOps, como en stacks
 | AWS Cost Explorer + tags | Kubecost federated ETL
 | Route 53 + ALB | Hub Gateway + Skupper + Connectivity Link
 |===
-
-== Panorama
-
-Este taller demuestra cómo los clientes de Red Hat unifican estrategia y operaciones en nube híbrida usando OpenShift como plataforma común. Verás los mismos patrones usados con ROSA en AWS aplicados a un lab hub-spoke RHDP con spokes east y west gestionados por ACM.
-
-La Parte A enmarca el caso de negocio: modernización, seguridad, FinOps e IA sin lock-in. La Parte B te permite desplegar cargas Industrial Edge, observarlas multicluster, asegurar APIs con Kuadrant y ejecutar inferencia con OpenShift AI y NeuroFace — todo como `pass:[%USER_NAME%]` en un slice de namespace aislado.
-
-Usa la tabla callout híbrida de esta página cuando el facilitador compare topología ROSA de producción con lo que ves en la consola. El registro en `https://workshop-registration.{hub_domain}` es obligatorio antes de los módulos hands-on.
-
 == Acceso al producto — URLs y credenciales
 
 .Puntos de entrada del taller
@@ -111,12 +101,12 @@ Usa la tabla callout híbrida de esta página cuando el facilitador compare topo
 |===
 | Servicio | URL | Credenciales
 
-| Showroom (este sitio) | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Tras redirect de registro
-| Registro | `https://workshop-registration.{hub_domain}/` | Tu email → asigna pass:[%USER_NAME%]
-| Consola OpenShift (hub) | `https://console-openshift-console.{hub_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+| Showroom (este sitio) | `https://showroom-showroom.{hub_domain}/?USER_NAME={user_name}` | Tras redirect de registro
+| Registro | `https://workshop-registration.{hub_domain}/` | Tu email → asigna {user_name}
+| Consola OpenShift (hub) | `https://console-openshift-console.{hub_domain}` | *Usuario:* {user_name} (p. ej. `user1` tras registro) +
 *Contraseña:* `Welcome123!` +
 *Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
-| Developer Hub | `https://developer-hub.{hub_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+| Developer Hub | `https://developer-hub.{hub_domain}` | *Usuario:* {user_name} (p. ej. `user1` tras registro) +
 *Contraseña:* `Welcome123!` +
 *Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
 |===
@@ -126,27 +116,27 @@ Usa la tabla callout híbrida de esta página cuando el facilitador compare topo
 |===
 | Producto | URL | Credenciales
 
-| Flota ACM | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+| Flota ACM | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | *Usuario:* {user_name} (p. ej. `user1` tras registro) +
 *Contraseña:* `Welcome123!` +
 *Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
 | Industrial Edge | `https://industrial-edge.{hub_domain}` | Demo pública (sin login)
-| Gitea | `https://gitea-gitea.{hub_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+| Gitea | `https://gitea-gitea.{hub_domain}` | *Usuario:* {user_name} (p. ej. `user1` tras registro) +
 *Contraseña:* `Welcome123!` +
 *Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east) o *Admin Gitea (facilitador):* `gitea_admin` / `openshift`
-| Grafana | `https://grafana.{hub_domain}` | OAuth OpenShift (*Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+| Grafana | `https://grafana.{hub_domain}` | OAuth OpenShift (*Usuario:* {user_name} (p. ej. `user1` tras registro) +
 *Contraseña:* `Welcome123!` +
 *Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east))
 | Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
 | Kairos Console | `https://kairos-console-kairos-system.{hub_domain}` | OAuth OpenShift
 | ACS Central | `https://central-stackrox.{hub_domain}` | OAuth OpenShift
-| API keys Kuadrant | `https://developer-hub.{hub_domain}/kuadrant` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+| API keys Kuadrant | `https://developer-hub.{hub_domain}/kuadrant` | *Usuario:* {user_name} (p. ej. `user1` tras registro) +
 *Contraseña:* `Welcome123!` +
 *Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
-| Workshop APIs | `https://workshop-apis.{hub_domain}` | API key desde UI Kuadrant (por pass:[%USER_NAME%])
+| Workshop APIs | `https://workshop-apis.{hub_domain}` | API key desde UI Kuadrant (por {user_name})
 | Kafka Console | `https://kafka-console.{hub_domain}` | OAuth OpenShift
 | Kubecost | `https://kubecost.{hub_domain}` | OAuth OpenShift
 | Quay | `https://quay-registry.{hub_domain}` | OAuth OpenShift
-| DevSpaces (east) | `https://devspaces.{east_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+| DevSpaces (east) | `https://devspaces.{east_domain}` | *Usuario:* {user_name} (p. ej. `user1` tras registro) +
 *Contraseña:* `Welcome123!` +
 *Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
 | Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OAuth OpenShift
@@ -154,13 +144,13 @@ Usa la tabla callout híbrida de esta página cuando el facilitador compare topo
 | NeuroFace | `https://neuroface.{hub_domain}` | Demo pública
 |===
 
-== Show and Tell
+== Demostración
 
 . Recorrer agenda dual: Parte A estrategia (01–05) luego Parte B hands-on (10–28).
 . Demo flujo de registro en `https://workshop-registration.{hub_domain}` y redirect Showroom.
 . Señalar demos compartidos Plan B en Developer Hub System `hybrid-mesh-shared-demos`.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Leer la tabla callout nube híbrida
 * [ ] Registrarse en `https://workshop-registration.{hub_domain}` y abrir Showroom

@@ -1,12 +1,13 @@
 = IA en apps finales
 
-span.workshop-time-badge[~20 min]
+++++
+<span class="workshop-time-badge">~20 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
-Las aplicaciones finales — dashboards de operador, alertas móviles, integraciones MES — consumen insights de IA donde ocurre el trabajo, no solo en notebooks de data science. line-dashboard en spoke east visualiza streams Kafka de sensores; integraciones Camel enrutan eventos de anomalía; NeuroFace y resúmenes MaaS se embeben en la misma UX que `pass:[%USER_NAME%]` ve en rollouts de producción.
+Las aplicaciones finales — dashboards de operador, alertas móviles, integraciones MES — consumen insights de IA donde ocurre el trabajo, no solo en notebooks de data science. line-dashboard en spoke east visualiza streams Kafka de sensores; integraciones Camel enrutan eventos de anomalía; NeuroFace y resúmenes MaaS se embeben en la misma UX que `{user_name}` ve en rollouts de producción.
 
 Este módulo integra módulos 13–25: verifica que line-dashboard muestra datos IE en vivo, dispara umbrales ie-anomaly-alerter y opcionalmente embebe iframe NeuroFace o enlace chat para ayuda IA contextual. Integraciones Camel K de plantillas `demo-camel-kaoto-east` y `demo-camel-cdc-east` muestran patrones event-driven que equipos de fábrica despliegan en OpenShift junto a sistemas OT.
 
@@ -14,7 +15,7 @@ Los equipos de plataforma ganan cuando la IA es infraestructura invisible: OpenS
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
@@ -25,13 +26,13 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | Grafana (telemetría) | `https://grafana.{hub_domain}` | OAuth OpenShift
 |===
 
-== Show and Tell
+== Demostración
 
 . Datos en vivo line-dashboard + overlay anomalía o badge alerta.
 . Opcional estado integración Camel en Topology.
 . Historia: operador ve telemetría, predicción y ayuda IA en una UX.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Verificar que line-dashboard muestra telemetría IE en vivo
 * [ ] Conectar un insight de anomalía o IA al flujo del operador

@@ -1,38 +1,39 @@
 = ACS y Kuadrant
 
-span.workshop-time-badge[~18 min]
+++++
+<span class="workshop-time-badge">~18 min</span>
+++++
 
 NOTE: Para la tabla ROSA/AWS vs lab ver xref:00-index.adoc#hybrid-callout[Módulo 00 — tabla comparativa].
-
 == Panorama
 
 Red Hat Advanced Cluster Security ofrece escaneo de vulnerabilidades, benchmarks de cumplimiento y detección de amenazas runtime en clusters gestionados por ACM. Agentes SecuredCluster en spokes reportan a ACS Central en el hub; init bundles sincronizan vía jobs GitOps en `components/acs-init-bundle-sync/`.
 
 Connectivity Link y Kuadrant extienden gestión de APIs al gateway del hub: AuthPolicy valida tokens, RateLimitPolicy protege backends y APIProduct publica APIs Industrial Edge para consumidores externos. El demo `demo-ie-api-product` en catálogo Plan B expone los mismos recursos Kuadrant sin scaffolding.
 
-Como `pass:[%USER_NAME%]`, verifica que ACS ve tus cargas spoke y prueba rutas APIProduct vía gateway del hub. Recuerda que ACS corre fuera del mesh ambient — este patrón de coexistencia es deliberado y coincide con despliegues ROSA + ACS en producción.
+Como `{user_name}`, verifica que ACS ve tus cargas spoke y prueba rutas APIProduct vía gateway del hub. Recuerda que ACS corre fuera del mesh ambient — este patrón de coexistencia es deliberado y coincide con despliegues ROSA + ACS en producción.
 
 == Acceso al producto — URLs y credenciales
 
-NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+NOTE: *Login del taller* — {user_name} / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
 
 [cols="2,3,2"]
 |===
 | Servicio | URL | Credenciales
 
 | ACS Central | `https://central-stackrox.{hub_domain}` | OAuth OpenShift
-| Kuadrant — API keys | `https://developer-hub.{hub_domain}/kuadrant` | Usuario taller → key para pass:[%USER_NAME%]
+| Kuadrant — API keys | `https://developer-hub.{hub_domain}/kuadrant` | Usuario taller → key para {user_name}
 | Workshop APIs (httpbin, REST, LLM) | `https://workshop-apis.{hub_domain}` | `Authorization: Bearer <API_KEY>`
 | Developer Hub — catálogo API | `https://developer-hub.{hub_domain}/catalog` | Usuario taller
 |===
 
-== Show and Tell
+== Demostración
 
 . Overview ACS Central — violaciones y despliegues en spokes.
 . Demo ruta APIProduct vía gateway hub con AuthPolicy.
 . Recordar namespace ACS fuera del mesh ambient.
 
-== Tu TODO (usuario pass:[%USER_NAME%])
+== Tu TODO (usuario {user_name})
 
 * [ ] Verificar que ACS muestra tus cargas spoke en UI Central
 * [ ] Probar ruta APIProduct vía gateway hub (o demo Plan B)
@@ -49,13 +50,15 @@ NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Dev
 | UI action | Git source | Kind
 
 | ACS init | components/acs-init-bundle-sync/ | Job |
-| Kuadrant APIs | components/workshop-kuadrant-apis/ | APIProduct |
+| External APIs | components/workshop-kuadrant-apis/templates/external-backends.yaml | ServiceEntry |
+| Kuadrant policies | components/workshop-kuadrant-apis/templates/policies.yaml | TokenRateLimitPolicy |
 | Hub gateway | components/hub-gateway/ | HTTPRoute |
 |===
 
 [source,yaml]
 ----
-# Request API key in Developer Hub → Kuadrant
+# External public APIs — no in-cluster Docker images
+# ServiceEntry + DestinationRule + HTTPRoute (Hostname backendRef)
 # curl -H 'Authorization: APIKEY $KEY' https://workshop-apis.{hub_domain}/httpbin/get
 ----
 
@@ -63,7 +66,7 @@ Verify:
 
 [source,bash]
 ----
-oc get apiproducts -A; oc get authpolicy -n hub-gateway-system
+oc get serviceentry,httproute -n hub-gateway-system | grep workshop
 ----
 
 == Verificar

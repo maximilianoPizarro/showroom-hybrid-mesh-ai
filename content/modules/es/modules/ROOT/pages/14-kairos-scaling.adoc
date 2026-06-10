@@ -12,6 +12,19 @@ En este lab, la política sensor-scan observa métricas Industrial Edge y propon
 
 Abre Kairos Console desde el menú OpenShift, localiza recomendaciones pendientes en namespaces de `pass:[%USER_NAME%]` y aprueba o debate trade-offs con el facilitador. Ejecuta `oc get smartscalingpolicy -A` para correlacionar CRDs con acciones UI.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Kairos Console | `https://kairos-console-kairos-system.{hub_domain}` | OAuth OpenShift
+| Grafana (métricas sensores) | `https://grafana.{hub_domain}` | OAuth OpenShift
+| Consola OpenShift — HPA | ACM → `east` → Workloads → HPA | Usuario taller
+|===
+
 == Show and Tell
 
 . Abrir Kairos Console y recorrer recomendación SmartScalingPolicy pendiente.

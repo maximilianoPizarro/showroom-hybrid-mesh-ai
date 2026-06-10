@@ -12,6 +12,21 @@ El roadmap de ese cliente llevó a OpenShift AI para modelos de mantenimiento pr
 
 Tu siguiente paso es verificar registro Parte B — confirma que `pass:[%USER_NAME%]` funciona en Showroom, luego continúa al módulo 10 para visibilidad de flota ACM. Los demos compartidos Plan B siguen disponibles si tu slot de scaffold no está libre.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Registro (inicio Parte B) | `https://workshop-registration.{hub_domain}/` | Email → pass:[%USER_NAME%]
+| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Tras redirect
+| Developer Hub — demos Plan B | `https://developer-hub.{hub_domain}/catalog/default/system/hybrid-mesh-shared-demos` | Usuario taller
+| Demo Industrial Edge | `https://industrial-edge.{hub_domain}` | Pública (sin login)
+| Vista previa NeuroFace | `https://neuroface.{hub_domain}` | Pública (sin login)
+|===
+
 == Show and Tell
 
 . Presentar métricas caso IoT automotriz (12k eventos/min, 47k USD/hr downtime, 34% ahorro nodos).

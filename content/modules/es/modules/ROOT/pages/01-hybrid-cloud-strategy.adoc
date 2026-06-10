@@ -14,6 +14,19 @@ En este lab, ACM en el hub representa esa capa de gobernanza — políticas, fed
 
 Los ejecutivos deben notar que OpenShift evita replatformear dos veces: microservicios, VMs (CNV) e pipelines de IA comparten RBAC, red y CI/CD. Al registrarte como `pass:[%USER_NAME%]`, tu ruta hands-on refleja cómo los equipos de plataforma incorporan squads en producción.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Tras registro
+| Consola OpenShift (hub) | `https://console-openshift-console.{hub_domain}` | Usuario taller
+| Vista flota ACM | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | Usuario taller
+|===
+
 == Show and Tell
 
 . Enmarcar cuatro pilares estratégicos: modernizar, asegurar, automatizar, monetizar IA en OpenShift.

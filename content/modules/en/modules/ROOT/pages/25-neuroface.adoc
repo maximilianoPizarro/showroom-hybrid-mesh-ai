@@ -14,6 +14,19 @@ Access NeuroFace at `https://neuroface.{hub_domain}` after registering as `pass:
 
 In the lab, test webcam inference latency on spoke network paths and ask chat questions about detected objects — simulating a shop-floor assistant that explains vision alerts in natural language. Module 26 wires these signals into Industrial Edge dashboards for unified operator experience.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| NeuroFace app | `https://neuroface.{hub_domain}` | Public (no login)
+| API chat | `https://neuroface.{hub_domain}/api/chat` | Public (no login)
+| OpenShift Console — deploy | ACM → `hub` → namespace `neuroface` | Workshop user
+|===
+
 == Show and Tell
 
 . Open `https://neuroface.{hub_domain}` — webcam object detection live.

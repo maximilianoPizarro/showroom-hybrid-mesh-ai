@@ -12,6 +12,19 @@ En este taller, OSSM3 se suscribe vía `components/operators/templates/serviceme
 
 Usa Kiali desde la consola OpenShift para ver tráfico en vivo de despliegues de `pass:[%USER_NAME%]` y validar mTLS entre line-dashboard y servicios orientados a Kafka. El módulo 17 combina con dashboards de observabilidad del módulo 15 para análisis de latencia end-to-end.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
+| Industrial Edge (apps en mesh) | `https://industrial-edge.{hub_domain}` | Pública (sin login)
+| Consola OpenShift — mesh | ACM → `east` → Operators → Service Mesh | Usuario taller
+|===
+
 == Show and Tell
 
 . Abrir grafo Kiali para namespace IE — señalar aristas ztunnel ambient.

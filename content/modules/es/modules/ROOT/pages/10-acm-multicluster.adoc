@@ -14,6 +14,19 @@ En este lab, abre ACM Clusters en el hub y localiza east y west — cada spoke s
 
 Este módulo establece el modelo mental para cada ejercicio Parte B: el hub posee ingress, política, agregación FinOps y planos de control IA; los spokes ejecutan Industrial Edge y namespaces con alcance de usuario. Verifica con `oc get managedclusters` desde la terminal Showroom.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| ACM Clusters | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | Usuario taller
+| ACM GitOps (Policies) | `https://console-openshift-console.{hub_domain}/multicloud/policies` | Usuario taller
+| Consola hub | `https://console-openshift-console.{hub_domain}` | Usuario taller
+|===
+
 == Show and Tell
 
 . Abrir UI ACM Clusters — identificar spokes east y west.

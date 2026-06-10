@@ -12,6 +12,19 @@ RAG architecture in hybrid manufacturing typically indexes PDFs and SOPs into a 
 
 As `pass:[%USER_NAME%]`, open Developer Hub, trigger Lightspeed on a catalog Component, and compare responses with Continue AI in a DevSpaces workspace. Module 25 extends the same MaaS path to multimodal NeuroFace chat — proving one governance model serves dev, ops, and end-user AI surfaces.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Developer Hub — Lightspeed | `https://developer-hub.{hub_domain}` (catalog → Ask) | Workshop user
+| Workshop APIs — LLM route | `https://workshop-apis.{hub_domain}/llm` | Kuadrant API key (module 20)
+| MaaS (optional) | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Facilitator token
+|===
+
 == Show and Tell
 
 . Trigger Developer Hub Lightspeed on a catalog Component live.

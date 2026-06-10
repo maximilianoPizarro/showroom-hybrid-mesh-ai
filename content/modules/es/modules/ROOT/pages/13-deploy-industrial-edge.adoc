@@ -12,6 +12,21 @@ Ejecuta la plantilla Industrial Edge como `pass:[%USER_NAME%]` y confirma que tu
 
 Este módulo es el corazón operativo de la Parte B: observabilidad, escalado, network policy, detección de anomalías e IA posteriores asumen cargas IE en tu spoke. Verifica la ruta line-dashboard y topics Kafka antes de continuar a escalado Kairos.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Developer Hub — scaffold IE | `https://developer-hub.{hub_domain}/create` | Usuario taller
+| Gitea — repos IE | `https://gitea-gitea.{hub_domain}` | Usuario taller
+| UI Industrial Edge | `https://industrial-edge.{hub_domain}` | Pública (sin login)
+| OpenShift GitOps (east) | ACM → cluster `east` → aplicaciones GitOps | Usuario taller
+| Kafka Console | `https://kafka-console.{hub_domain}` | OAuth OpenShift
+|===
+
 == Show and Tell
 
 . Confirmar org Gitea `ws-pass:[%USER_NAME%]` y sync Argo CD en east.

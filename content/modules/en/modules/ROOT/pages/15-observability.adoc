@@ -12,6 +12,19 @@ This workshop deploys multicluster Grafana dashboards on the hub, OpenTelemetry 
 
 Executives should connect this module to module 21 (Kubecost): metrics prove SLO compliance while cost metrics prove efficiency — both required for hybrid FinOps. Use Showroom `oc` to list `GrafanaDashboard` CRs and confirm IE workloads emit scrape targets.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Grafana | `https://grafana.{hub_domain}` | OpenShift OAuth
+| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OpenShift OAuth
+| OpenShift Console — Observe | `https://console-openshift-console.{hub_domain}/observe/metrics` | Workshop user
+|===
+
 == Show and Tell
 
 . Open multicluster Grafana dashboard filtered to IE namespace.

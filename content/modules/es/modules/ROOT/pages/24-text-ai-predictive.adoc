@@ -12,6 +12,19 @@ Recursos opcionales KServe InferenceService en el hub demuestran model serving c
 
 Conecta alertas predictivas al módulo 26 de apps finales: rutas Camel pueden distribuir eventos de anomalía a overlays line-dashboard y notificaciones NeuroFace. Esto cierra el loop telemetría → detección ML/estadística → respuesta humana + IA generativa en el mismo footprint OpenShift.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Playground MaaS | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Token facilitador
+| Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OAuth OpenShift
+| Anomaly alerter (spoke east) | ACM → `east` → `industrial-edge-tst-pass:[%USER_NAME%]` | Usuario taller
+|===
+
 == Show and Tell
 
 . Mostrar ie-anomaly-alerter disparando en violación umbral en métricas.

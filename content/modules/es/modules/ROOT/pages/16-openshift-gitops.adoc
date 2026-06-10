@@ -12,6 +12,19 @@ En este lab, Applications hub bajo `templates/component-applications.yaml` despl
 
 Inspecciona estado de sync en UI Argo CD como `pass:[%USER_NAME%]` e identifica qué revisión de repo disparó tu despliegue. GitOps es la columna operativa: cada módulo de producto (mesh, ACS, IA) resuelve en YAML rastreado en `platform-hub-spoke-config`.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Gitea | `https://gitea-gitea.{hub_domain}` | Usuario taller (*Admin Gitea (facilitador):* `gitea_admin` / `openshift`)
+| Argo CD (hub) | `https://console-openshift-console.{hub_domain}/k8s/ns/openshift-gitops/applications.argoproj.io~v1alpha1~Application` | Usuario taller
+| ACM GitOps cluster | ACM → Infrastructure → Clusters → GitOps | Usuario taller
+|===
+
 == Show and Tell
 
 . UI Argo CD: Application hub vs fuentes Application spoke usuario.

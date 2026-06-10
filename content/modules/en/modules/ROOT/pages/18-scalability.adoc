@@ -12,6 +12,19 @@ In this lab, line-dashboard and related IE deployments include HPAs defined in w
 
 This module completes the capacity story started in module 14: Kairos proposes nodes, HPA adds pods, Kafka buffers events — together they mirror how a ROSA customer scales factory edge during production peaks without manual cluster admin intervention.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Kairos Console | `https://kairos-console-kairos-system.{hub_domain}` | OpenShift OAuth
+| Kafka Console | `https://kafka-console.{hub_domain}` | OpenShift OAuth
+| Grafana (Kafka lag) | `https://grafana.{hub_domain}` | OpenShift OAuth
+|===
+
 == Show and Tell
 
 . Watch HPA scale line-dashboard pods under simulated load.

@@ -12,6 +12,21 @@ Run the Industrial Edge template as `pass:[%USER_NAME%]` and confirm your Gitea 
 
 This module is the operational heart of Part B: later observability, scaling, network policy, anomaly detection, and AI modules all assume IE workloads are running on your spoke. Verify the line-dashboard route and Kafka topics before proceeding to Kairos scaling.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Developer Hub — scaffold IE | `https://developer-hub.{hub_domain}/create` | Workshop user
+| Gitea — your IE repos | `https://gitea-gitea.{hub_domain}` | Workshop user
+| Industrial Edge UI | `https://industrial-edge.{hub_domain}` | Public (no login)
+| OpenShift GitOps (east) | ACM → cluster `east` → GitOps applications | Workshop user
+| Kafka Console | `https://kafka-console.{hub_domain}` | OpenShift OAuth
+|===
+
 == Show and Tell
 
 . Confirm Gitea org `ws-pass:[%USER_NAME%]` and Argo CD sync on east.

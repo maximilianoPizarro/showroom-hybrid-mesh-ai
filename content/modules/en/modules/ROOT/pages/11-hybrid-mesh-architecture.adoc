@@ -14,6 +14,20 @@ In this workshop, the hub gateway terminates external traffic and forwards to In
 
 Observe `HTTPRoute` resources and Skupper status in the console; module 13 deploys IE apps that become reachable through this mesh. Understanding this layer explains why Kuadrant policies attach at the hub gateway in module 20.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Industrial Edge (via hub gateway) | `https://industrial-edge.{hub_domain}` | Public (no login)
+| Skupper network observer | `https://field-content-skupper-network-observer-service-interconnect.{hub_domain}` | OpenShift OAuth
+| Hub Gateway routes | `https://console-openshift-console.{hub_domain}/k8s/ns/hub-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute` | Workshop user
+| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OpenShift OAuth
+|===
+
 == Show and Tell
 
 . Trace external URL → hub HTTPRoute → Skupper → spoke IE frontend.

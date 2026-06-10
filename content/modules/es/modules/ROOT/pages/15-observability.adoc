@@ -12,6 +12,19 @@ Este taller despliega dashboards Grafana multicluster en el hub, collectors Open
 
 Los ejecutivos deben conectar este módulo con el 21 (Kubecost): métricas demuestran cumplimiento SLO mientras métricas de costo demuestran eficiencia — ambos requeridos para FinOps híbrido. Usa `oc` en Showroom para listar CRs `GrafanaDashboard` y confirmar que cargas IE emiten targets de scrape.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Grafana | `https://grafana.{hub_domain}` | OAuth OpenShift
+| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
+| Consola OpenShift — Observe | `https://console-openshift-console.{hub_domain}/observe/metrics` | Usuario taller
+|===
+
 == Show and Tell
 
 . Abrir dashboard Grafana multicluster filtrado a namespace IE.

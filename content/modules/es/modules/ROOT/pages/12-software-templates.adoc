@@ -12,6 +12,20 @@ Este taller incluye plantillas para Industrial Edge, Camel Kaoto, API products, 
 
 Las plantillas son el puente entre estrategia ejecutiva (módulo 01) y despliegues spoke (módulo 13). Inspecciona `docs/assets/backstage/software-templates/` y ConfigMaps de catálogo para ver cómo OpenShift GitOps recoge repos generados automáticamente.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Developer Hub — Create | `https://developer-hub.{hub_domain}/create` | Usuario taller
+| Developer Hub — Catálogo | `https://developer-hub.{hub_domain}/catalog` | Usuario taller
+| Demos compartidas Plan B | `https://developer-hub.{hub_domain}/catalog/default/system/hybrid-mesh-shared-demos` | Usuario taller
+| Gitea (repos del scaffold) | `https://gitea-gitea.{hub_domain}` | Usuario taller
+|===
+
 == Show and Tell
 
 . Flujo Create Developer Hub en vivo para plantilla Industrial Edge.

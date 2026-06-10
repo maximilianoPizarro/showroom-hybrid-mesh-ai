@@ -12,6 +12,19 @@ In this lab, hub Applications under `templates/component-applications.yaml` depl
 
 Inspect sync status in Argo CD UI as `pass:[%USER_NAME%]` and identify which repo revision triggered your deployment. GitOps is the operational backbone: every product module (mesh, ACS, AI) ultimately resolves to tracked YAML in `platform-hub-spoke-config`.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Gitea | `https://gitea-gitea.{hub_domain}` | Workshop user (*Gitea admin (facilitator):* `gitea_admin` / `openshift`)
+| Argo CD (hub) | `https://console-openshift-console.{hub_domain}/k8s/ns/openshift-gitops/applications.argoproj.io~v1alpha1~Application` | Workshop user
+| ACM GitOps cluster | ACM → Infrastructure → Clusters → GitOps | Workshop user
+|===
+
 == Show and Tell
 
 . Argo CD UI: hub Application vs user spoke Application sources.

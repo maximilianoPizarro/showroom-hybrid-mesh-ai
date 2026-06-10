@@ -104,6 +104,56 @@ La Parte A enmarca el caso de negocio: modernización, seguridad, FinOps e IA si
 
 Usa la tabla callout híbrida de esta página cuando el facilitador compare topología ROSA de producción con lo que ves en la consola. El registro en `https://workshop-registration.{hub_domain}` es obligatorio antes de los módulos hands-on.
 
+== Acceso al producto — URLs y credenciales
+
+.Puntos de entrada del taller
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Showroom (este sitio) | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Tras redirect de registro
+| Registro | `https://workshop-registration.{hub_domain}/` | Tu email → asigna pass:[%USER_NAME%]
+| Consola OpenShift (hub) | `https://console-openshift-console.{hub_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+*Contraseña:* `Welcome123!` +
+*Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
+| Developer Hub | `https://developer-hub.{hub_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+*Contraseña:* `Welcome123!` +
+*Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
+|===
+
+.Catálogo de productos — enlaces rápidos
+[cols="2,3,2"]
+|===
+| Producto | URL | Credenciales
+
+| Flota ACM | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+*Contraseña:* `Welcome123!` +
+*Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
+| Industrial Edge | `https://industrial-edge.{hub_domain}` | Demo pública (sin login)
+| Gitea | `https://gitea-gitea.{hub_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+*Contraseña:* `Welcome123!` +
+*Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east) o *Admin Gitea (facilitador):* `gitea_admin` / `openshift`
+| Grafana | `https://grafana.{hub_domain}` | OAuth OpenShift (*Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+*Contraseña:* `Welcome123!` +
+*Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east))
+| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
+| Kairos Console | `https://kairos-console-kairos-system.{hub_domain}` | OAuth OpenShift
+| ACS Central | `https://central-stackrox.{hub_domain}` | OAuth OpenShift
+| API keys Kuadrant | `https://developer-hub.{hub_domain}/kuadrant` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+*Contraseña:* `Welcome123!` +
+*Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
+| Workshop APIs | `https://workshop-apis.{hub_domain}` | API key desde UI Kuadrant (por pass:[%USER_NAME%])
+| Kafka Console | `https://kafka-console.{hub_domain}` | OAuth OpenShift
+| Kubecost | `https://kubecost.{hub_domain}` | OAuth OpenShift
+| Quay | `https://quay-registry.{hub_domain}` | OAuth OpenShift
+| DevSpaces (east) | `https://devspaces.{east_domain}` | *Usuario:* pass:[%USER_NAME%] (p. ej. `user1` tras registro) +
+*Contraseña:* `Welcome123!` +
+*Válido en:* Developer Hub (Keycloak), consola OpenShift htpasswd (hub / east / west), DevSpaces (spoke east)
+| Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OAuth OpenShift
+| Skupper observer | `https://field-content-skupper-network-observer-service-interconnect.{hub_domain}` | OAuth OpenShift
+| NeuroFace | `https://neuroface.{hub_domain}` | Demo pública
+|===
+
 == Show and Tell
 
 . Recorrer agenda dual: Parte A estrategia (01–05) luego Parte B hands-on (10–28).

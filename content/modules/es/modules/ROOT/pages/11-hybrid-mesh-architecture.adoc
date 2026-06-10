@@ -14,6 +14,20 @@ En este taller, el gateway del hub termina tráfico externo y reenvía a fronten
 
 Observa recursos `HTTPRoute` y estado Skupper en la consola; el módulo 13 despliega apps IE alcanzables por esta malla. Entender esta capa explica por qué las políticas Kuadrant se adjuntan en el gateway del hub en el módulo 20.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Industrial Edge (vía hub gateway) | `https://industrial-edge.{hub_domain}` | Pública (sin login)
+| Skupper network observer | `https://field-content-skupper-network-observer-service-interconnect.{hub_domain}` | OAuth OpenShift
+| Rutas Hub Gateway | `https://console-openshift-console.{hub_domain}/k8s/ns/hub-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute` | Usuario taller
+| Kiali | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
+|===
+
 == Show and Tell
 
 . Trazar URL externa → HTTPRoute hub → Skupper → frontend IE spoke.

@@ -12,6 +12,19 @@ En este lab, ACS Central corre en el hub con agentes SecuredCluster en spokes �
 
 Escalar flotas híbridas implica automatizar placement y capacidad: políticas ACM, Kairos SmartScalingPolicy, buffering Kafka y HPA manejan picos de sensores sin colas manuales. Como `pass:[%USER_NAME%]`, observarás estos controles en los módulos 14 y 18 en cargas que simulan ráfagas de telemetría de fábrica.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| ACS Central | `https://central-stackrox.{hub_domain}` | OAuth OpenShift
+| Consola OpenShift — Security | `https://console-openshift-console.{hub_domain}/security` | Usuario taller
+| Kiali (políticas mesh) | `https://kiali-openshift-cluster-observability-operator.{hub_domain}` | OAuth OpenShift
+|===
+
 == Show and Tell
 
 . Destacar coexistencia ACS + mesh (`stackrox` sin labels ambient).

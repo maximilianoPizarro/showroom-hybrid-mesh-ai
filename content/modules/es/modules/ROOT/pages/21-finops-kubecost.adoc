@@ -12,6 +12,18 @@ En este lab, Kubecost se despliega desde `components/kubecost/` con agentes en e
 
 FinOps cierra el loop ejecutivo del módulo 01: estrategia híbrida sin visibilidad de costo falla en revisión CFO. Kubecost complementa tags AWS Cost Explorer en ROSA exponiendo desperdicio a nivel pod dentro del límite del cluster.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Kubecost | `https://kubecost.{hub_domain}` | OAuth OpenShift
+| Consola OpenShift — quotas | ACM → tu namespace en `east` | Usuario taller
+|===
+
 == Show and Tell
 
 . UI Kubecost: asignación por namespace para `pass:[%USER_NAME%]`.

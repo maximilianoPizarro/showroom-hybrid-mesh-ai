@@ -12,6 +12,20 @@ This workshop ships templates for Industrial Edge, Camel Kaoto, API products, Op
 
 Templates are the bridge between executive strategy (module 01) and spoke deployments (module 13). Inspect `docs/assets/backstage/software-templates/` and catalog ConfigMaps to see how OpenShift GitOps picks up generated repos automatically.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Developer Hub — Create | `https://developer-hub.{hub_domain}/create` | Workshop user
+| Developer Hub — Catalog | `https://developer-hub.{hub_domain}/catalog` | Workshop user
+| Plan B shared demos | `https://developer-hub.{hub_domain}/catalog/default/system/hybrid-mesh-shared-demos` | Workshop user
+| Gitea (repos created by scaffold) | `https://gitea-gitea.{hub_domain}` | Workshop user
+|===
+
 == Show and Tell
 
 . Live Developer Hub Create flow for Industrial Edge template.

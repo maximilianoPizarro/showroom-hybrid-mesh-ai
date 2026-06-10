@@ -12,6 +12,19 @@ Este módulo integra módulos 13–25: verifica que line-dashboard muestra datos
 
 Los equipos de plataforma ganan cuando la IA es infraestructura invisible: OpenShift AI, MaaS y NeuroFace son entradas de catálogo — squads de app los vinculan vía dependencias Developer Hub sin reconstruir pipelines ML por planta.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Dashboard línea IE | `https://industrial-edge.{hub_domain}` | Pública (sin login)
+| Developer Hub — componentes IE | `https://developer-hub.{hub_domain}/catalog` | Usuario taller
+| Grafana (telemetría) | `https://grafana.{hub_domain}` | OAuth OpenShift
+|===
+
 == Show and Tell
 
 . Datos en vivo line-dashboard + overlay anomalía o badge alerta.

@@ -12,6 +12,19 @@ Usa Win+G u OBS localmente para capturar demos; nunca commitees assets MP4 a `pl
 
 Como `pass:[%USER_NAME%]`, opcionalmente ejecuta un script Agent Browser read-only contra tus namespaces asignados para validar regresiones UI antes de sesiones ejecutivas. Este módulo cierra el loop del taller: aprendices humanos, verificación automatizada y captura de demo reproducible en OpenShift.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Showroom (grabar aquí) | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Usuario taller
+| Developer Hub (objetivos catálogo) | `https://developer-hub.{hub_domain}` | Usuario taller
+| Consola OpenShift | `https://console-openshift-console.{hub_domain}` | Usuario taller
+|===
+
 == Show and Tell
 
 . Mostrar YAML Agent Browser en `verification/agent-browser/` (read-only).

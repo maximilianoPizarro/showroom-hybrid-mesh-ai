@@ -12,6 +12,20 @@ Connectivity Link y Kuadrant extienden gestión de APIs al gateway del hub: Auth
 
 Como `pass:[%USER_NAME%]`, verifica que ACS ve tus cargas spoke y prueba rutas APIProduct vía gateway del hub. Recuerda que ACS corre fuera del mesh ambient — este patrón de coexistencia es deliberado y coincide con despliegues ROSA + ACS en producción.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| ACS Central | `https://central-stackrox.{hub_domain}` | OAuth OpenShift
+| Kuadrant — API keys | `https://developer-hub.{hub_domain}/kuadrant` | Usuario taller → key para pass:[%USER_NAME%]
+| Workshop APIs (httpbin, REST, LLM) | `https://workshop-apis.{hub_domain}` | `Authorization: Bearer <API_KEY>`
+| Developer Hub — catálogo API | `https://developer-hub.{hub_domain}/catalog` | Usuario taller
+|===
+
 == Show and Tell
 
 . Overview ACS Central — violaciones y despliegues en spokes.

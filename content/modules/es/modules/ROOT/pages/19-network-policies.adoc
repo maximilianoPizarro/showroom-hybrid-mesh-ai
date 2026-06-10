@@ -12,6 +12,19 @@ Este taller aplica una NetworkPolicy demo en `industrial-edge-tst-all` desde `co
 
 Compara con security groups ROSA más NP Kubernetes: defensa en profundidad en VPC cloud y capas pod. Combina este módulo con ACS (módulo 20) para detección runtime de anomalías cuando políticas están mal configuradas o bypassed.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Industrial Edge | `https://industrial-edge.{hub_domain}` | Pública (sin login)
+| Consola OpenShift — east | ACM → cluster `east` → Networking → NetworkPolicies | Usuario taller
+| NeuroFace (objetivo demo NP) | `https://neuroface.{hub_domain}` | Pública (sin login)
+|===
+
 == Show and Tell
 
 . Aplicar o revisar NetworkPolicy demo en `industrial-edge-tst-all`.

@@ -12,6 +12,19 @@ This workshop intentionally substitutes OpenShift AI plus Model-as-a-Service (Ma
 
 Module 22 onward activates this stack hands-on. Executives should recognize that OpenShift AI on ROSA or on-prem avoids rewriting applications when cloud AI pricing or residency rules change — the Kubernetes-native serving layer moves with the cluster.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| OpenShift AI dashboard | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OpenShift OAuth
+| Developer Hub (Lightspeed / catalog) | `https://developer-hub.{hub_domain}` | Workshop user
+| MaaS endpoint (lab) | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Facilitator token
+|===
+
 == Show and Tell
 
 . Contrast Bedrock/SageMaker with OpenShift AI + MaaS in this lab.

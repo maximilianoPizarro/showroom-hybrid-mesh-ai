@@ -12,6 +12,26 @@ Run `bash scripts/verify-workshop-e2e.sh` from the repo or follow the checklist 
 
 Treat this module as your graduation gate: if any check fails, revisit the linked module or switch to Plan B shared demos documented in Developer Hub System `hybrid-mesh-shared-demos`.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+.Re-run registration if needed
+* `https://workshop-registration.{hub_domain}/` → pass:[%USER_NAME%]
+
+.Checklist URLs (all products)
+[cols="2,3,2"]
+|===
+| Product | URL | Credentials
+
+| Showroom | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Registered user
+| Developer Hub | `https://developer-hub.{hub_domain}` | Workshop user
+| Industrial Edge | `https://industrial-edge.{hub_domain}` | Public (no login)
+| Kuadrant + APIs | `https://developer-hub.{hub_domain}/kuadrant` + `https://workshop-apis.{hub_domain}` | API key
+| NeuroFace | `https://neuroface.{hub_domain}` | Public (no login)
+| Kubecost | `https://kubecost.{hub_domain}` | OpenShift OAuth
+|===
+
 == Show and Tell
 
 . Walk checklist items and run verify script excerpt live.

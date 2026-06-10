@@ -14,6 +14,20 @@ El layout hub-spoke de este taller mapea a conceptos ROSA: el hub es tu cluster 
 
 Entender la arquitectura ROSA ayuda a explicar límites de SLA: Red Hat gestiona el plano de control; tú el sizing de workers, red y datos. En el lab, Kairos y HPA en spokes simulan decisiones de autoscaling ROSA sin facturación AWS, preparándote para módulos FinOps posteriores.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| ACM — ManagedClusters | `https://console-openshift-console.{hub_domain}/multicloud/infrastructure/clusters` | Usuario taller
+| Consola hub | `https://console-openshift-console.{hub_domain}` | Usuario taller
+| Spoke east (cambiar cluster en ACM) | Misma UI ACM → cluster `east` | Usuario taller
+| Spoke west | UI ACM → cluster `west` | Usuario taller
+|===
+
 == Show and Tell
 
 . Pizarra split plano de control ROSA vs responsabilidad workers.

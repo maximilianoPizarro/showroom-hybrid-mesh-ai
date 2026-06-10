@@ -12,6 +12,19 @@ Use Win+G or OBS locally to capture demos; never commit MP4 assets to `platform-
 
 As `pass:[%USER_NAME%]`, optionally execute a read-only Agent Browser script against your assigned namespaces to validate UI regressions before executive sessions. This module closes the workshop loop: human learners, automated verification, and reproducible demo capture on OpenShift.
 
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Showroom (record here) | `https://showroom-showroom.{hub_domain}/?USER_NAME=pass:[%USER_NAME%]` | Workshop user
+| Developer Hub (catalog targets) | `https://developer-hub.{hub_domain}` | Workshop user
+| OpenShift Console | `https://console-openshift-console.{hub_domain}` | Workshop user
+|===
+
 == Show and Tell
 
 . Show Agent Browser YAML in `verification/agent-browser/` (read-only).

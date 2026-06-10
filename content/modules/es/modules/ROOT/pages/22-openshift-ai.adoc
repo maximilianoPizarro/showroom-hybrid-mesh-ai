@@ -12,6 +12,19 @@ Model-as-a-Service (MaaS) ofrece un endpoint compartido compatible OpenAI (`OPEN
 
 Como `pass:[%USER_NAME%]`, confirma que `oc get dsc` reporta Ready y localiza la URL MaaS en el namespace maas-workshop. Este patrón IA hub-spoke refleja clientes ROSA que centralizan inferencia en un cluster de gobernanza mientras spokes edge ejecutan consumidores ligeros.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OAuth OpenShift
+| DevSpaces (east) | `https://devspaces.{east_domain}` | Usuario taller
+| Workspace Plan B | ACM → `east` → Workloads → `demo-ods-workspace` | Usuario taller
+|===
+
 == Show and Tell
 
 . `oc get dsc` — confirmar Ready; abrir workspace DS o Plan B demo-ods-workspace.

@@ -12,6 +12,19 @@ Este taller sustituye intencionalmente OpenShift AI más Model-as-a-Service (Maa
 
 Desde el módulo 22 se activa este stack hands-on. Los ejecutivos deben reconocer que OpenShift AI en ROSA u on-prem evita reescribir aplicaciones cuando cambian precios o reglas de residencia — la capa de serving nativa Kubernetes se mueve con el cluster.
 
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — pass:[%USER_NAME%] / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.{hub_domain}` | OAuth OpenShift
+| Developer Hub (Lightspeed / catálogo) | `https://developer-hub.{hub_domain}` | Usuario taller
+| Endpoint MaaS (lab) | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Token facilitador
+|===
+
 == Show and Tell
 
 . Contrastar Bedrock/SageMaker con OpenShift AI + MaaS en este lab.

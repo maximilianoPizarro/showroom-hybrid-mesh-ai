@@ -7,6 +7,11 @@
 image::images/13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+Goal: confirm Industrial Edge workloads are reachable — line dashboard, Kafka topics, and (optional) your user-scoped namespace. Use Plan B demo `demo-industrial-edge-east` if you did not scaffold.
+
 == Overview
 
 Industrial Edge on OpenShift combines event streaming, integration, and visualization for factory and IoT scenarios. Apache Kafka buffers high-volume sensor topics; Camel K integrations transform and route events; line-dashboard provides operators a live view — all deployed via GitOps to spoke clusters after Developer Hub scaffolding.
@@ -14,6 +19,7 @@ Industrial Edge on OpenShift combines event streaming, integration, and visualiz
 Run the Industrial Edge template as `%USER_NAME%` and confirm your Gitea organization `ws-%USER_NAME%` contains the generated repository. Argo CD on east syncs the Application into namespace `industrial-edge-tst-all` (or your user-scoped equivalent). Plan B demo `demo-industrial-edge-east` offers the same topology if scaffolding is skipped.
 
 This module is the operational heart of Part B: later observability, scaling, network policy, anomaly detection, and AI modules all assume IE workloads are running on your spoke. Verify the line-dashboard route and Kafka topics before proceeding to Kairos scaling.
+
 
 == Lab access — URLs & credentials
 
@@ -23,11 +29,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Developer Hub — scaffold IE | `https://developer-hub.%HUB_DOMAIN%/create` | Workshop user
-| Gitea — your IE repos | `https://gitea-gitea.%HUB_DOMAIN%` | Workshop user
-| Industrial Edge UI | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
+| Developer Hub — scaffold IE | link:https://developer-hub.%HUB_DOMAIN%/create[Developer Hub — scaffold IE] | Workshop user
+| Gitea — your IE repos | link:https://gitea-gitea.%HUB_DOMAIN%[Gitea — your IE repos] | Workshop user
+| Industrial Edge UI | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge UI] | Public (no login)
 | OpenShift GitOps (east) | ACM → cluster `east` → GitOps applications | Workshop user
-| Kafka Console | `https://kafka-console.%HUB_DOMAIN%` | OpenShift OAuth
+| Kafka Console | link:https://kafka-console.%HUB_DOMAIN%[Kafka Console] | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -35,7 +41,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Confirm Gitea org `ws-%USER_NAME%` and Argo CD sync on east.
 . Open line-dashboard route and Kafka Console topics.
 . Offer Plan B `demo-industrial-edge-east` if scaffold fails.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Scaffold IE or open Plan B `demo-industrial-edge-east`
@@ -46,28 +51,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Scaffold IE | software-templates/industrial-edge/template.yaml | SoftwareTemplate |
-| Spoke deploy | east/templates/component-applications.yaml | Application |
+| IE on spoke | `components/industrial-edge-tst/` (east Application) |
+| Line dashboard | namespace `industrial-edge-tst-all` |
 |===
 
-[source,yaml]
-----
-spec:
-  destination:
-    namespace: industrial-edge-tst-all
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get applications -n openshift-gitops | grep -E 'industrial|east-spoke'
+oc get deploy -n industrial-edge-tst-all 2>/dev/null | head -8
 ----
 
 == Verify

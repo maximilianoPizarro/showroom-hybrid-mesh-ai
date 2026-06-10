@@ -7,6 +7,11 @@
 image::images/13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+== Qué harás
+
+Objetivo: confirmar que las cargas Industrial Edge responden — line dashboard, topics Kafka y (opcional) tu namespace. Usa demo Plan B `demo-industrial-edge-east` si no hiciste scaffold.
+
 == Panorama
 
 Industrial Edge en OpenShift combina streaming de eventos, integración y visualización para escenarios de fábrica e IoT. Apache Kafka bufferiza topics de sensores de alto volumen; integraciones Camel K transforman y enrutan eventos; line-dashboard ofrece vista en vivo a operadores — todo desplegado vía GitOps a spokes tras scaffolding Developer Hub.
@@ -14,6 +19,7 @@ Industrial Edge en OpenShift combina streaming de eventos, integración y visual
 Ejecuta la plantilla Industrial Edge como `%USER_NAME%` y confirma que tu organización Gitea `ws-%USER_NAME%` contiene el repositorio generado. Argo CD en east sincroniza la Application al namespace `industrial-edge-tst-all` (o equivalente con alcance de usuario). El demo Plan B `demo-industrial-edge-east` ofrece la misma topología si se omite scaffolding.
 
 Este módulo es el corazón operativo de la Parte B: observabilidad, escalado, network policy, detección de anomalías e IA posteriores asumen cargas IE en tu spoke. Verifica la ruta line-dashboard y topics Kafka antes de continuar a escalado Kairos.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,11 +29,11 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| Developer Hub — scaffold IE | `https://developer-hub.%HUB_DOMAIN%/create` | Usuario taller
-| Gitea — repos IE | `https://gitea-gitea.%HUB_DOMAIN%` | Usuario taller
-| UI Industrial Edge | `https://industrial-edge.%HUB_DOMAIN%` | Pública (sin login)
+| Developer Hub — scaffold IE | link:https://developer-hub.%HUB_DOMAIN%/create[Developer Hub — scaffold IE] | Usuario taller
+| Gitea — repos IE | link:https://gitea-gitea.%HUB_DOMAIN%[Gitea — repos IE] | Usuario taller
+| UI Industrial Edge | link:https://industrial-edge.%HUB_DOMAIN%[UI Industrial Edge] | Pública (sin login)
 | OpenShift GitOps (east) | ACM → cluster `east` → aplicaciones GitOps | Usuario taller
-| Kafka Console | `https://kafka-console.%HUB_DOMAIN%` | OAuth OpenShift
+| Kafka Console | link:https://kafka-console.%HUB_DOMAIN%[Kafka Console] | OAuth OpenShift
 |===
 
 == Demostración
@@ -35,7 +41,6 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Confirmar org Gitea `ws-%USER_NAME%` y sync Argo CD en east.
 . Abrir ruta line-dashboard y topics Kafka Console.
 . Ofrecer Plan B `demo-industrial-edge-east` si falla scaffold.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Scaffoldear IE o abrir Plan B `demo-industrial-edge-east`
@@ -46,28 +51,23 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 
 * Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Scaffold IE | software-templates/industrial-edge/template.yaml | SoftwareTemplate |
-| Spoke deploy | east/templates/component-applications.yaml | Application |
+| IE on spoke | `components/industrial-edge-tst/` (east Application) |
+| Line dashboard | namespace `industrial-edge-tst-all` |
 |===
 
-[source,yaml]
-----
-spec:
-  destination:
-    namespace: industrial-edge-tst-all
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get applications -n openshift-gitops | grep -E 'industrial|east-spoke'
+oc get deploy -n industrial-edge-tst-all 2>/dev/null | head -8
 ----
 
 == Verificar

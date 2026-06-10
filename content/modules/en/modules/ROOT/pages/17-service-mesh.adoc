@@ -7,6 +7,9 @@
 image::images/17-service-mesh.png[OpenShift Service Mesh ambient,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 OpenShift Service Mesh 3 introduces ambient mode: a shared ztunnel layer handles mTLS and L4 telemetry without injecting sidecars into every workload pod by default. Kiali visualizes traffic graphs; mesh config enables distributed tracing for Industrial Edge microservices traversing east spoke namespaces.
@@ -14,6 +17,7 @@ OpenShift Service Mesh 3 introduces ambient mode: a shared ztunnel layer handles
 In this workshop, OSSM3 is subscribed via `components/operators/templates/servicemeshoperator3.yaml` and configured for ambient dataplane mode on IE namespaces — excluding `stackrox` where ACS requires direct network visibility. Compare this to ROSA deployments using App Mesh or third-party meshes: OpenShift keeps mesh CRDs and policies native to the platform lifecycle.
 
 Use Kiali from the OpenShift console to view live traffic for `%USER_NAME%` deployments and validate mTLS between line-dashboard and Kafka-facing services. Module 17 pairs with observability dashboards from module 15 for end-to-end latency analysis.
+
 
 == Lab access — URLs & credentials
 
@@ -23,8 +27,8 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Kiali | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OpenShift OAuth
-| Industrial Edge (meshed apps) | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
+| Kiali | link:https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%[Kiali] | OpenShift OAuth
+| Industrial Edge (meshed apps) | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge (meshed apps)] | Public (no login)
 | OpenShift Console — mesh | ACM → `east` → Operators → Service Mesh | Workshop user
 |===
 
@@ -33,7 +37,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Open Kiali graph for IE namespace — point out ambient ztunnel edges.
 . Note `stackrox` exclusion from ambient mesh.
 . Optional: show mTLS lock icon on service edges.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open Kiali and view traffic for your IE deployments
@@ -44,28 +47,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| OSSM3 | components/servicemeshoperator3/ | Subscription |
-| Kiali | components/kiali/ | Kiali CR |
+| OSSM3 subscription | `components/servicemeshoperator3/` |
+| Kiali | `components/kiali/` |
 |===
 
-[source,yaml]
-----
-metadata:
-  labels:
-    istio.io/dataplane-mode: ambient
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get istio -n istio-system; oc get kiali -A
+oc get istio -n istio-system 2>/dev/null; oc get kiali -A 2>/dev/null | head -3
 ----
 
 == Verify

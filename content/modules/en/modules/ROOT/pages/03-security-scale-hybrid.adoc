@@ -7,6 +7,9 @@
 image::images/03-security-scale-hybrid.png[Hybrid cloud security and scale,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 Security and scale in hybrid OpenShift environments require defense in depth: identity federation, network segmentation, runtime threat detection, and policy-driven compliance across every cluster in the fleet. Red Hat Advanced Cluster Security (ACS) centralizes vulnerability management and runtime policies while OpenShift Service Mesh adds zero-trust connectivity between microservices.
@@ -14,6 +17,7 @@ Security and scale in hybrid OpenShift environments require defense in depth: id
 In this lab, ACS Central runs on the hub with SecuredCluster agents on spokes — note that the `stackrox` namespace deliberately avoids ambient mesh labels so ACS sensors are not disrupted. NetworkPolicy demos in module 19 use OVN on spokes, analogous to security groups plus Kubernetes NP on ROSA. Kuadrant AuthPolicy at the hub gateway shows how API traffic is authenticated and rate-limited before it reaches Industrial Edge backends.
 
 Scaling hybrid fleets means automating placement and capacity: ACM policies, Kairos SmartScalingPolicy, Kafka buffering, and HPA together handle sensor spikes without manual ticket queues. As `%USER_NAME%`, you will observe these controls in modules 14 and 18 on workloads that simulate factory telemetry bursts.
+
 
 == Lab access — URLs & credentials
 
@@ -23,9 +27,9 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| ACS Central | `https://central-stackrox.%HUB_DOMAIN%` | OpenShift OAuth
-| OpenShift Console — Security | `https://console-openshift-console.%HUB_DOMAIN%/security` | Workshop user
-| Kiali (mesh policies) | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OpenShift OAuth
+| ACS Central | link:https://central-stackrox.%HUB_DOMAIN%[ACS Central] | OpenShift OAuth
+| OpenShift Console (hub) | link:https://console-openshift-console.%HUB_DOMAIN%[OpenShift Console] | Workshop user
+| Kiali (mesh policies) | link:https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%[Kiali] | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -33,35 +37,29 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Highlight ACS + mesh coexistence (`stackrox` without ambient labels).
 . Preview NetworkPolicy (19) and Kuadrant (20) as defense layers.
 . Discuss factory edge scale events and Kairos approval workflow.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] List three security layers you will verify in Part B (ACS, NP, Kuadrant)
 * [ ] Note why `stackrox` avoids ambient mesh in this lab
 * [ ] Save progress at the end of this module
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| ACS Central | components/acs-operator/ | Central |
-| Mesh ambient | components/servicemeshoperator3/ | Subscription |
+| ACS operator | `components/acs-operator/` |
+| ACS Central route | namespace `stackrox` |
 |===
 
-[source,yaml]
-----
-# stackrox namespace must NOT use istio ambient label
-metadata:
-  name: stackrox
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get central -n stackrox
+oc get central -n stackrox; oc get ns stackrox --show-labels | head -3
 ----
 
 == Verify

@@ -5,6 +5,9 @@
 ++++
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 Kubecost on OpenShift allocates Kubernetes spend by namespace, label, and cluster — federating data from hub primary and spoke agents into MinIO-backed ETL storage. Platform teams charge back factory edge tenants and compare ROSA node costs versus on-prem depreciation using consistent Kubernetes unit economics.
@@ -12,6 +15,7 @@ Kubecost on OpenShift allocates Kubernetes spend by namespace, label, and cluste
 In this lab, Kubecost deploys from `components/kubecost/` with agents on east/west reporting to the hub primary. Filter allocations to namespaces owned by `%USER_NAME%` and correlate idle capacity with Kairos recommendations from module 14.
 
 FinOps closes the executive loop from module 01: hybrid strategy without cost visibility fails in CFO review. Kubecost complements AWS Cost Explorer tags on ROSA by exposing pod-level waste inside the cluster boundary.
+
 
 == Lab access — URLs & credentials
 
@@ -21,7 +25,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Kubecost | `https://kubecost.%HUB_DOMAIN%` | OpenShift OAuth
+| Kubecost | link:https://kubecost.%HUB_DOMAIN%[Kubecost] | OpenShift OAuth
 | OpenShift Console — quotas | ACM → your namespace on `east` | Workshop user
 |===
 
@@ -30,7 +34,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Kubecost UI: allocation by namespace for `%USER_NAME%`.
 . Show federated cluster dropdown (hub + spokes).
 . Compare idle cost with Kairos over-provision narrative.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open Kubecost and filter allocations to your namespace
@@ -41,26 +44,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Kubecost | components/kubecost/ | CostAnalyzer |
-| MinIO ETL | components/industrial-edge-minio/ | Bucket |
+| Kubecost | `components/kubecost/` |
+| MinIO data lake | `components/industrial-edge-minio/` |
 |===
 
-[source,yaml]
-----
-# Free tier: single-cluster Kubecost on hub
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get deploy -n kubecost kubecost-cost-analyzer
+oc get deploy -n kubecost 2>/dev/null | head -3
 ----
 
 == Verify

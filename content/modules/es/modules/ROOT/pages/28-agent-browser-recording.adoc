@@ -1,89 +1,31 @@
-= Agent Browser y grabación
+= Agent Browser (facilitador)
 
 ++++
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
-== Panorama
 
-Las automatizaciones Agent Browser en `verification/agent-browser/` reproducen flujos del taller para smoke testing estilo CI — navegando Developer Hub, ACM y NeuroFace sin clicks manuales. Las grabaciones apoyan dry-runs de facilitadores y highlights post-evento pero están intencionalmente en gitignore (`*.mp4`) según `verification/recording-runbook.md`.
 
-Usa Win+G u OBS localmente para capturar demos; nunca commitees assets MP4 a `platform-hub-spoke-config`. Scripts YAML Agent Browser documentan selectores y URLs esperados con placeholders `%HUB_DOMAIN%` para entornos forked.
 
-Como `%USER_NAME%`, opcionalmente ejecuta un script Agent Browser read-only contra tus namespaces asignados para validar regresiones UI antes de sesiones ejecutivas. Este módulo cierra el loop del taller: aprendices humanos, verificación automatizada y captura de demo reproducible en OpenShift.
+== Qué harás
 
-== Acceso al producto — URLs y credenciales
+IMPORTANT: **Solo facilitador / agente de automatización** — esta página no forma parte de la navegación del participante.
 
-NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+**Solo facilitador / agente.** YAML Agent Browser bajo `verification/agent-browser/` reproduce flujos UI para CI. Grabaciones locales (`*.mp4` gitignored).
 
-[cols="2,3,2"]
-|===
-| Servicio | URL | Credenciales
 
-| Showroom (grabar aquí) | `https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%` | Usuario taller
-| Developer Hub (objetivos catálogo) | `https://developer-hub.%HUB_DOMAIN%` | Usuario taller
-| Consola OpenShift | `https://console-openshift-console.%HUB_DOMAIN%` | Usuario taller
-|===
 
-== Demostración
 
-. Mostrar YAML Agent Browser en `verification/agent-browser/` (read-only).
-. Revisar recording-runbook.md — política sin MP4 en Git.
-. Opcional: ejecutar un script smoke headless si el entorno lo permite.
-
-== Tu TODO (usuario %USER_NAME%)
-
-* [ ] Leer `verification/recording-runbook.md` (sin MP4 en Git)
-* [ ] Explorar un YAML Agent Browser bajo `verification/agent-browser/`
-* [ ] Guardar progreso al final de este módulo
 
 == Lab en vivo
 
 * Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
-== YAML behind the scenes
-
-[cols="2,3,1"]
-|===
-| UI action | Git source | Kind
-
-| Agent Browser | verification/agent-browser/*.yaml | YAML flows |
-| Runbook | verification/recording-runbook.md | Doc |
-|===
-
-[source,yaml]
-----
-# Recordings stay local — *.mp4 gitignored
-# Naming: YYYY-MM-DD-userN-module-slug.mp4
-----
-
-Verify:
-
-[source,bash]
-----
-test -f verification/recording-runbook.md && test -d verification/agent-browser
-----
-
-== Verificar
-
-[cols="1,2,1"]
-|===
-| Check | Action | Expected
-
-| Progress | Save checkboxes below | `POST /api/progress` returns OK
-|===
 
 
-++++
-<div class="workshop-progress" data-module="28-agent-browser-recording">
-  <label><input type="checkbox" data-completed> Completé este módulo</label>
-  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
-  <button type="button" onclick="saveWorkshopProgress('28-agent-browser-recording')">Guardar progreso</button>
-</div>
-++++
 
 
-TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
 
 

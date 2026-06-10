@@ -25,5 +25,3 @@
 * xref:24-text-ai-predictive.adoc[24. Texto gen y predictivo]
 * xref:25-neuroface.adoc[25. NeuroFace]
 * xref:26-ai-end-user-apps.adoc[26. IA en apps finales]
-* xref:27-full-verification.adoc[27. Verificación completa]
-* xref:28-agent-browser-recording.adoc[28. Agent Browser y grabación]

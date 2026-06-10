@@ -7,6 +7,11 @@
 image::images/22-openshift-ai.png[OpenShift AI DataScienceCluster,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+Open the **OpenShift AI dashboard** on this hub and confirm `DataScienceCluster` is ready. MaaS endpoint credentials are pre-provisioned for the lab — you do not configure AWS Bedrock in this module.
+
 == Overview
 
 OpenShift AI unifies data science workflows on OpenShift through the DataScienceCluster operator: notebooks, pipeline runtime, model serving, and ModelMesh for multi-framework inference. On the workshop hub, `default-dsc` enables DS projects, workbenches, and serving runtimes consumed by downstream modules.
@@ -14,6 +19,7 @@ OpenShift AI unifies data science workflows on OpenShift through the DataScience
 Model-as-a-Service (MaaS) provides a shared OpenAI-compatible endpoint (`OPENAI_API_BASE`) stored in `openshift-ai-maas-credentials` — NeuroFace, Developer Hub Lightspeed, and DevSpaces Continue AI all consume this endpoint instead of public cloud keys. Plan B demo `demo-ods-workspace` opens a pre-provisioned DS workspace if your template quota is exhausted.
 
 As `%USER_NAME%`, confirm `oc get dsc` reports Ready and locate the MaaS URL in the maas-workshop namespace. This hub-spoke AI pattern mirrors ROSA customers who centralize inference on a governance cluster while edge spokes run lightweight consumers.
+
 
 == Lab access — URLs & credentials
 
@@ -23,8 +29,8 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| OpenShift AI dashboard | `https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%` | OpenShift OAuth
-| DevSpaces (east) | `https://devspaces.%EAST_DOMAIN%` | Workshop user
+| OpenShift AI dashboard | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[OpenShift AI dashboard] | OpenShift OAuth
+| DevSpaces (east) | link:https://devspaces.%EAST_DOMAIN%[DevSpaces (east)] | Workshop user
 | Plan B workspace | ACM → `east` → Workloads → `demo-ods-workspace` | Workshop user
 |===
 
@@ -33,7 +39,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . `oc get dsc` — confirm Ready; open DS workspace or Plan B demo-ods-workspace.
 . Show MaaS endpoint URL in maas-workshop (no keys on screen).
 . Explain hub-centralized inference, spoke consumers pattern.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Run `oc get dsc` and confirm DataScienceCluster Ready
@@ -44,29 +49,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| DSC | components/openshift-ai-hub/ | DataScienceCluster |
-| MaaS | maas-workshop namespace | Secret |
+| DSC | `components/openshift-ai-hub/` |
+| MaaS | values `litemaas` in hub `values.yaml` |
 |===
 
-[source,yaml]
-----
-apiVersion: datasciencecluster.opendatahub.io/v1
-kind: DataScienceCluster
-metadata:
-  name: default-dsc
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get dsc; oc get ns maas-workshop demo-ods-workspace 2>/dev/null
+oc get dsc 2>/dev/null; oc get ns maas-workshop 2>/dev/null
 ----
 
 == Verify

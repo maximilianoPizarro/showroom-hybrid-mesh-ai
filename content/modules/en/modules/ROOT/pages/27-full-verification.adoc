@@ -1,4 +1,4 @@
-= Full Stack Verification
+= Full Stack Verification (facilitator)
 
 ++++
 <span class="workshop-time-badge">~15 min</span>
@@ -7,98 +7,27 @@
 image::images/27-full-verification.png[Full stack workshop verification,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
-== Overview
 
-Full stack verification confirms Part A narrative comprehension and Part B hands-on outcomes for `%USER_NAME%`: registration redirect, Showroom terminal `oc`, ACM spoke visibility, IE sync, Kubecost allocations, DSC Ready, NeuroFace health, and progress API persistence.
 
-Run `bash scripts/verify-workshop-e2e.sh` from the repo or follow the checklist in `verification/progress-checklist.yaml`. The workshop registration service at `https://workshop-registration.%HUB_DOMAIN%` and Showroom progress endpoint (`POST /api/progress`) must accept your module completions — facilitators use aggregate progress to pace the room.
 
-Treat this module as your graduation gate: if any check fails, revisit the linked module or switch to Plan B shared demos documented in Developer Hub System `hybrid-mesh-shared-demos`.
+== What you will do
 
-== Lab access — URLs & credentials
+IMPORTANT: **Facilitator / automation agent only** — this page is not part of the learner navigation.
 
-NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+**Facilitator / agent only.** Run `scripts/verify-workshop-e2e.sh` and `showroom-hybrid-mesh-ai/verification/progress-checklist.yaml` — not shown to learners in the workshop nav.
 
-.Re-run registration if needed
-* `https://workshop-registration.%HUB_DOMAIN%/` → %USER_NAME%
 
-.Checklist URLs (all products)
-[cols="2,3,2"]
-|===
-| Product | URL | Credentials
 
-| Showroom | `https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%` | Registered user
-| Developer Hub | `https://developer-hub.%HUB_DOMAIN%` | Workshop user
-| Industrial Edge | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
-| Kuadrant + APIs | `https://developer-hub.%HUB_DOMAIN%/kuadrant` + `https://workshop-apis.%HUB_DOMAIN%` | API key
-| NeuroFace | `https://neuroface.%HUB_DOMAIN%` | Public (no login)
-| Kubecost | `https://kubecost.%HUB_DOMAIN%` | OpenShift OAuth
-|===
 
-== Show and Tell
-
-. Walk checklist items and run verify script excerpt live.
-. Confirm progress API save from Showroom checkbox UI.
-. Celebrate completion; share Plan B paths for any failed checks.
-
-== Your TODO (user %USER_NAME%)
-
-* [ ] Complete checklist in `verification/progress-checklist.yaml`
-* [ ] Run or review output of `scripts/verify-workshop-e2e.sh`
-* [ ] Save progress at the end of this module
 
 == Live lab
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
-
-[cols="2,3,1"]
-|===
-| UI action | Git source | Kind
-
-| Progress API | workshop-registration | POST /api/progress |
-| E2E script | scripts/verify-workshop-e2e.sh | Shell |
-| Checklist | verification/progress-checklist.yaml | YAML |
-|===
-
-[source,yaml]
-----
-# Checks: registration, showroom, ACM clusters, IE deploy, NeuroFace route
-----
-
-Verify:
-
-[source,bash]
-----
-bash scripts/verify-workshop-e2e.sh 2>/dev/null || oc get managedclusters
-----
-
-== Verify
-
-[cols="1,2,1"]
-|===
-| Check | Action | Expected
-
-| Progress | Save checkboxes below | `POST /api/progress` returns OK
-|===
 
 
-++++
-<div class="workshop-progress" data-module="27-full-verification">
-  <label><input type="checkbox" data-completed> I completed this module</label>
-  <label><input type="checkbox" data-interest> I want to learn more</label>
-  <button type="button" onclick="saveWorkshopProgress('27-full-verification')">Save progress</button>
-</div>
-++++
 
 
-TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
 
 
-++++
-<div class="workshop-next-nav">
-  <a href="28-agent-browser-recording.html">Next → 28 agent browser recording</a>
-</div>
-++++
 

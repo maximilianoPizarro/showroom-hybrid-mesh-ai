@@ -7,6 +7,11 @@
 image::images/26-ai-end-user-apps.png[AI in end-user applications,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+Capstone: tie together IE dashboard, Developer Hub catalog entries, and Grafana for `%USER_NAME%`. This is the **last learner module (26)** — facilitators run automated verification separately.
+
 == Overview
 
 End-user applications — operator dashboards, mobile alerts, MES integrations — consume AI insights where work happens, not only in data science notebooks. line-dashboard on the east spoke visualizes Kafka sensor streams; Camel integrations route anomaly events; NeuroFace and MaaS summaries embed into the same UX `%USER_NAME%` sees in production rollouts.
@@ -14,6 +19,7 @@ End-user applications — operator dashboards, mobile alerts, MES integrations �
 This module integrates modules 13–25: verify line-dashboard displays live IE data, trigger ie-anomaly-alerter thresholds, and optionally embed a NeuroFace iframe or chat link for contextual AI help. Camel K Integrations from templates `demo-camel-kaoto-east` and `demo-camel-cdc-east` show event-driven patterns factory teams deploy on OpenShift alongside OT systems.
 
 Platform teams win when AI is invisible infrastructure: OpenShift AI, MaaS, and NeuroFace become services catalog entries — app squads bind them through Developer Hub dependencies without rebuilding ML pipelines per plant.
+
 
 == Lab access — URLs & credentials
 
@@ -23,9 +29,9 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Industrial Edge line dashboard | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
-| Developer Hub — IE components | `https://developer-hub.%HUB_DOMAIN%/catalog` | Workshop user
-| Grafana (telemetry) | `https://grafana.%HUB_DOMAIN%` | OpenShift OAuth
+| Industrial Edge line dashboard | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge line dashboard] | Public (no login)
+| Developer Hub — IE components | link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub — IE components] | Workshop user
+| Grafana (telemetry) | link:https://grafana.%HUB_DOMAIN%[Grafana (telemetry)] | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -33,7 +39,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . line-dashboard live data + anomaly overlay or alert badge.
 . Optional Camel integration status in Topology.
 . Story: operator sees telemetry, prediction, and AI help in one UX.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Verify line-dashboard shows live IE telemetry
@@ -44,26 +49,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| line-dashboard | industrial-edge-tst-all | Deployment |
-| Camel K | industrial-edge-pipelines | Integration |
+| Line dashboard | `industrial-edge-tst-all` |
+| Developer Hub IE catalog | `components/developer-hub/files/catalog/industrial-edge-system.yaml` |
 |===
 
-[source,yaml]
-----
-# End-user apps on spoke consume IE + AI stack
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get deploy -n industrial-edge-tst-all line-dashboard
+oc get deploy -n industrial-edge-tst-all line-dashboard 2>/dev/null
 ----
 
 == Verify
@@ -87,10 +89,4 @@ oc get deploy -n industrial-edge-tst-all line-dashboard
 
 TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
 
-
-++++
-<div class="workshop-next-nav">
-  <a href="27-full-verification.html">Next → 27 full verification</a>
-</div>
-++++
 

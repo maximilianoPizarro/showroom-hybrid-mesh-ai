@@ -7,6 +7,11 @@
 image::images/12-software-templates.png[Developer Hub software templates,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+== Qué harás
+
+Crearás (o explorarás) una carga desde **Developer Hub → Create**. Si falla el scaffold de `%USER_NAME%`, abre el system **Plan B** `hybrid-mesh-shared-demos`. Revisa Gitea solo si el scaffold tuvo éxito.
+
 == Panorama
 
 Las plantillas software de Red Hat Developer Hub codifican golden paths: acciones scaffolder parametrizadas crean repos Git, registran entidades de catálogo y disparan Applications Argo CD con guardrails (namespaces, quotas, network policies) ya cableados. Los equipos de plataforma publican plantillas una vez; los desarrolladores se autoatienden vía Create sin tickets de infraestructura.
@@ -14,6 +19,7 @@ Las plantillas software de Red Hat Developer Hub codifican golden paths: accione
 Este taller incluye plantillas para Industrial Edge, Camel Kaoto, API products, workspaces OpenShift AI, VMs CNV y NeuroFace. Si el scaffold de `%USER_NAME%` falla por quota o timing de Gitea, cambia a Plan B — Developer Hub System `hybrid-mesh-shared-demos` expone Components pre-desplegados con las mismas URLs y entradas Topology.
 
 Las plantillas son el puente entre estrategia ejecutiva (módulo 01) y despliegues spoke (módulo 13). Inspecciona `docs/assets/backstage/software-templates/` y ConfigMaps de catálogo para ver cómo OpenShift GitOps recoge repos generados automáticamente.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,10 +29,10 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| Developer Hub — Create | `https://developer-hub.%HUB_DOMAIN%/create` | Usuario taller
-| Developer Hub — Catálogo | `https://developer-hub.%HUB_DOMAIN%/catalog` | Usuario taller
-| Demos compartidas Plan B | `https://developer-hub.%HUB_DOMAIN%/catalog/default/system/hybrid-mesh-shared-demos` | Usuario taller
-| Gitea (repos del scaffold) | `https://gitea-gitea.%HUB_DOMAIN%` | Usuario taller
+| Developer Hub — Create | link:https://developer-hub.%HUB_DOMAIN%/create[Developer Hub — Create] | Usuario taller
+| Developer Hub — Catálogo | link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub — Catálogo] | Usuario taller
+| Demos compartidas Plan B | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/hybrid-mesh-shared-demos[Demos compartidas Plan B] | Usuario taller
+| Gitea (repos del scaffold) | link:https://gitea-gitea.%HUB_DOMAIN%[Gitea (repos del scaffold)] | Usuario taller
 |===
 
 == Demostración
@@ -34,7 +40,6 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Flujo Create Developer Hub en vivo para plantilla Industrial Edge.
 . Mostrar fuente YAML catálogo y patrón URL repo Gitea generado.
 . Demostrar entidad fallback Plan B en `hybrid-mesh-shared-demos`.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Explorar lista plantillas Create en Developer Hub
@@ -45,28 +50,23 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 
 * Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Developer Hub Create | docs/assets/backstage/software-templates/ | SoftwareTemplate |
-| Plan B catalog | components/workshop-demos/files/catalog/ | System |
+| Template catalog | `docs/assets/backstage/software-templates/` |
+| Plan B demos | `components/workshop-demos/files/catalog/hybrid-mesh-shared-demos.yaml` |
 |===
 
-[source,yaml]
-----
-metadata:
-  name: hybrid-mesh-shared-demos
-  title: Hybrid Mesh AI — Shared Demos (Plan B)
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get configmap developer-hub-catalog-demos -n developer-hub 2>/dev/null || oc get application -n openshift-gitops | grep workshop
+oc get configmap developer-hub-catalog-demos -n developer-hub 2>/dev/null
 ----
 
 == Verificar

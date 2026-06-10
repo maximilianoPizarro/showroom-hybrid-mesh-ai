@@ -5,6 +5,9 @@
 ++++
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 OpenShift observability spans cluster metrics, logs, traces, and custom dashboards federated across ACM-managed clusters. Red Hat builds on Prometheus, Loki or Elasticsearch patterns, Grafana, and OpenTelemetry Instrumentation CRs so application teams inherit platform-wide collectors without sidecar sprawl on every pod.
@@ -12,6 +15,7 @@ OpenShift observability spans cluster metrics, logs, traces, and custom dashboar
 This workshop deploys multicluster Grafana dashboards on the hub, OpenTelemetry collectors via `components/opentelemetry/`, and Kafka Console for IE topic inspection. As `%USER_NAME%`, filter dashboards to your namespace and correlate latency spikes with mesh traces in module 17.
 
 Executives should connect this module to module 21 (Kubecost): metrics prove SLO compliance while cost metrics prove efficiency — both required for hybrid FinOps. Use Showroom `oc` to list `GrafanaDashboard` CRs and confirm IE workloads emit scrape targets.
+
 
 == Lab access — URLs & credentials
 
@@ -21,9 +25,9 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Grafana | `https://grafana.%HUB_DOMAIN%` | OpenShift OAuth
-| Kiali | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OpenShift OAuth
-| OpenShift Console — Observe | `https://console-openshift-console.%HUB_DOMAIN%/observe/metrics` | Workshop user
+| Grafana | link:https://grafana.%HUB_DOMAIN%[Grafana] | OpenShift OAuth
+| Kiali | link:https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%[Kiali] | OpenShift OAuth
+| OpenShift Console — Observe | link:https://console-openshift-console.%HUB_DOMAIN%/observe/metrics[OpenShift Console — Observe] | Workshop user
 |===
 
 == Show and Tell
@@ -31,7 +35,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Open multicluster Grafana dashboard filtered to IE namespace.
 . Show Kafka Console and a sample OTEL trace (or metrics gap if trace pending).
 . Link metrics SLO story to upcoming Kubecost module.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open a multicluster Grafana dashboard for your IE namespace
@@ -42,27 +45,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Grafana dashboards | components/grafana-dashboards/ | ConfigMap |
-| OTEL | components/opentelemetry/ | Instrumentation |
-| Kafka Console | components/kafka-console/ | Deployment |
+| Grafana dashboards | `components/grafana-dashboards/` |
+| OTEL | `components/opentelemetry/` |
 |===
 
-[source,yaml]
-----
-# Open Grafana from ConsoleLink; filter by cluster label
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get grafanadashboard -A 2>/dev/null | head -5; oc get route -n openshift-cluster-observability-operator 2>/dev/null | head -3
+oc get route -n openshift-cluster-observability-operator 2>/dev/null | head -3
 ----
 
 == Verify

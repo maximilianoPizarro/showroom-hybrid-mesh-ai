@@ -7,6 +7,11 @@
 image::images/10-acm-multicluster.png[ACM multicluster fleet management,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+== Qué harás
+
+En este módulo abres **ACM Clusters** en el hub y confirmas que los spokes `east` y `west` están `Available`. Usa la terminal Showroom: `oc get managedclusters`. Cada ejercicio posterior asume que sabes en qué cluster corren tus cargas (normalmente `east`).
+
 == Panorama
 
 Red Hat Advanced Cluster Management for Kubernetes convierte OpenShift en plano de control de flota: importar spokes, aplicar políticas, visualizar salud y delegar GitOps con RBAC consistente. ManagedCluster y agentes Klusterlet reflejan cómo clusters ROSA y on-prem se unen al hub de gobernanza sin compartir kube-admin ampliamente.
@@ -14,6 +19,7 @@ Red Hat Advanced Cluster Management for Kubernetes convierte OpenShift en plano 
 En este lab, abre ACM Clusters en el hub y localiza east y west — cada spoke se bootstrapeó desde manifiestos GitOps de `components/acm-hub-spoke/`. Como `%USER_NAME%`, tus cargas aterrizan en east por defecto; Topology en Developer Hub usa APIs OCM para mostrar el mismo grafo que ACM.
 
 Este módulo establece el modelo mental para cada ejercicio Parte B: el hub posee ingress, política, agregación FinOps y planos de control IA; los spokes ejecutan Industrial Edge y namespaces con alcance de usuario. Verifica con `oc get managedclusters` desde la terminal Showroom.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,9 +29,9 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| ACM Clusters | `https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters` | Usuario taller
-| ACM GitOps (Policies) | `https://console-openshift-console.%HUB_DOMAIN%/multicloud/policies` | Usuario taller
-| Consola hub | `https://console-openshift-console.%HUB_DOMAIN%` | Usuario taller
+| ACM Clusters | link:https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters[ACM Clusters] | Usuario taller
+| ACM GitOps (Policies) | link:https://console-openshift-console.%HUB_DOMAIN%/multicloud/policies[ACM GitOps (Policies)] | Usuario taller
+| Consola hub | link:https://console-openshift-console.%HUB_DOMAIN%[Consola hub] | Usuario taller
 |===
 
 == Demostración
@@ -33,7 +39,6 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Abrir UI ACM Clusters — identificar spokes east y west.
 . Ejecutar `oc get managedclusters` en terminal Showroom en vivo.
 . Mostrar Topology Developer Hub reflejando grafo OCM.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Ejecutar `oc get managedclusters` e identificar east/west
@@ -44,31 +49,23 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 
 * Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| ACM Clusters UI | components/acm-hub-spoke/ | ManagedCluster |
-| GitOpsCluster | components/acm-hub-spoke/templates/gitops-cluster.yaml | GitOpsCluster |
+| ManagedCluster | `components/acm-hub-spoke/templates/managed-clusters.yaml` |
+| GitOpsCluster | `components/acm-hub-spoke/templates/gitops-cluster.yaml` |
 |===
 
-[source,yaml]
-----
-apiVersion: cluster.open-cluster-management.io/v1
-kind: ManagedCluster
-metadata:
-  name: east
-spec:
-  hubAcceptsClient: true
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get managedclusters && oc get gitopscluster -A
+oc get managedclusters; oc get gitopscluster -A 2>/dev/null | head -5
 ----
 
 == Verificar

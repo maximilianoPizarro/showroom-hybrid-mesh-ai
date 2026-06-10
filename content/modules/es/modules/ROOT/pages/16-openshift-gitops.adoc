@@ -7,6 +7,9 @@
 image::images/16-openshift-gitops.png[OpenShift GitOps and Argo CD,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+
+
 == Panorama
 
 OpenShift GitOps instala Argo CD como operador gestionado e integra con ApplicationSets ACM para propagar manifiestos hub-to-spoke con destinos seguros por política. Los equipos de plataforma commitean estado deseado a Git; controladores reconcilian drift — la misma disciplina GitOps que clientes ROSA usan al combinar clusters ROSA con repos hub ACM.
@@ -14,6 +17,7 @@ OpenShift GitOps instala Argo CD como operador gestionado e integra con Applicat
 En este lab, Applications hub bajo `templates/component-applications.yaml` despliegan servicios compartidos mientras Applications spoke (por ejemplo Industrial Edge) sincronizan desde repos Gitea de usuario creados en el módulo 13. ApplicationSet `industrial-edge-spoke` demuestra generadores matrix apuntando a labels east/west.
 
 Inspecciona estado de sync en UI Argo CD como `%USER_NAME%` e identifica qué revisión de repo disparó tu despliegue. GitOps es la columna operativa: cada módulo de producto (mesh, ACS, IA) resuelve en YAML rastreado en `platform-hub-spoke-config`.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,8 +27,8 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| Gitea | `https://gitea-gitea.%HUB_DOMAIN%` | Usuario taller (*Admin Gitea (facilitador):* `gitea_admin` / `openshift`)
-| Argo CD (hub) | `https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/openshift-gitops/applications.argoproj.io~v1alpha1~Application` | Usuario taller
+| Gitea | link:https://gitea-gitea.%HUB_DOMAIN%[Gitea] | Usuario taller (*Admin Gitea (facilitador):* `gitea_admin` / `openshift`)
+| Argo CD (hub) | link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/openshift-gitops/applications.argoproj.io~v1alpha1~Application[Argo CD (hub)] | Usuario taller
 | ACM GitOps cluster | ACM → Infrastructure → Clusters → GitOps | Usuario taller
 |===
 
@@ -33,7 +37,6 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . UI Argo CD: Application hub vs fuentes Application spoke usuario.
 . Destacar generador ApplicationSet matrix east/west.
 . Mostrar sync wave o estado health para app IE.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Encontrar tu Application IE en Argo CD y anotar estado sync
@@ -44,29 +47,23 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 
 * Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| ApplicationSet | components/acm-hub-spoke/templates/applicationset.yaml | ApplicationSet |
-| Hub apps | templates/component-applications.yaml | Application |
+| Hub Applications | `templates/component-applications.yaml` |
+| ApplicationSet IE | `components/acm-hub-spoke/templates/applicationset.yaml` |
 |===
 
-[source,yaml]
-----
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: industrial-edge-spoke
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get applicationset -n openshift-gitops
+oc get applications -n openshift-gitops 2>/dev/null | head -10
 ----
 
 == Verificar

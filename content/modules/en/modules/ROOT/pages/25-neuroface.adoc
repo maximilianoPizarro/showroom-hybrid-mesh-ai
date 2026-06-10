@@ -7,6 +7,11 @@
 image::images/25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] in this browser, allow webcam access, and test detection + chat. If the route fails, check Argo app `field-content-neuroface` on the hub — do not follow external LibreChat docs.
+
 == Overview
 
 NeuroFace delivers computer vision and conversational AI on OpenShift without bundling LibreChat: browser webcam feeds YOLO object detection and face recognition pipelines while `/api/chat` proxies to the shared MaaS LLM (llama-scout-17b). OVMS ModelMesh serves vision models locally; chat stays centralized for token governance — the hybrid AI pattern manufacturing customers request for quality inspection lines.
@@ -14,6 +19,7 @@ NeuroFace delivers computer vision and conversational AI on OpenShift without bu
 Access NeuroFace at `https://neuroface.%HUB_DOMAIN%` after registering as `%USER_NAME%`. Helm values in `components/neuroface/` disable LiteLLM and external LibreChat dependencies; model endpoint and modelName align with maas-workshop credentials. Plan B catalog entity `demo-neuroface` maps to the same route if you skip scaffolding.
 
 In the lab, test webcam inference latency on spoke network paths and ask chat questions about detected objects — simulating a shop-floor assistant that explains vision alerts in natural language. Module 26 wires these signals into Industrial Edge dashboards for unified operator experience.
+
 
 == Lab access — URLs & credentials
 
@@ -23,8 +29,8 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| NeuroFace app | `https://neuroface.%HUB_DOMAIN%` | Public (no login)
-| API chat | `https://neuroface.%HUB_DOMAIN%/api/chat` | Public (no login)
+| NeuroFace app | link:https://neuroface.%HUB_DOMAIN%[NeuroFace app] | Public (no login)
+| API chat | link:https://neuroface.%HUB_DOMAIN%/api/chat[API chat] | Public (no login)
 | OpenShift Console — deploy | ACM → `hub` → namespace `neuroface` | Workshop user
 |===
 
@@ -33,7 +39,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Open `https://neuroface.%HUB_DOMAIN%` — webcam object detection live.
 . Send chat question about detected object; show MaaS backend (not LibreChat).
 . Highlight OVMS local vision + centralized chat governance.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open `https://neuroface.%HUB_DOMAIN%` and test webcam detection
@@ -44,30 +49,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| NeuroFace | components/neuroface/ | Helm chart |
-| MaaS chat | neuroface.chat | Config |
+| NeuroFace chart | `components/neuroface/` |
+| Route | `neuroface.%HUB_DOMAIN%` |
 |===
 
-[source,yaml]
-----
-chat:
-  enabled: true
-  modelEndpoint: "https://maas-rhdp.apps.maas.redhatworkshops.io/v1"
-litellm:
-  enabled: false
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-curl -sk -o /dev/null -w '%{http_code}' https://neuroface.{hub_domain}/api/health
+curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/
 ----
 
 == Verify

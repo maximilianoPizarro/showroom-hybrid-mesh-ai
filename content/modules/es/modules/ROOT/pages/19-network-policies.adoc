@@ -5,6 +5,9 @@
 ++++
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+
+
 == Panorama
 
 NetworkPolicy Kubernetes en OpenShift OVN aplica micro-segmentación: solo pods y namespaces etiquetados que permitas explícitamente pueden comunicarse — esencial en redes zero-trust de fábrica donde sensores comprometidos no deben moverse lateralmente a backends MES. Red Hat OpenShift incluye OVN-Kubernetes como CNI por defecto con enrutamiento consciente de políticas.
@@ -12,6 +15,7 @@ NetworkPolicy Kubernetes en OpenShift OVN aplica micro-segmentación: solo pods 
 Este taller aplica una NetworkPolicy demo en `industrial-edge-tst-all` desde `components/workshop-demos/templates/network-policy-demo.yaml`, permitiendo ingress al dashboard mientras niega tráfico cross-namespace inesperado. Como `%USER_NAME%`, prueba rutas permitidas y denegadas con probes curl `oc exec` desde la terminal Showroom.
 
 Compara con security groups ROSA más NP Kubernetes: defensa en profundidad en VPC cloud y capas pod. Combina este módulo con ACS (módulo 20) para detección runtime de anomalías cuando políticas están mal configuradas o bypassed.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -21,9 +25,9 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| Industrial Edge | `https://industrial-edge.%HUB_DOMAIN%` | Pública (sin login)
+| Industrial Edge | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge] | Pública (sin login)
 | Consola OpenShift — east | ACM → cluster `east` → Networking → NetworkPolicies | Usuario taller
-| NeuroFace (objetivo demo NP) | `https://neuroface.%HUB_DOMAIN%` | Pública (sin login)
+| NeuroFace (objetivo demo NP) | link:https://neuroface.%HUB_DOMAIN%[NeuroFace (objetivo demo NP)] | Pública (sin login)
 |===
 
 == Demostración
@@ -31,7 +35,6 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Aplicar o revisar NetworkPolicy demo en `industrial-edge-tst-all`.
 . Ejecutar curl permitido vs denegado desde pods terminal Showroom.
 . Relacionar con security groups ROSA + NP defensa en profundidad.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Revisar NetworkPolicy en `industrial-edge-tst-all`
@@ -42,30 +45,23 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 
 * Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| NP demo | components/workshop-demos/templates/network-policy-demo.yaml | NetworkPolicy |
-| OVN CNI | OpenShift networking | Cluster default |
+| NP demo | `components/workshop-demos/templates/network-policy-demo.yaml` |
+| IE namespace | `industrial-edge-tst-all` |
 |===
 
-[source,yaml]
-----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: ie-workshop-allow-dashboard
-  namespace: industrial-edge-tst-all
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get networkpolicy -n industrial-edge-tst-all
+oc get networkpolicy -n industrial-edge-tst-all 2>/dev/null
 ----
 
 == Verificar

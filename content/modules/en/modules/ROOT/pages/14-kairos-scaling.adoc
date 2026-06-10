@@ -5,6 +5,9 @@
 ++++
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 Kairos Community on OpenShift analyzes workload metrics and recommends node or machine set adjustments through SmartScalingPolicy resources — bridging the gap between Kubernetes HPA (pod-level) and infrastructure provisioning (cluster-level). Operators approve recommendations in Kairos Console, preserving human oversight for factory edge sites where sudden scale-down is risky.
@@ -12,6 +15,7 @@ Kairos Community on OpenShift analyzes workload metrics and recommends node or m
 In this lab, the sensor-scan policy watches Industrial Edge metrics and proposes scaling when scan rates spike — analogous to ROSA MachineSet autoscaling triggered by custom CloudWatch metrics. Pair this module with module 18 (HPA + Kafka) to show two layers: pods scale horizontally while Kairos evaluates node capacity.
 
 Open Kairos Console from the OpenShift menu, locate pending recommendations tied to `%USER_NAME%` namespaces, and approve or discuss trade-offs with the facilitator. Run `oc get smartscalingpolicy -A` to correlate CRDs with UI actions.
+
 
 == Lab access — URLs & credentials
 
@@ -21,8 +25,8 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Kairos Console | `https://kairos-console-kairos-system.%HUB_DOMAIN%` | OpenShift OAuth
-| Grafana (sensor metrics) | `https://grafana.%HUB_DOMAIN%` | OpenShift OAuth
+| Kairos Console | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos Console] | OpenShift OAuth
+| Grafana (sensor metrics) | link:https://grafana.%HUB_DOMAIN%[Grafana (sensor metrics)] | OpenShift OAuth
 | OpenShift Console — HPA | ACM → `east` → Workloads → HPA | Workshop user
 |===
 
@@ -31,7 +35,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Open Kairos Console and walk through a pending SmartScalingPolicy recommendation.
 . Correlate UI action with `oc get smartscalingpolicy -A`.
 . Discuss human-in-the-loop approval for factory edge.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open Kairos Console and review one SmartScalingPolicy
@@ -42,29 +45,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Kairos Console | components/kairos/templates/console-rbac.yaml | ClusterRole |
-| SmartScalingPolicy | components/kairos/templates/sensor-scan-policies.yaml | SmartScalingPolicy |
+| Kairos policies | `components/kairos/templates/sensor-scan-policies.yaml` |
+| Kairos Console | `components/kairos/` |
 |===
 
-[source,yaml]
-----
-apiVersion: kairos.io/v1alpha1
-kind: SmartScalingPolicy
-metadata:
-  name: scan-policy-machine-sensor
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get smartscalingpolicy -A
+oc get smartscalingpolicy -A 2>/dev/null | head -5
 ----
 
 == Verify

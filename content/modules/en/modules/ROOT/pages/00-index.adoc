@@ -8,9 +8,11 @@ image::images/00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture dia
 
 == Welcome
 
-Welcome to the **Hybrid Mesh AI Workshop** — a dual-track experience that mirrors how Red Hat customers run hybrid cloud on OpenShift. Part A (modules 01–05) is executive; Part B (modules 10–28) is hands-on on a live RHDP hub-spoke fleet.
+Welcome to the **Hybrid Mesh AI Workshop** — a dual-track experience on a live RHDP hub-spoke fleet. Part A (modules 01–05) is executive narrative; Part B (modules 10–26) is hands-on in this Showroom and the OpenShift console.
 
-Register at `https://workshop-registration.%HUB_DOMAIN%` to receive lab identity **%USER_NAME%**. The Showroom at `https://showroom-showroom.%HUB_DOMAIN%` embeds an authenticated `oc` terminal for Part B. If scaffolding fails, use **Plan B** shared demos in Developer Hub → System `hybrid-mesh-shared-demos`.
+Register at link:https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[workshop registration] to receive lab identity **%USER_NAME%**. Open link:https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[Showroom home] for the embedded `oc` terminal. If scaffolding fails, use **Plan B** shared demos in link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/hybrid-mesh-shared-demos[Developer Hub — hybrid-mesh-shared-demos].
+
+NOTE: End-to-end verification and recording runbooks under `showroom-hybrid-mesh-ai/verification/` are for **facilitators and automation agents only** — not part of the learner path.
 
 ++++
 <p class="workshop-register-cta">
@@ -101,7 +103,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 
 * Modern web browser (Chrome or Firefox recommended) with webcam access for NeuroFace modules.
 * Access to the OpenShift console on the workshop hub — launch **Hybrid Mesh AI Workshop** from the Application menu.
-* Workshop registration at `https://workshop-registration.%HUB_DOMAIN%` to obtain `%USER_NAME%` and Showroom redirect.
+* Workshop registration at link:https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[workshop registration] to obtain `%USER_NAME%` and Showroom redirect.
 * Optional: use the embedded Showroom terminal for `oc` commands; no local kubeconfig required for Part B.
 
 == Dual agenda
@@ -116,15 +118,16 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 | 05 | Real Cases & Roadmap
 |===
 
-.Part B — Hands-on (10–28)
+.Part B — Hands-on (10–26)
 [cols="1,3"]
 |===
 | 10–14 | Foundation — ACM, mesh, templates, IE, Kairos
 | 15–18 | Operations — observability, GitOps, mesh, scale
 | 19–21 | Security & FinOps — NP, ACS/Kuadrant, Kubecost
-| 22–26 | Hybrid Mesh AI — ODS, LLM, NeuroFace
-| 27–28 | Verification & recording runbook
+| 22–26 | Hybrid Mesh AI — ODS, LLM, NeuroFace, end-user apps
 |===
+
+NOTE: Modules 27–28 (verification & Agent Browser) are **facilitator/agent tasks** only — see `showroom-hybrid-mesh-ai/verification/`. They are not part of the learner path.
 
 == Registration & Plan B demos
 
@@ -162,12 +165,15 @@ az aks create --resource-group rg-workshop --name aks-edge --node-count 3
 Hands-on equivalents: ACM fleet (module 10), Kuadrant API gateway (module 20), OpenShift AI + MaaS (modules 22–25).
 
 
+
+
+
+
 == Show and Tell
 
 . Walk the dual agenda: Part A strategy (01–05) then Part B hands-on (10–28).
 . Demo registration flow at `https://workshop-registration.%HUB_DOMAIN%` and Showroom redirect.
 . Point to Plan B shared demos in Developer Hub System `hybrid-mesh-shared-demos`.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Skim hybrid cloud integration notes (AWS/Azure snippets)

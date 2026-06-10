@@ -7,6 +7,9 @@
 image::images/02-rosa-architecture.png[ROSA and OpenShift hub-spoke architecture,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+
+
 == Panorama
 
 Red Hat OpenShift Service on AWS (ROSA) ofrece un plano de control totalmente gestionado en tu cuenta AWS mientras Red Hat maneja upgrades, parches de seguridad y operaciones SRE. Los workers escalan vía MachineSets; el ingress integra Route 53 y ALB; IAM y STS habilitan acceso seguro a servicios cloud — la arquitectura de referencia para clientes híbridos que estandarizan OpenShift.
@@ -14,6 +17,7 @@ Red Hat OpenShift Service on AWS (ROSA) ofrece un plano de control totalmente ge
 El layout hub-spoke de este taller mapea a conceptos ROSA: el hub es tu cluster de gestión de flota (como un hub ACM en ROSA), los spokes son clusters regionales o edge que importan vía ManagedCluster. Inspeccionarás objetos `ManagedCluster` y enlaces GitOpsCluster en el módulo 10 — los mismos CRDs que un cliente ROSA usa al unir clusters edge de fábrica a un hub de gobernanza.
 
 Entender la arquitectura ROSA ayuda a explicar límites de SLA: Red Hat gestiona el plano de control; tú el sizing de workers, red y datos. En el lab, Kairos y HPA en spokes simulan decisiones de autoscaling ROSA sin facturación AWS, preparándote para módulos FinOps posteriores.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,8 +27,8 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| ACM — ManagedClusters | `https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters` | Usuario taller
-| Consola hub | `https://console-openshift-console.%HUB_DOMAIN%` | Usuario taller
+| ACM — ManagedClusters | link:https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters[ACM — ManagedClusters] | Usuario taller
+| Consola hub | link:https://console-openshift-console.%HUB_DOMAIN%[Consola hub] | Usuario taller
 | Spoke east (cambiar cluster en ACM) | Misma UI ACM → cluster `east` | Usuario taller
 | Spoke west | UI ACM → cluster `west` | Usuario taller
 |===
@@ -34,50 +38,29 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Pizarra split plano de control ROSA vs responsabilidad workers.
 . Mostrar lista ManagedCluster ACM como equivalente lab de unir ROSA a hub de flota.
 . Mencionar límites SLA y soporte Red Hat vs ops cliente.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Esbozar responsabilidades plano control ROSA vs workers para tu cuenta
 * [ ] Preview ManagedCluster ACM en lectura previa módulo 10
 * [ ] Guardar progreso al final de este módulo
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| ROSA control plane | docs.redhat.com ROSA | Managed service |
-| Lab hub-spoke | components/acm-hub-spoke/templates/managed-clusters.yaml | ManagedCluster |
-| West spoke | same chart | ManagedCluster west |
+| ManagedCluster CRs | `components/acm-hub-spoke/templates/managed-clusters.yaml` |
+| Spoke registration | ACM → Clusters UI on this hub |
 |===
 
-[source,yaml]
-----
-apiVersion: cluster.open-cluster-management.io/v1
-kind: ManagedCluster
-metadata:
-  name: east
-  labels:
-    region: east
-spec:
-  hubAcceptsClient: true
----
-apiVersion: cluster.open-cluster-management.io/v1
-kind: ManagedCluster
-metadata:
-  name: west
-  labels:
-    region: west
-spec:
-  hubAcceptsClient: true
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get managedclusters
+oc get managedclusters -o wide
 ----
 
 == Verificar

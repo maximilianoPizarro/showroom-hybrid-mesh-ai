@@ -7,6 +7,9 @@
 image::images/01-hybrid-strategy.png[Hybrid cloud strategy overview,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+
+
 == Panorama
 
 La estrategia de nube híbrida comienza con la ubicación de cargas: sistemas de fábrica sensibles a latencia en el edge, analytics e IA en regiones cloud, y gobernanza central desde un hub OpenShift. Red Hat OpenShift Container Platform ofrece una API Kubernetes y modelo de operadores únicos on-prem, edge o ROSA en AWS.
@@ -14,6 +17,7 @@ La estrategia de nube híbrida comienza con la ubicación de cargas: sistemas de
 En este lab, ACM en el hub representa esa capa de gobernanza — políticas, federación de observabilidad y placement GitOps hacia spokes east y west como un cliente hacia clusters ROSA y on-prem. No aprendes diapositivas abstractas; cada módulo de la Parte B refuerza un pilar estratégico: automatización, seguridad, velocidad de desarrollo o preparación para IA.
 
 Los ejecutivos deben notar que OpenShift evita replatformear dos veces: microservicios, VMs (CNV) e pipelines de IA comparten RBAC, red y CI/CD. Al registrarte como `%USER_NAME%`, tu ruta hands-on refleja cómo los equipos de plataforma incorporan squads en producción.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,9 +27,9 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| Showroom | `https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%` | Tras registro
-| Consola OpenShift (hub) | `https://console-openshift-console.%HUB_DOMAIN%` | Usuario taller
-| Vista flota ACM | `https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters` | Usuario taller
+| Showroom | link:https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[Showroom] | Tras registro
+| Consola OpenShift (hub) | link:https://console-openshift-console.%HUB_DOMAIN%[Consola OpenShift (hub)] | Usuario taller
+| Vista flota ACM | link:https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters[Vista flota ACM] | Usuario taller
 |===
 
 == Demostración
@@ -33,30 +37,25 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Enmarcar cuatro pilares estratégicos: modernizar, asegurar, automatizar, monetizar IA en OpenShift.
 . Mapear cada pilar a un número de módulo Parte B en la tabla agenda.
 . Preguntar split híbrido actual de asistentes (ROSA vs on-prem vs edge).
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Mapear cargas de tu organización a placement hub vs spoke vs ROSA
 * [ ] Identificar qué módulo Parte B aborda tu pilar prioritario
 * [ ] Guardar progreso al final de este módulo
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Executive narrative | docs/workshop/parte-a/ | Narrative |
-| Fleet ACM | components/acm-hub-spoke/ | ManagedCluster |
+| ACM fleet UI | `components/acm-hub-spoke/` |
+| Hub app-of-apps | `templates/component-applications.yaml` |
 |===
 
-[source,yaml]
-----
-# Executive track — reference ROSA docs
-# https://docs.redhat.com/en/documentation/rosa/
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----

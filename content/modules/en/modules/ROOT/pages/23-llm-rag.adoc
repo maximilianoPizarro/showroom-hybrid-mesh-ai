@@ -7,6 +7,9 @@
 image::images/23-llm-rag.png[LLM and RAG with MaaS,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 Large language models and retrieval-augmented generation (RAG) on OpenShift combine centralized inference with domain-specific context from factory docs, runbooks, and sensor logs — without exporting proprietary data to public SaaS. Red Hat Developer Hub Lightspeed assists developers in-catalog; Kairos Console agents answer scaling questions; Continue AI in DevSpaces suggests code inline using the same MaaS backend.
@@ -14,6 +17,7 @@ Large language models and retrieval-augmented generation (RAG) on OpenShift comb
 RAG architecture in hybrid manufacturing typically indexes PDFs and SOPs into a vector store (customer choice) while the LLM runs on OpenShift AI ModelMesh or external MaaS. In this lab, you configure Lightspeed deployment in `components/developer-hub/templates/lightspeed.yaml` and test prompts against the shared MaaS endpoint — observe latency and token usage suitable for shop-floor Wi-Fi constraints.
 
 As `%USER_NAME%`, open Developer Hub, trigger Lightspeed on a catalog Component, and compare responses with Continue AI in a DevSpaces workspace. Module 25 extends the same MaaS path to multimodal NeuroFace chat — proving one governance model serves dev, ops, and end-user AI surfaces.
+
 
 == Lab access — URLs & credentials
 
@@ -23,9 +27,9 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Developer Hub — Lightspeed | `https://developer-hub.%HUB_DOMAIN%` (catalog → Ask) | Workshop user
-| Workshop APIs — LLM route | `https://workshop-apis.%HUB_DOMAIN%/llm` | Kuadrant API key (module 20)
-| MaaS (optional) | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Facilitator token
+| Developer Hub — Lightspeed | link:https://developer-hub.%HUB_DOMAIN%[Developer Hub — Lightspeed] (catalog → Ask) | Workshop user
+| Workshop APIs — LLM route | link:https://workshop-apis.%HUB_DOMAIN%/llm[Workshop APIs — LLM route] | Kuadrant API key (module 20)
+| MaaS (optional) | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1[MaaS (optional)] | Facilitator token
 |===
 
 == Show and Tell
@@ -33,7 +37,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Trigger Developer Hub Lightspeed on a catalog Component live.
 . Optional DevSpaces Continue AI inline suggestion using MaaS.
 . Discuss RAG index placement (customer choice) vs LLM on OpenShift AI.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Trigger Lightspeed in Developer Hub on a catalog entity
@@ -44,26 +47,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Lightspeed | components/developer-hub/ | Plugin |
-| MaaS | openshift-ai-hub | Credentials |
+| Developer Hub Lightspeed | `components/developer-hub/` |
+| MaaS endpoint | hub `maas-workshop` |
 |===
 
-[source,yaml]
-----
-# Developer Hub → Lightspeed uses MaaS llama-scout-17b
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get deploy -n developer-hub 2>/dev/null | grep -i lightspeed || echo 'Lightspeed via RHDH plugin'
+oc get deploy -n developer-hub 2>/dev/null | head -5
 ----
 
 == Verify

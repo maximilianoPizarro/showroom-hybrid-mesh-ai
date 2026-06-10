@@ -7,6 +7,11 @@
 image::images/20-acs-kuadrant.png[ACS and Kuadrant API security,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+You will use **ACS Central** on this cluster (`central-stackrox` route) for runtime security context and **Developer Hub → Kuadrant** to request an API key for `workshop-apis`. Test with `curl` and your key — not a generic Red Hat marketing URL.
+
 == Overview
 
 Red Hat Advanced Cluster Security provides vulnerability scanning, compliance benchmarks, and runtime threat detection across ACM-managed clusters. SecuredCluster agents on spokes report to ACS Central on the hub; init bundles sync via GitOps jobs in `components/acs-init-bundle-sync/`.
@@ -14,6 +19,7 @@ Red Hat Advanced Cluster Security provides vulnerability scanning, compliance be
 Connectivity Link and Kuadrant extend API management to the hub gateway: AuthPolicy validates tokens, RateLimitPolicy protects backends, and APIProduct publishes Industrial Edge APIs for external consumers. Demo `demo-ie-api-product` in Plan B catalog exposes the same Kuadrant resources without scaffolding.
 
 As `%USER_NAME%`, verify ACS sees your spoke workloads and test APIProduct routes through the hub gateway. Remember ACS runs outside ambient mesh — this coexistence pattern is deliberate and matches production ROSA + ACS deployments.
+
 
 == Lab access — URLs & credentials
 
@@ -23,10 +29,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| ACS Central | `https://central-stackrox.%HUB_DOMAIN%` | OpenShift OAuth
-| Kuadrant — API keys | `https://developer-hub.%HUB_DOMAIN%/kuadrant` | Workshop user → key for %USER_NAME%
-| Workshop APIs (httpbin, REST, LLM) | `https://workshop-apis.%HUB_DOMAIN%` | `Authorization: Bearer <API_KEY>`
-| Developer Hub — API catalog | `https://developer-hub.%HUB_DOMAIN%/catalog` | Workshop user
+| ACS Central | link:https://central-stackrox.%HUB_DOMAIN%[ACS Central] | OpenShift OAuth
+| Kuadrant — API keys | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant — API keys] | Workshop user → key for %USER_NAME%
+| Workshop APIs (httpbin, REST, LLM) | link:https://workshop-apis.%HUB_DOMAIN%[Workshop APIs (httpbin, REST, LLM)] | `Authorization: Bearer <API_KEY>`
+| Developer Hub — API catalog | link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub — API catalog] | Workshop user
 |===
 
 == Show and Tell
@@ -34,7 +40,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . ACS Central overview — violations and deployments on spokes.
 . Demo APIProduct route via hub gateway with AuthPolicy.
 . Remind ACS namespace stays outside ambient mesh.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Verify ACS shows your spoke workloads in Central UI
@@ -45,30 +50,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| ACS init | components/acs-init-bundle-sync/ | Job |
-| External APIs | components/workshop-kuadrant-apis/templates/external-backends.yaml | ServiceEntry |
-| Kuadrant policies | components/workshop-kuadrant-apis/templates/policies.yaml | TokenRateLimitPolicy |
-| Hub gateway | components/hub-gateway/ | HTTPRoute |
+| Workshop APIs | `components/workshop-kuadrant-apis/` |
+| Hub gateway | `components/hub-gateway/` |
 |===
 
-[source,yaml]
-----
-# External public APIs — no in-cluster Docker images
-# ServiceEntry + DestinationRule + HTTPRoute (Hostname backendRef)
-# curl -H 'Authorization: APIKEY $KEY' https://workshop-apis.{hub_domain}/httpbin/get
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get serviceentry,httproute -n hub-gateway-system | grep workshop
+oc get httproute,serviceentry -n hub-gateway-system 2>/dev/null | grep -i workshop | head -5
 ----
 
 == Verify

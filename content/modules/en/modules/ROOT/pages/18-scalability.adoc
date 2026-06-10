@@ -5,6 +5,9 @@
 ++++
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 Scalability on OpenShift spans horizontal pod autoscaling, Kafka partition scaling, and node-level recommendations from Kairos. HPA v2 watches CPU, memory, or custom metrics from Prometheus adapters; KafkaNodePool resources expand broker capacity when IE topics saturate consumer lag.
@@ -12,6 +15,7 @@ Scalability on OpenShift spans horizontal pod autoscaling, Kafka partition scali
 In this lab, line-dashboard and related IE deployments include HPAs defined in workload manifests under `components/industrial-edge-tst/`. Trigger load via workshop scripts or simulated sensor rates, then watch pods scale in the Topology view as `%USER_NAME%`. Kafka scaling complements HPA by absorbing event bursts before pods reject traffic.
 
 This module completes the capacity story started in module 14: Kairos proposes nodes, HPA adds pods, Kafka buffers events — together they mirror how a ROSA customer scales factory edge during production peaks without manual cluster admin intervention.
+
 
 == Lab access — URLs & credentials
 
@@ -21,9 +25,9 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Kairos Console | `https://kairos-console-kairos-system.%HUB_DOMAIN%` | OpenShift OAuth
-| Kafka Console | `https://kafka-console.%HUB_DOMAIN%` | OpenShift OAuth
-| Grafana (Kafka lag) | `https://grafana.%HUB_DOMAIN%` | OpenShift OAuth
+| Kairos Console | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos Console] | OpenShift OAuth
+| Kafka Console | link:https://kafka-console.%HUB_DOMAIN%[Kafka Console] | OpenShift OAuth
+| Grafana (Kafka lag) | link:https://grafana.%HUB_DOMAIN%[Grafana (Kafka lag)] | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -31,7 +35,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Watch HPA scale line-dashboard pods under simulated load.
 . Show Kafka consumer lag recovering after buffer capacity.
 . Tie pod-scale (HPA) vs node-scale (Kairos) layering.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Check HPA status for line-dashboard or related IE deployment
@@ -42,29 +45,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Kafka | components/industrial-edge-tst/ | KafkaNodePool |
-| HPA | industrial-edge manifests | HorizontalPodAutoscaler |
+| IE workloads | `components/industrial-edge-tst/` |
+| HPA / Kafka | spoke namespace `industrial-edge-tst-all` |
 |===
 
-[source,yaml]
-----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: line-dashboard
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get hpa -n industrial-edge-tst-all
+oc get hpa -n industrial-edge-tst-all 2>/dev/null
 ----
 
 == Verify

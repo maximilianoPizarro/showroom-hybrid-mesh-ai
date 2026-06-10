@@ -5,6 +5,9 @@
 ++++
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
 == Overview
 
 Kubernetes NetworkPolicy on OpenShift OVN enforces micro-segmentation: only labeled pods and namespaces you explicitly allow can communicate — essential for zero-trust factory networks where compromised sensors must not lateral-move to MES backends. Red Hat OpenShift ships OVN-Kubernetes as the default CNI with policy-aware routing.
@@ -12,6 +15,7 @@ Kubernetes NetworkPolicy on OpenShift OVN enforces micro-segmentation: only labe
 This workshop applies a demo NetworkPolicy in `industrial-edge-tst-all` from `components/workshop-demos/templates/network-policy-demo.yaml`, allowing dashboard ingress while denying unexpected cross-namespace traffic. As `%USER_NAME%`, test allowed and denied paths using `oc exec` curl probes from the Showroom terminal.
 
 Compare to ROSA security groups plus Kubernetes NP: defense in depth at cloud VPC and pod layers. Pair this module with ACS (module 20) for runtime anomaly detection when policies are misconfigured or bypassed.
+
 
 == Lab access — URLs & credentials
 
@@ -21,9 +25,9 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Industrial Edge | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
+| Industrial Edge | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge] | Public (no login)
 | OpenShift Console — east | ACM → cluster `east` → Networking → NetworkPolicies | Workshop user
-| NeuroFace (NP demo target) | `https://neuroface.%HUB_DOMAIN%` | Public (no login)
+| NeuroFace (NP demo target) | link:https://neuroface.%HUB_DOMAIN%[NeuroFace (NP demo target)] | Public (no login)
 |===
 
 == Show and Tell
@@ -31,7 +35,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Apply or review demo NetworkPolicy in `industrial-edge-tst-all`.
 . Run allowed vs denied curl from Showroom terminal pods.
 . Relate to ROSA security groups + NP defense in depth.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Review NetworkPolicy in `industrial-edge-tst-all`
@@ -42,30 +45,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| NP demo | components/workshop-demos/templates/network-policy-demo.yaml | NetworkPolicy |
-| OVN CNI | OpenShift networking | Cluster default |
+| NP demo | `components/workshop-demos/templates/network-policy-demo.yaml` |
+| IE namespace | `industrial-edge-tst-all` |
 |===
 
-[source,yaml]
-----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: ie-workshop-allow-dashboard
-  namespace: industrial-edge-tst-all
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get networkpolicy -n industrial-edge-tst-all
+oc get networkpolicy -n industrial-edge-tst-all 2>/dev/null
 ----
 
 == Verify

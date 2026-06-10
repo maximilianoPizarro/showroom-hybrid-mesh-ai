@@ -7,6 +7,11 @@
 image::images/11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+You will trace how external traffic reaches Industrial Edge on a spoke: hub Gateway API `HTTPRoute`, Skupper interconnect, and the IE route. Open the Skupper observer and IE UI from the lab access table — no separate ACM or ROSA documentation site is required.
+
 == Overview
 
 Hybrid mesh architecture connects application networks across clusters without flattening VPCs or exposing kube-apiserver endpoints publicly. Red Hat Service Interconnect (Skupper) paired with Gateway API HTTPRoutes on the hub creates a logical application network: frontends on the hub route to spoke services through encrypted links.
@@ -14,6 +19,7 @@ Hybrid mesh architecture connects application networks across clusters without f
 In this workshop, the hub gateway terminates external traffic and forwards to Industrial Edge frontends on east/west via Skupper Sites and Connectors defined under `components/service-interconnect/` and `components/hub-gateway/`. This is the lab analogue to ROSA ALB plus private connectivity into factory networks — same OpenShift routes and policies, different underlay.
 
 Observe `HTTPRoute` resources and Skupper status in the console; module 13 deploys IE apps that become reachable through this mesh. Understanding this layer explains why Kuadrant policies attach at the hub gateway in module 20.
+
 
 == Lab access — URLs & credentials
 
@@ -23,10 +29,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Industrial Edge (via hub gateway) | `https://industrial-edge.%HUB_DOMAIN%` | Public (no login)
-| Skupper network observer | `https://field-content-skupper-network-observer-service-interconnect.%HUB_DOMAIN%` | OpenShift OAuth
-| Hub Gateway routes | `https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/hub-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute` | Workshop user
-| Kiali | `https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%` | OpenShift OAuth
+| Industrial Edge (via hub gateway) | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge (via hub gateway)] | Public (no login)
+| Skupper network observer | link:https://field-content-skupper-network-observer-service-interconnect.%HUB_DOMAIN%[Skupper network observer] | OpenShift OAuth
+| Hub Gateway routes | link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/hub-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute[Hub Gateway routes] | Workshop user
+| Kiali | link:https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%[Kiali] | OpenShift OAuth
 |===
 
 == Show and Tell
@@ -34,7 +40,6 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 . Trace external URL → hub HTTPRoute → Skupper → spoke IE frontend.
 . Display Skupper site/connector status in console.
 . Relate to ROSA ALB + private link narrative from Part A.
-
 == Your TODO (user %USER_NAME%)
 
 * [ ] Inspect hub HTTPRoute and Skupper resources in console
@@ -45,30 +50,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
-== YAML behind the scenes
+== Where this lab is defined
 
-[cols="2,3,1"]
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Hub gateway | components/hub-gateway/templates/httproute.yaml | HTTPRoute |
-| Skupper | components/service-interconnect/ | Site/Connector |
+| Hub gateway | `components/hub-gateway/` |
+| Skupper | `components/service-interconnect/` |
 |===
 
-[source,yaml]
-----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: industrial-edge-lb
-# hub ingress → spoke gateways via Skupper
-----
-
-Verify:
+Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get httproute -n hub-gateway-system
+oc get httproute -n hub-gateway-system 2>/dev/null | head -5
 ----
 
 == Verify

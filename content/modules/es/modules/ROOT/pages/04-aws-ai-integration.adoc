@@ -7,6 +7,9 @@
 image::images/04-aws-ai-integration.png[AWS and AI integration on OpenShift,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+
+
 == Panorama
 
 Los clientes AWS suelen combinar ROSA con servicios nativos de IA — Amazon Bedrock para modelos foundation, SageMaker para pipelines de entrenamiento e IAM OIDC para identidad segura de cargas. El enfoque híbrido de Red Hat mantiene inferencia y pipelines de datos en OpenShift AI permitiendo integración opcional con servicios AWS vía credenciales y endpoints externos donde la política lo permita.
@@ -14,6 +17,7 @@ Los clientes AWS suelen combinar ROSA con servicios nativos de IA — Amazon Bed
 Este taller sustituye intencionalmente OpenShift AI más Model-as-a-Service (MaaS) por Bedrock/SageMaker para que experimentes un patrón portable: `DataScienceCluster` en el hub, endpoint LLM compartido y apps consumidoras (NeuroFace, Developer Hub Lightspeed) en spokes. El secret `openshift-ai-maas-credentials` y la URL base MaaS reflejan cómo los equipos centralizan acceso a modelos en lugar de incrustar API keys en cada despliegue.
 
 Desde el módulo 22 se activa este stack hands-on. Los ejecutivos deben reconocer que OpenShift AI en ROSA u on-prem evita reescribir aplicaciones cuando cambian precios o reglas de residencia — la capa de serving nativa Kubernetes se mueve con el cluster.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,9 +27,9 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| Dashboard OpenShift AI | `https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%` | OAuth OpenShift
-| Developer Hub (Lightspeed / catálogo) | `https://developer-hub.%HUB_DOMAIN%` | Usuario taller
-| Endpoint MaaS (lab) | `https://maas-rhdp.apps.maas.redhatworkshops.io/v1` | Token facilitador
+| Dashboard OpenShift AI | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[Dashboard OpenShift AI] | OAuth OpenShift
+| Developer Hub (Lightspeed / catálogo) | link:https://developer-hub.%HUB_DOMAIN%[Developer Hub (Lightspeed / catálogo)] | Usuario taller
+| Endpoint MaaS (lab) | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1[Endpoint MaaS (lab)] | Token facilitador
 |===
 
 == Demostración
@@ -33,35 +37,29 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Contrastar Bedrock/SageMaker con OpenShift AI + MaaS en este lab.
 . Mostrar ubicación conceptual del secret MaaS (sin valores de secret).
 . Explicar inferencia portable cuando cambian residencia o precios AWS.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Comparar tus servicios IA AWS con patrón lab OpenShift AI + MaaS
 * [ ] Localizar módulo 22 para setup hands-on DSC y MaaS
 * [ ] Guardar progreso al final de este módulo
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| Bedrock/SageMaker (narrative) | AWS docs | External |
-| MaaS lab | components/openshift-ai-hub/ | DataScienceCluster |
+| OpenShift AI hub | `components/openshift-ai-hub/` |
+| MaaS credentials | namespace `maas-workshop` |
 |===
 
-[source,yaml]
-----
-stringData:
-  OPENAI_API_BASE: "https://maas-rhdp.apps.maas.redhatworkshops.io/v1"
-# Secret openshift-ai-maas-credentials in maas-workshop
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get dsc -A
+oc get dsc -A 2>/dev/null; oc get ns maas-workshop 2>/dev/null
 ----
 
 == Verificar

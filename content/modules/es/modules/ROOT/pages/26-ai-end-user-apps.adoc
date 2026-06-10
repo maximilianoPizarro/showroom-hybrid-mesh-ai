@@ -7,6 +7,11 @@
 image::images/26-ai-end-user-apps.png[AI in end-user applications,600]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+== Qué harás
+
+Cierre: conecta dashboard IE, entradas Developer Hub y Grafana para `%USER_NAME%`. Este es el **último módulo del participante (26)** — los facilitadores ejecutan verificación automatizada por separado.
+
 == Panorama
 
 Las aplicaciones finales — dashboards de operador, alertas móviles, integraciones MES — consumen insights de IA donde ocurre el trabajo, no solo en notebooks de data science. line-dashboard en spoke east visualiza streams Kafka de sensores; integraciones Camel enrutan eventos de anomalía; NeuroFace y resúmenes MaaS se embeben en la misma UX que `%USER_NAME%` ve en rollouts de producción.
@@ -14,6 +19,7 @@ Las aplicaciones finales — dashboards de operador, alertas móviles, integraci
 Este módulo integra módulos 13–25: verifica que line-dashboard muestra datos IE en vivo, dispara umbrales ie-anomaly-alerter y opcionalmente embebe iframe NeuroFace o enlace chat para ayuda IA contextual. Integraciones Camel K de plantillas `demo-camel-kaoto-east` y `demo-camel-cdc-east` muestran patrones event-driven que equipos de fábrica despliegan en OpenShift junto a sistemas OT.
 
 Los equipos de plataforma ganan cuando la IA es infraestructura invisible: OpenShift AI, MaaS y NeuroFace son entradas de catálogo — squads de app los vinculan vía dependencias Developer Hub sin reconstruir pipelines ML por planta.
+
 
 == Acceso al producto — URLs y credenciales
 
@@ -23,9 +29,9 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 |===
 | Servicio | URL | Credenciales
 
-| Dashboard línea IE | `https://industrial-edge.%HUB_DOMAIN%` | Pública (sin login)
-| Developer Hub — componentes IE | `https://developer-hub.%HUB_DOMAIN%/catalog` | Usuario taller
-| Grafana (telemetría) | `https://grafana.%HUB_DOMAIN%` | OAuth OpenShift
+| Dashboard línea IE | link:https://industrial-edge.%HUB_DOMAIN%[Dashboard línea IE] | Pública (sin login)
+| Developer Hub — componentes IE | link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub — componentes IE] | Usuario taller
+| Grafana (telemetría) | link:https://grafana.%HUB_DOMAIN%[Grafana (telemetría)] | OAuth OpenShift
 |===
 
 == Demostración
@@ -33,7 +39,6 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 . Datos en vivo line-dashboard + overlay anomalía o badge alerta.
 . Opcional estado integración Camel en Topology.
 . Historia: operador ve telemetría, predicción y ayuda IA en una UX.
-
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Verificar que line-dashboard muestra telemetría IE en vivo
@@ -44,26 +49,23 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 
 * Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
 
-== YAML behind the scenes
+== Dónde está definido este lab
 
-[cols="2,3,1"]
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
 |===
-| UI action | Git source | Kind
+| UI / capability | Source in GitOps repo
 
-| line-dashboard | industrial-edge-tst-all | Deployment |
-| Camel K | industrial-edge-pipelines | Integration |
+| Line dashboard | `industrial-edge-tst-all` |
+| Developer Hub IE catalog | `components/developer-hub/files/catalog/industrial-edge-system.yaml` |
 |===
 
-[source,yaml]
-----
-# End-user apps on spoke consume IE + AI stack
-----
-
-Verify:
+Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get deploy -n industrial-edge-tst-all line-dashboard
+oc get deploy -n industrial-edge-tst-all line-dashboard 2>/dev/null
 ----
 
 == Verificar
@@ -87,10 +89,4 @@ oc get deploy -n industrial-edge-tst-all line-dashboard
 
 TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
 
-
-++++
-<div class="workshop-next-nav">
-  <a href="27-full-verification.html">Siguiente → 27 full verification</a>
-</div>
-++++
 

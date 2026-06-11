@@ -10,6 +10,9 @@ NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 
 
 == Panorama
 
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
 Kubecost en OpenShift asigna gasto Kubernetes por namespace, label y cluster — federando datos del primario hub y agentes spoke en almacenamiento ETL respaldado por MinIO. Los equipos de plataforma cargan back tenants edge de fábrica y comparan costos de nodos ROSA versus depreciación on-prem con economía unitaria Kubernetes consistente.
 
 En este lab, Kubecost se despliega desde `components/kubecost/` con agentes en east/west reportando al primario hub. Filtra asignaciones a namespaces de `%USER_NAME%` y correlaciona capacidad ociosa con recomendaciones Kairos del módulo 14.

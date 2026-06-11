@@ -1,7 +1,25 @@
 (function () {
+  function getSearchParams() {
+    var params = new URLSearchParams(window.location.search);
+    try {
+      if (window.parent && window.parent !== window) {
+        var pp = new URLSearchParams(window.parent.location.search);
+        pp.forEach(function (val, key) {
+          if (!params.has(key)) params.set(key, val);
+        });
+      }
+    } catch (e) {}
+    return params;
+  }
+
   function queryUser() {
-    var p = new URLSearchParams(window.location.search);
-    return p.get('USER_NAME') || p.get('user_name') || '';
+    var params = getSearchParams();
+    var qp = params.get('USER_NAME') || params.get('user_name') || '';
+    if (qp) {
+      localStorage.setItem('USER_NAME', qp);
+      return qp;
+    }
+    return localStorage.getItem('USER_NAME') || '';
   }
 
   function metaContent(name) {
@@ -25,6 +43,14 @@
     if (hub && !isPlaceholder(hub)) {
       return hub.replace(/^\./, '');
     }
+    var params = getSearchParams();
+    var qp = params.get('CLUSTER_DOMAIN') || params.get('HUB_DOMAIN');
+    if (qp) {
+      localStorage.setItem('CLUSTER_DOMAIN', qp);
+      return qp.replace(/^\./, '');
+    }
+    var stored = localStorage.getItem('CLUSTER_DOMAIN');
+    if (stored) return stored.replace(/^\./, '');
     var host = window.location.hostname || '';
     var idx = host.indexOf('.apps.');
     if (idx !== -1) {
@@ -38,7 +64,7 @@
     if (east && !isPlaceholder(east)) {
       return east;
     }
-    var qp = new URLSearchParams(window.location.search).get('EAST_DOMAIN');
+    var qp = getSearchParams().get('EAST_DOMAIN');
     if (qp) return qp;
     return hubDomain;
   }
@@ -48,7 +74,7 @@
     if (west && !isPlaceholder(west)) {
       return west;
     }
-    var qp = new URLSearchParams(window.location.search).get('WEST_DOMAIN');
+    var qp = getSearchParams().get('WEST_DOMAIN');
     if (qp) return qp;
     return hubDomain;
   }
@@ -125,6 +151,20 @@
     });
   }
 
+  function wireQuickLinks(hubDomain, eastDomain) {
+    if (!hubDomain) return;
+    var links = {
+      'link-developer-hub': 'https://developer-hub.' + hubDomain,
+      'link-console': 'https://console-openshift-console.' + hubDomain,
+      'link-gitea': 'https://gitea-gitea.' + hubDomain,
+      'link-devspaces': 'https://devspaces.' + (eastDomain || hubDomain)
+    };
+    Object.keys(links).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.href = links[id];
+    });
+  }
+
   function wireRegistrationLinks(hubDomain, user) {
     var base = registrationUrl(hubDomain);
     var href = base ? base + (user ? '?USER_NAME=' + encodeURIComponent(user) : '') : '#';
@@ -144,21 +184,77 @@
     });
   }
 
+  function initUserBadge(user) {
+    var badge = document.getElementById('user-badge');
+    var badgeName = document.getElementById('user-badge-name');
+    var editPanel = document.getElementById('vars-edit-panel');
+    var editBtn = document.getElementById('vars-edit-btn');
+    var ui = document.getElementById('user-name-input');
+    var save = document.getElementById('vars-save');
+    var cancelEdit = document.getElementById('vars-cancel-edit');
+
+    if (user && badge && badgeName) {
+      badgeName.textContent = user;
+      badge.style.display = 'inline-flex';
+      if (editBtn) editBtn.style.display = 'inline-block';
+      if (editPanel) editPanel.style.display = 'none';
+    } else {
+      if (badge) badge.style.display = 'none';
+      if (editBtn) editBtn.style.display = 'none';
+      if (editPanel) editPanel.style.display = 'flex';
+      if (ui) ui.value = '';
+    }
+
+    if (editBtn) {
+      editBtn.onclick = function () {
+        badge.style.display = 'none';
+        editBtn.style.display = 'none';
+        editPanel.style.display = 'flex';
+        if (ui) {
+          ui.value = user || '';
+          ui.focus();
+        }
+      };
+    }
+
+    if (cancelEdit) {
+      cancelEdit.onclick = function () {
+        editPanel.style.display = 'none';
+        if (user) {
+          badge.style.display = 'inline-flex';
+          editBtn.style.display = 'inline-block';
+        }
+      };
+    }
+
+    if (save) {
+      save.onclick = function () {
+        var u = (ui && ui.value ? ui.value : '').trim();
+        if (u) {
+          localStorage.setItem('USER_NAME', u);
+          var url = new URL(window.location.href);
+          url.searchParams.set('USER_NAME', u);
+          window.location.href = url.toString();
+        }
+      };
+    }
+  }
+
   function applyUser() {
     var user = queryUser();
     var hubDomain = hubDomainFromMeta();
     var eastDomain = eastDomainFromMeta(hubDomain);
     var westDomain = westDomainFromMeta(hubDomain);
-    replacePlaceholders(hubDomain, eastDomain, westDomain, user);
-    document.querySelectorAll('.workshop-user-name').forEach(function (el) {
-      el.textContent = user || 'guest (register first)';
-    });
-    if (user) {
-      document.querySelectorAll('.workshop-user-badge').forEach(function (el) {
-        el.classList.add('workshop-user-badge--active');
-      });
+
+    if (hubDomain) {
+      localStorage.setItem('CLUSTER_DOMAIN', hubDomain);
     }
+
+    replacePlaceholders(hubDomain, eastDomain, westDomain, user);
+    wireQuickLinks(hubDomain, eastDomain);
     wireRegistrationLinks(hubDomain, user);
+    initUserBadge(user);
+
     if (hubDomain) {
       var regMeta = document.querySelector('meta[name="workshop-registration-url"]');
       if (regMeta && isPlaceholder(regMeta.content)) {

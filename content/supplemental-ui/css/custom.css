@@ -1,54 +1,139 @@
-.workshop-toolbar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem 1rem;
-  padding: 0.5rem 0 0.75rem;
-  border-bottom: 1px solid #d2d2d2;
-  margin-bottom: 0.75rem;
-}
-.workshop-rhds-brand img {
-  height: 36px;
+/* Navbar quick links (PF6 dark toolbar) */
+.navbar-logo-img {
+  height: 40px;
   width: auto;
   display: block;
 }
-.workshop-rhds-title {
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #151515;
+
+.workshop-navbar-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.workshop-quick-link {
+  color: #73bcf7;
+  font-size: 0.8rem;
+  text-decoration: none;
+  padding: 3px 8px;
+  border: 1px solid #444;
+  border-radius: 4px;
   white-space: nowrap;
 }
-.workshop-toolbar-spacer {
-  flex: 1 1 auto;
+
+.workshop-quick-link:hover {
+  color: #a3daff;
+  border-color: #666;
+  text-decoration: none;
 }
+
+.workshop-quick-link i {
+  margin-right: 3px;
+}
+
+.workshop-quick-link--register {
+  color: #f0ab00;
+}
+
+.workshop-navbar-sep {
+  border-left: 1px solid #555;
+  height: 20px;
+  margin: 0 4px;
+}
+
 .workshop-lang-bar {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.5rem;
-  font-size: 0.9rem;
-  margin: 0;
+  gap: 0.35rem;
+  font-size: 0.85rem;
 }
+
 .workshop-lang-bar a {
+  color: #fff;
   font-weight: 600;
   text-decoration: none;
 }
+
 .workshop-lang-bar a:hover {
+  color: #73bcf7;
   text-decoration: underline;
 }
+
 .workshop-lang-sep {
   color: #6a6e73;
   user-select: none;
 }
-.workshop-register-nav {
-  color: #0066cc;
+
+.workshop-user-badge-nav {
+  background: #292929;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  border: 1px solid #444;
+  white-space: nowrap;
 }
-.workshop-user-badge {
-  color: #6a6e73;
+
+.workshop-user-badge-nav i {
+  margin-right: 4px;
 }
-.workshop-user-badge--active {
-  color: #151515;
+
+.workshop-vars-edit {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
 }
+
+.workshop-vars-edit label {
+  color: #fff;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.workshop-vars-edit input {
+  width: 80px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+
+.workshop-vars-edit button {
+  border: none;
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+#vars-save {
+  background: #0066cc;
+  color: #fff;
+}
+
+#vars-cancel-edit {
+  background: #6a6e73;
+  color: #fff;
+}
+
+.workshop-vars-edit-btn {
+  background: transparent;
+  color: #ccc;
+  border: 1px solid #555;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+/* Wider content area */
+.doc {
+  max-width: none;
+}
+
+/* Workshop content helpers */
 .workshop-register-cta {
   margin: 1rem 0 1.25rem;
   padding: 1rem;
@@ -56,6 +141,7 @@
   border-radius: 4px;
   border-left: 4px solid #ee0000;
 }
+
 .workshop-register-btn {
   display: inline-block;
   background: #ee0000;
@@ -66,40 +152,49 @@
   text-decoration: none !important;
   margin-bottom: 0.5rem;
 }
+
 .workshop-register-btn:hover {
   background: #cc0000;
   color: #fff !important;
 }
+
 .workshop-register-hint {
   display: block;
   font-size: 0.9rem;
   color: #6a6e73;
   margin-top: 0.35rem;
 }
+
 .workshop-progress {
   border: 1px solid #ccc;
   padding: 1rem;
   margin-top: 1.5rem;
   border-radius: 4px;
 }
+
 .workshop-progress-status {
   margin: 0.75rem 0 0;
   font-size: 0.9rem;
 }
+
 .workshop-progress-status.is-success {
   color: #3e8635;
 }
+
 .workshop-progress-status.is-error {
   color: #c9190b;
 }
+
 .workshop-next-nav {
   margin-top: 2rem;
   padding-top: 1rem;
   border-top: 1px solid #eee;
 }
+
 .workshop-next-nav a {
   font-weight: 600;
 }
+
 .workshop-time-badge {
   color: #6a6e73;
   font-size: 0.95rem;

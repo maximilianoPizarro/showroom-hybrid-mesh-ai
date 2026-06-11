@@ -1,0 +1,33 @@
+= Full Stack Verification (facilitator)
+
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
+
+image::images/27-full-verification.png[Full stack workshop verification,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
+== What you will do
+
+IMPORTANT: **Facilitator / automation agent only** — this page is not part of the learner navigation.
+
+**Facilitator / agent only.** Run `scripts/verify-workshop-e2e.sh` and `showroom-hybrid-mesh-ai/verification/progress-checklist.yaml` — not shown to learners in the workshop nav.
+
+
+
+
+
+== Live lab
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
+
+
+
+
+
+
+
+

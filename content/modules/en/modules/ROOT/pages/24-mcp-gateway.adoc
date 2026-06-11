@@ -1,0 +1,103 @@
+= MCP Gateway + Lightspeed
+
+++++
+<span class="workshop-time-badge">~30 min</span>
+++++
+
+image::images/24-mcp-gateway.png[MCP Gateway federated tools,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+Verify MCP Gateway in `mcp-system`, then use **Developer Hub → Lightspeed** with prompts that invoke ArgoCD/k8s MCP tools. Register OpenShift AI MCP server in dashboard (maas-workshop).
+
+== Overview
+
+
+NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
+
+**MCP Gateway** deploys Kuadrant community CRDs (`MCPGatewayExtension`, `MCPServerRegistration`), `mcp-controller`, Gateway API `Gateway`, **ArgoCD MCP**, and **k8s MCP** — pattern from test-drive-pe-oscg. Public URL: `https://mcp-gateway.%HUB_DOMAIN%/mcp`.
+
+**Overview-only (~8 min):** Catalog → **workshop-mcp-gateway**; `oc get mcpserverregistration -n mcp-system`; Lightspeed demo prompt.
+
+**Hands-on (~30 min):** Developer Hub **/lightspeed** — activity: "List Argo CD apps in OutOfSync state and suggest sync." Llama-stack uses `remote::mcp` to gateway (`components/developer-hub/files/lightspeed/llama-stack-run.yaml`).
+
+
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| MCP Gateway | link:https://mcp-gateway.%HUB_DOMAIN%/mcp[MCP Gateway] | Workshop user
+| Lightspeed | link:https://developer-hub.%HUB_DOMAIN%/lightspeed[Lightspeed] | Workshop user
+| OpenShift AI MCP (in-cluster) | `ods-maas-mcp-server.maas-workshop.svc:8080/mcp` | OpenShift OAuth
+| Catalog entity | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/workshop-mcp-gateway[Catalog entity] | Workshop user
+|===
+
+== Show and Tell
+
+. `oc get mcpgatewayextension,mcpserverregistration -n mcp-system`.
+. Developer Hub `/lightspeed` — prompt: list Argo CD applications.
+. OpenShift AI dashboard → register MCP server URL from maas-workshop ConfigMap.
+== Your TODO (user %USER_NAME%)
+
+* [ ] Verify MCP CRDs and `MCPServerRegistration` in `mcp-system`
+* [ ] Lightspeed: list Argo CD apps via MCP gateway tools
+* [ ] Register OpenShift AI MCP server in dashboard
+* [ ] Save progress at the end of this module
+
+== Live lab
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
+
+== Where this lab is defined
+
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
+|===
+| UI / capability | Source in GitOps repo
+
+| MCP CRDs + controller | `components/mcp-gateway/` |
+| Lightspeed MCP | `llama-stack-run.yaml` tool_groups |
+|===
+
+Verify in the Showroom terminal:
+
+[source,bash]
+----
+oc get mcpserverregistration -n mcp-system 2>/dev/null
+----
+
+== Verify
+
+[cols="1,2,1"]
+|===
+| Check | Action | Expected
+
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
+|===
+
+
+++++
+<div class="workshop-progress" data-module="24-mcp-gateway">
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('24-mcp-gateway')">Save progress</button>
+</div>
+++++
+
+
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="25-llm-rag.html">Next → 25 llm rag</a>
+</div>
+++++
+

@@ -1,7 +1,7 @@
 = Taller OpenShift AI
 
 ++++
-<span class="workshop-time-badge">~20 min</span>
+<span class="workshop-time-badge">~30 min</span>
 ++++
 
 image::images/22-openshift-ai.png[OpenShift AI DataScienceCluster,600]
@@ -10,15 +10,20 @@ NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 
 
 == Qué harás
 
-Abre el **dashboard OpenShift AI** en este hub y confirma que `DataScienceCluster` está listo. Las credenciales MaaS están pre-provisionadas — no configuras AWS Bedrock en este módulo.
+Abre **dashboard OpenShift AI** → proyecto **ai-%USER_NAME%** → **Workbenches → workshop-notebook** y ejecuta el notebook MaaS. La entidad **OpenShift AI — %USER_NAME%** enlaza Topology y dashboard.
 
 == Panorama
 
-OpenShift AI unifica flujos de data science en OpenShift mediante el operador DataScienceCluster: notebooks, runtime de pipelines, model serving y ModelMesh para inferencia multi-framework. En el hub del taller, `default-dsc` habilita proyectos DS, workbenches y runtimes de serving consumidos por módulos posteriores.
 
-Model-as-a-Service (MaaS) ofrece un endpoint compartido compatible OpenAI (`OPENAI_API_BASE`) almacenado en `openshift-ai-maas-credentials` — NeuroFace, Developer Hub Lightspeed y DevSpaces Continue AI consumen este endpoint en lugar de claves cloud públicas. El demo Plan B `demo-ods-workspace` abre un workspace DS pre-provisionado si tu quota de plantilla se agotó.
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
 
-Como `%USER_NAME%`, confirma que `oc get dsc` reporta Ready y localiza la URL MaaS en el namespace maas-workshop. Este patrón IA hub-spoke refleja clientes ROSA que centralizan inferencia en un cluster de gobernanza mientras spokes edge ejecutan consumidores ligeros.
+OpenShift AI en el hub ejecuta **ModelMesh + Serverless (Knative)** vía `default-dsc`. Cada usuario tiene **`ai-%USER_NAME%`** con **notebook Jupyter** `workshop-notebook`, secret MaaS y entidad en Developer Hub.
+
+**Solo visualización (~10 min):** Catálogo → **OpenShift AI — %USER_NAME%**; mostrar Playground en `maas-workshop`.
+
+**Hands-on (~30 min):** Abrir **workshop-notebook**, ejecutar `maas-smoke-test.ipynb`, registrar **MCP Server** `ods-maas-mcp-server` en extensiones OpenShift AI. En **ai-%USER_NAME%** → **Models**, confirmar **`workshop-sklearn`** (ModelMesh) Ready y probar inferencia.
+
+GitOps: `components/openshift-ai-hub/`. Verificar: `oc get notebook,inferenceservice -n ai-%USER_NAME%`.
 
 
 == Acceso al producto — URLs y credenciales
@@ -30,19 +35,22 @@ NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer 
 | Servicio | URL | Credenciales
 
 | Dashboard OpenShift AI | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[Dashboard OpenShift AI] | OAuth OpenShift
-| DevSpaces (east) | link:https://devspaces.%EAST_DOMAIN%[DevSpaces (east)] | Usuario taller
-| Workspace Plan B | ACM → `east` → Workloads → `demo-ods-workspace` | Usuario taller
+| Tu proyecto DS | OpenShift AI → Projects → **ai-%USER_NAME%** | Usuario taller (admin proyecto)
+| Developer Hub — entidad IA | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/ai-%USER_NAME%[Developer Hub — entidad IA] | Usuario taller
+| Playground MaaS compartido | OpenShift AI → **maas-workshop** (Plan B) | OAuth OpenShift
 |===
 
 == Demostración
 
-. `oc get dsc` — confirmar Ready; abrir workspace DS o Plan B demo-ods-workspace.
-. Mostrar URL endpoint MaaS en maas-workshop (sin keys en pantalla).
-. Explicar patrón inferencia centralizada hub, consumidores spoke.
+. `oc get dsc` — confirmar Ready; abrir **workshop-notebook** en ai-%USER_NAME%.
+. Developer Hub → **OpenShift AI — %USER_NAME%** + **Playground** maas-workshop.
+. Mostrar deployment MCP `ods-maas-mcp-server`.
 == Tu TODO (usuario %USER_NAME%)
 
 * [ ] Ejecutar `oc get dsc` y confirmar DataScienceCluster Ready
-* [ ] Abrir workspace DS o Plan B `demo-ods-workspace`
+* [ ] Abrir **workshop-notebook** en `ai-%USER_NAME%` y ejecutar prueba MaaS
+* [ ] Encontrar Component **ai-%USER_NAME%** en Developer Hub
+* [ ] Habilitar extensión **Playground** / **MCP Server** OpenShift AI
 * [ ] Guardar progreso al final de este módulo
 
 == Lab en vivo
@@ -57,15 +65,17 @@ NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegad
 |===
 | UI / capability | Source in GitOps repo
 
-| DSC | `components/openshift-ai-hub/` |
-| MaaS | values `litemaas` in hub `values.yaml` |
+| DSC + ModelMesh | `components/openshift-ai-hub/` |
+| Notebooks | `user-projects.yaml` → `workshop-notebook` |
+| ModelMesh ISVC | `workshop-sklearn` per `ai-userN` |
+| MCP + Playground | `ods-mcp-server.yaml`, `dashboard-config.yaml` |
 |===
 
 Verificar en la terminal Showroom:
 
 [source,bash]
 ----
-oc get dsc 2>/dev/null; oc get ns maas-workshop 2>/dev/null
+oc get dsc; oc get notebook,inferenceservice -n ai-%USER_NAME% 2>/dev/null
 ----
 
 == Verificar
@@ -92,7 +102,7 @@ TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-
 
 ++++
 <div class="workshop-next-nav">
-  <a href="23-llm-rag.html">Siguiente → 23 llm rag</a>
+  <a href="23-ai-gateway.html">Siguiente → 23 ai gateway</a>
 </div>
 ++++
 

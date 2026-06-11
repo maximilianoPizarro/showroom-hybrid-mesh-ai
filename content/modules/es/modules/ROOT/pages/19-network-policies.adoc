@@ -10,6 +10,9 @@ NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 
 
 == Panorama
 
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
 NetworkPolicy Kubernetes en OpenShift OVN aplica micro-segmentación: solo pods y namespaces etiquetados que permitas explícitamente pueden comunicarse — esencial en redes zero-trust de fábrica donde sensores comprometidos no deben moverse lateralmente a backends MES. Red Hat OpenShift incluye OVN-Kubernetes como CNI por defecto con enrutamiento consciente de políticas.
 
 Este taller aplica una NetworkPolicy demo en `industrial-edge-tst-all` desde `components/workshop-demos/templates/network-policy-demo.yaml`, permitiendo ingress al dashboard mientras niega tráfico cross-namespace inesperado. Como `%USER_NAME%`, prueba rutas permitidas y denegadas con probes curl `oc exec` desde la terminal Showroom.

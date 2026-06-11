@@ -14,6 +14,9 @@ Objetivo: confirmar que las cargas Industrial Edge responden — line dashboard,
 
 == Panorama
 
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
 Industrial Edge en OpenShift combina streaming de eventos, integración y visualización para escenarios de fábrica e IoT. Apache Kafka bufferiza topics de sensores de alto volumen; integraciones Camel K transforman y enrutan eventos; line-dashboard ofrece vista en vivo a operadores — todo desplegado vía GitOps a spokes tras scaffolding Developer Hub.
 
 Ejecuta la plantilla Industrial Edge como `%USER_NAME%` y confirma que tu organización Gitea `ws-%USER_NAME%` contiene el repositorio generado. Argo CD en east sincroniza la Application al namespace `industrial-edge-tst-all` (o equivalente con alcance de usuario). El demo Plan B `demo-industrial-edge-east` ofrece la misma topología si se omite scaffolding.

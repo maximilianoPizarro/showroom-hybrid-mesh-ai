@@ -14,6 +14,9 @@ Rastrearás cómo el tráfico externo llega a Industrial Edge en un spoke: `HTTP
 
 == Panorama
 
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
 La arquitectura hybrid mesh conecta redes de aplicación entre clusters sin aplanar VPCs ni exponer endpoints kube-apiserver públicamente. Red Hat Service Interconnect (Skupper) con HTTPRoutes Gateway API en el hub crea una red lógica de aplicación: frontends en el hub enrutan a servicios spoke por enlaces cifrados.
 
 En este taller, el gateway del hub termina tráfico externo y reenvía a frontends Industrial Edge en east/west vía Sites y Connectors Skupper en `components/service-interconnect/` y `components/hub-gateway/`. Es el análogo lab a ALB ROSA más conectividad privada a redes de fábrica — mismas rutas y políticas OpenShift, distinto underlay.

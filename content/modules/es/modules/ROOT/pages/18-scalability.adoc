@@ -10,6 +10,9 @@ NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 
 
 == Panorama
 
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
 La escalabilidad en OpenShift abarca autoscaling horizontal de pods, escalado de particiones Kafka y recomendaciones a nivel nodo de Kairos. HPA v2 observa CPU, memoria o métricas custom de adaptadores Prometheus; KafkaNodePool expande capacidad de brokers cuando topics IE saturan lag de consumidores.
 
 En este lab, line-dashboard y despliegues IE relacionados incluyen HPAs en manifiestos bajo `components/industrial-edge-tst/`. Dispara carga vía scripts del taller o tasas simuladas de sensores, luego observa pods escalar en Topology como `%USER_NAME%`. El escalado Kafka complementa HPA absorbiendo ráfagas de eventos antes de que pods rechacen tráfico.

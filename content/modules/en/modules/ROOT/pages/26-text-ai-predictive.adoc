@@ -1,0 +1,97 @@
+= Generative & Predictive Text
+
+++++
+<span class="workshop-time-badge">~18 min</span>
+++++
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
+== Overview
+
+
+NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
+
+Generative AI assists operators with natural-language summaries of alarms; predictive AI forecasts failures before downtime. On OpenShift, the ie-anomaly-alerter deployment watches Prometheus metrics from Industrial Edge sensors and emits alerts when statistical thresholds breach — a lightweight predictive pattern without mandatory KServe for this workshop track.
+
+Optional KServe InferenceService resources on the hub demonstrate full model serving for custom scikit-learn or ONNX models trained in DS workspaces. MaaS playground endpoints let `%USER_NAME%` test generative prompts for incident postmortems: "Summarize last hour Kafka lag and ACS violations for my namespace."
+
+Connect predictive alerts to module 26 end-user apps: Camel routes can fan out anomaly events to line-dashboard overlays and NeuroFace notifications. This closes the loop from telemetry → ML/statistical detection → human + generative AI response on the same OpenShift footprint.
+
+
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| MaaS playground | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1[MaaS playground] | Facilitator token
+| OpenShift AI dashboard | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[OpenShift AI dashboard] | OpenShift OAuth
+| Anomaly alerter (east spoke) | ACM → `east` → `industrial-edge-tst-%USER_NAME%` | Workshop user
+|===
+
+== Show and Tell
+
+. Show ie-anomaly-alerter firing on threshold breach in metrics.
+. MaaS prompt: generative summary of recent IE alerts.
+. Mention optional KServe path for custom models.
+== Your TODO (user %USER_NAME%)
+
+* [ ] Confirm ie-anomaly-alerter deployment running on your spoke
+* [ ] Generate one alarm summary prompt via MaaS playground
+* [ ] Save progress at the end of this module
+
+== Live lab
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
+
+== Where this lab is defined
+
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
+|===
+| UI / capability | Source in GitOps repo
+
+| IE alerter | `components/ie-anomaly-alerter/` |
+| Kafka topics | `industrial-edge-tst-all` |
+|===
+
+Verify in the Showroom terminal:
+
+[source,bash]
+----
+oc get deploy -n industrial-edge-tst-all 2>/dev/null | grep -i anomaly
+----
+
+== Verify
+
+[cols="1,2,1"]
+|===
+| Check | Action | Expected
+
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
+|===
+
+
+++++
+<div class="workshop-progress" data-module="26-text-ai-predictive">
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('26-text-ai-predictive')">Save progress</button>
+</div>
+++++
+
+
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="27-neuroface.html">Next → 27 neuroface</a>
+</div>
+++++
+

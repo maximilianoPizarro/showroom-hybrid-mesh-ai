@@ -1,0 +1,101 @@
+= NeuroFace
+
+++++
+<span class="workshop-time-badge">~30 min</span>
+++++
+
+image::images/25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,600]
+
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+== Qué harás
+
+Abre link:https://neuroface.%HUB_DOMAIN%[NeuroFace] y **Developer Hub → Catálogo → neuroface-workshop**. OVMS habilitado para visión local; chat usa MaaS.
+
+== Panorama
+
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
+NeuroFace combina **visión OVMS local** (`ovms.enabled: true`) y **chat MaaS** en `/api/chat`. **ModelMesh** en el hub sirve modelos de plataforma; OVMS NeuroFace maneja inferencia webcam de baja latencia.
+
+**Solo visualización (~10 min):** Developer Hub → **neuroface-workshop** → Topology.
+
+**Hands-on (~30 min):** Probar webcam + chat; inspeccionar Service OVMS en namespace `neuroface`.
+
+
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| App NeuroFace | link:https://neuroface.%HUB_DOMAIN%[App NeuroFace] | Pública (sin login)
+| API chat | link:https://neuroface.%HUB_DOMAIN%/api/chat[API chat] | Pública (sin login)
+| Consola OpenShift — deploy | ACM → `hub` → namespace `neuroface` | Usuario taller
+|===
+
+== Demostración
+
+. Abrir `https://neuroface.%HUB_DOMAIN%` — detección objetos webcam en vivo.
+. Enviar pregunta chat sobre objeto detectado; mostrar backend MaaS (no LibreChat).
+. Destacar visión local OVMS + gobernanza chat centralizada.
+== Tu TODO (usuario %USER_NAME%)
+
+* [ ] Abrir `https://neuroface.%HUB_DOMAIN%` y probar detección webcam
+* [ ] Preguntar a `/api/chat` sobre un objeto detectado
+* [ ] Guardar progreso al final de este módulo
+
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
+
+== Dónde está definido este lab
+
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
+|===
+| UI / capability | Source in GitOps repo
+
+| NeuroFace chart | `components/neuroface/` |
+| Route | `neuroface.%HUB_DOMAIN%` |
+|===
+
+Verificar en la terminal Showroom:
+
+[source,bash]
+----
+curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/
+----
+
+== Verificar
+
+[cols="1,2,1"]
+|===
+| Check | Action | Expected
+
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
+|===
+
+
+++++
+<div class="workshop-progress" data-module="27-neuroface">
+  <label><input type="checkbox" data-completed> Completé este módulo</label>
+  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
+  <button type="button" onclick="saveWorkshopProgress('27-neuroface')">Guardar progreso</button>
+</div>
+++++
+
+
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="28-ai-end-user-apps.html">Siguiente → 28 ai end user apps</a>
+</div>
+++++
+

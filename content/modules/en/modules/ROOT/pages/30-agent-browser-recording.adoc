@@ -1,0 +1,31 @@
+= Agent Browser (facilitator)
+
+++++
+<span class="workshop-time-badge">~12 min</span>
+++++
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+
+
+== What you will do
+
+IMPORTANT: **Facilitator / automation agent only** — this page is not part of the learner navigation.
+
+**Facilitator / agent only.** Agent Browser YAML under `verification/agent-browser/` replays UI flows for CI. Recordings stay local (`*.mp4` gitignored).
+
+
+
+
+
+== Live lab
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
+
+
+
+
+
+
+
+

@@ -1,0 +1,103 @@
+= Face & Object AI + Chat
+
+++++
+<span class="workshop-time-badge">~30 min</span>
+++++
+
+image::images/25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,600]
+
+NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+
+== What you will do
+
+Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and **Developer Hub → Catalog → neuroface-workshop** for Topology. OVMS is enabled for local vision; chat uses MaaS. Allow webcam and test detection + `/api/chat`.
+
+== Overview
+
+
+NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
+
+NeuroFace combines **OVMS local vision** (face/object detection via `components/neuroface/` with `ovms.enabled: true`) and **MaaS chat** at `/api/chat`. Hub **ModelMesh** serves platform models; NeuroFace OVMS handles low-latency webcam inference on the app namespace.
+
+**Overview-only (~10 min):** Developer Hub → **neuroface-workshop** → Topology; open UI without webcam.
+
+**Hands-on (~30 min):** Register as `%USER_NAME%`, test webcam + chat, inspect OVMS Service/route in namespace `neuroface`.
+
+Catalog: System `hybrid-mesh-ai-platform` → Component **neuroface-workshop** (links UI + OpenShift AI dashboard).
+
+
+== Lab access — URLs & credentials
+
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| NeuroFace app | link:https://neuroface.%HUB_DOMAIN%[NeuroFace app] | Public (no login)
+| API chat | link:https://neuroface.%HUB_DOMAIN%/api/chat[API chat] | Public (no login)
+| OpenShift Console — deploy | ACM → `hub` → namespace `neuroface` | Workshop user
+|===
+
+== Show and Tell
+
+. Open `https://neuroface.%HUB_DOMAIN%` — webcam object detection live.
+. Send chat question about detected object; show MaaS backend (not LibreChat).
+. Highlight OVMS local vision + centralized chat governance.
+== Your TODO (user %USER_NAME%)
+
+* [ ] Open `https://neuroface.%HUB_DOMAIN%` and test webcam detection
+* [ ] Ask `/api/chat` one question about a detected object
+* [ ] Save progress at the end of this module
+
+== Live lab
+
+* Showroom integrated `oc` terminal — use hub context unless module says east/west.
+
+== Where this lab is defined
+
+NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+
+[cols="2,3"]
+|===
+| UI / capability | Source in GitOps repo
+
+| NeuroFace chart | `components/neuroface/` |
+| Route | `neuroface.%HUB_DOMAIN%` |
+|===
+
+Verify in the Showroom terminal:
+
+[source,bash]
+----
+curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/
+----
+
+== Verify
+
+[cols="1,2,1"]
+|===
+| Check | Action | Expected
+
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
+|===
+
+
+++++
+<div class="workshop-progress" data-module="27-neuroface">
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('27-neuroface')">Save progress</button>
+</div>
+++++
+
+
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="28-ai-end-user-apps.html">Next → 28 ai end user apps</a>
+</div>
+++++
+

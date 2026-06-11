@@ -1,0 +1,101 @@
+= AI Gateway — MaaS + Kuadrant
+
+++++
+<span class="workshop-time-badge">~25 min</span>
+++++
+
+image::images/23-ai-gateway.png[AI Gateway Kuadrant MaaS,600]
+
+NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
+
+== Qué harás
+
+Abre **Developer Hub → Catálogo → workshop-ai-gateway** y sigue GitOps en `components/workshop-kuadrant-apis/`. Crea API key Kuadrant y llama la ruta MaaS LLM.
+
+== Panorama
+
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
+El **AI Gateway** (`workshop-apis.%HUB_DOMAIN%`) expone MaaS externo con **Gateway API**, Istio y **Kuadrant**. GitOps: `components/workshop-kuadrant-apis/`.
+
+**Solo visualización (~5 min):** Catálogo → **workshop-ai-gateway**; UI Kuadrant.
+
+**Hands-on (~25 min):** Crear API key, `curl` a `/llm/v1/chat/completions`, comparar con MaaS directo.
+
+
+== Acceso al producto — URLs y credenciales
+
+NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.
+
+[cols="2,3,2"]
+|===
+| Servicio | URL | Credenciales
+
+| AI Gateway (MaaS LLM) | link:https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions[AI Gateway (MaaS LLM)] | API key Kuadrant
+| UI Kuadrant | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[UI Kuadrant] | Usuario taller
+| Entidad catálogo | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/workshop-ai-gateway[Entidad catálogo] | Usuario taller
+|===
+
+== Demostración
+
+. Catálogo → **workshop-ai-gateway** → HTTPRoute en Topology.
+. UI Kuadrant: crear API key; curl `/llm/v1/chat/completions`.
+. Mostrar rutas GitOps AuthPolicy + TokenRateLimitPolicy.
+== Tu TODO (usuario %USER_NAME%)
+
+* [ ] Abrir catálogo **workshop-ai-gateway** y UI Kuadrant
+* [ ] Crear API key y llamar `/llm/v1/chat/completions`
+* [ ] Guardar progreso al final de este módulo
+
+== Lab en vivo
+
+* Terminal `oc` integrada en Showroom — usa contexto hub salvo que el módulo indique east/west.
+
+== Dónde está definido este lab
+
+NOTE: Las rutas referencian el repo GitOps `platform-hub-spoke-config` desplegado en **este** cluster. No copies fragmentos como manifiestos independientes — usa los enlaces de consola y verifica con `oc`.
+
+[cols="2,3"]
+|===
+| UI / capability | Source in GitOps repo
+
+| HTTPRoute + policies | `components/workshop-kuadrant-apis/` |
+| Catalog | `catalog-ai-platform.yaml` → workshop-ai-gateway |
+|===
+
+Verificar en la terminal Showroom:
+
+[source,bash]
+----
+oc get httproute -n hub-gateway-system 2>/dev/null | grep workshop
+----
+
+== Verificar
+
+[cols="1,2,1"]
+|===
+| Check | Action | Expected
+
+| Progress | Save checkboxes below | `POST /api/progress` returns OK
+|===
+
+
+++++
+<div class="workshop-progress" data-module="23-ai-gateway">
+  <label><input type="checkbox" data-completed> Completé este módulo</label>
+  <label><input type="checkbox" data-interest> Me interesa profundizar</label>
+  <button type="button" onclick="saveWorkshopProgress('23-ai-gateway')">Guardar progreso</button>
+</div>
+++++
+
+
+TIP: Plan B — demo compartido en Developer Hub → System `hybrid-mesh-shared-demos` si falla el scaffolder.
+
+
+++++
+<div class="workshop-next-nav">
+  <a href="24-mcp-gateway.html">Siguiente → 24 mcp gateway</a>
+</div>
+++++
+

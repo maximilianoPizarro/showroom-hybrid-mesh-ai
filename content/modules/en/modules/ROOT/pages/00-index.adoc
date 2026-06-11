@@ -118,16 +118,17 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 | 05 | Real Cases & Roadmap
 |===
 
-.Part B — Hands-on (10–26)
+.Part B — Hands-on (10–28, ~4 hours)
 [cols="1,3"]
 |===
 | 10–14 | Foundation — ACM, mesh, templates, IE, Kairos
 | 15–18 | Operations — observability, GitOps, mesh, scale
 | 19–21 | Security & FinOps — NP, ACS/Kuadrant, Kubecost
-| 22–26 | Hybrid Mesh AI — ODS, LLM, NeuroFace, end-user apps
+| 22–24 | OpenShift AI — projects, AI Gateway, MCP Gateway
+| 25–28 | LLM, NeuroFace (OVMS), end-user apps
 |===
 
-NOTE: Modules 27–28 (verification & Agent Browser) are **facilitator/agent tasks** only — see `showroom-hybrid-mesh-ai/verification/`. They are not part of the learner path.
+NOTE: Modules 29–30 (verification & Agent Browser) are **facilitator/agent tasks** only — see `showroom-hybrid-mesh-ai/verification/`. Each Part B module supports **Overview-only** (~90 min) vs **Hands-on** (~4 h).
 
 == Registration & Plan B demos
 

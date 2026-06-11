@@ -14,6 +14,9 @@ Crearás (o explorarás) una carga desde **Developer Hub → Create**. Si falla 
 
 == Panorama
 
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
 Las plantillas software de Red Hat Developer Hub codifican golden paths: acciones scaffolder parametrizadas crean repos Git, registran entidades de catálogo y disparan Applications Argo CD con guardrails (namespaces, quotas, network policies) ya cableados. Los equipos de plataforma publican plantillas una vez; los desarrolladores se autoatienden vía Create sin tickets de infraestructura.
 
 Este taller incluye plantillas para Industrial Edge, Camel Kaoto, API products, workspaces OpenShift AI, VMs CNV y NeuroFace. Si el scaffold de `%USER_NAME%` falla por quota o timing de Gitea, cambia a Plan B — Developer Hub System `hybrid-mesh-shared-demos` expone Components pre-desplegados con las mismas URLs y entradas Topology.

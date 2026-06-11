@@ -14,6 +14,9 @@ Usarás **ACS Central** en este cluster (ruta `central-stackrox`) y **Developer 
 
 == Panorama
 
+
+NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
+
 Red Hat Advanced Cluster Security ofrece escaneo de vulnerabilidades, benchmarks de cumplimiento y detección de amenazas runtime en clusters gestionados por ACM. Agentes SecuredCluster en spokes reportan a ACS Central en el hub; init bundles sincronizan vía jobs GitOps en `components/acs-init-bundle-sync/`.
 
 Connectivity Link y Kuadrant extienden gestión de APIs al gateway del hub: AuthPolicy valida tokens, RateLimitPolicy protege backends y APIProduct publica APIs Industrial Edge para consumidores externos. El demo `demo-ie-api-product` en catálogo Plan B expone los mismos recursos Kuadrant sin scaffolding.

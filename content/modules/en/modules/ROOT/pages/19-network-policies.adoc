@@ -4,7 +4,22 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::19-network-policies.png[Network policies workshop demo,960]
+image::19-network-policies.png[OVN-Kubernetes NetworkPolicy — micro-segmentation for the IE dashboard,960]
+
+.Policy demo in the lab
+[cols="1,1", options="header"]
+|===
+| Rule | Manifest
+
+| Target workload
+| `line-dashboard` pods in `industrial-edge-tst-all`
+
+| Allowed ingress
+| OpenShift ingress namespace + `machine-sensor` pods only
+
+| GitOps source
+| `components/workshop-demos/templates/network-policy-demo.yaml`
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

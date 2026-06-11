@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,960]
+image::11-hybrid-mesh.png[Hybrid mesh — Gateway API on hub, Skupper tunnels to spoke services,960]
+
+.Traffic path through the lab
+[cols="1,1", options="header"]
+|===
+| Hop | Component in Git
+
+| External client → hub
+| OpenShift Route + `hub-gateway` Gateway (`components/hub-gateway/`)
+
+| Hub ingress routing
+| HTTPRoute in `hub-gateway-system`
+
+| Cross-cluster link
+| Skupper VAN / Connectivity Link (`components/skupper/`)
+
+| Spoke workload
+| Industrial Edge line-dashboard on `east`
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::24-mcp-gateway.png[MCP Gateway federated tools,960]
+image::24-mcp-gateway.png[MCP Gateway — federated Argo CD and Kubernetes tools for Lightspeed,960]
+
+.MCP tools in the lab
+[cols="1,1", options="header"]
+|===
+| Tool server | Purpose
+
+| Argo CD MCP
+| Query/sync Applications from Lightspeed prompts
+
+| k8s MCP
+| Cluster resources without raw `oc` in chat
+
+| OpenShift AI MCP
+| Register in dashboard — connects to MaaS
+
+| Public endpoint
+| `https://mcp-gateway.%HUB_DOMAIN%/mcp`
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

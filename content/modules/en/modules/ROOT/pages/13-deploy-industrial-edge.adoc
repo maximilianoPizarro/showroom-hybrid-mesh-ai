@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,960]
+image::13-deploy-industrial-edge.png[Industrial Edge factory stack on the east spoke — sensors, Kafka, dashboards,960]
+
+.IE stack in this lab
+[cols="1,1", options="header"]
+|===
+| Factory layer | Lab component
+
+| OT sensors / simulators
+| `machine-sensor` deployments in `industrial-edge-tst-all`
+
+| Event streaming
+| Strimzi Kafka + `temperature` / `vibration` topics
+
+| Integration & CDC
+| Camel K routes → PostgreSQL
+
+| Operator dashboard
+| `line-dashboard` — reachable via hub gateway + Skupper
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

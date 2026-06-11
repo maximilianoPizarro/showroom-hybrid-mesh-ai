@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::16-openshift-gitops.png[OpenShift GitOps and Argo CD,960]
+image::16-openshift-gitops.png[OpenShift GitOps — App-of-Apps with sync waves propagating to hub and spokes,960]
+
+.GitOps patterns in this repo
+[cols="1,1", options="header"]
+|===
+| Pattern | Where it lives
+
+| App-of-Apps root Application
+| `templates/component-applications.yaml`
+
+| Ordered rollout (operators → CRs → workloads)
+| `argocd.argoproj.io/sync-wave` on every component
+
+| Hub-only vs spoke placement
+| ACM Placement + ApplicationSet in `components/acm-hub-spoke/`
+
+| Self-heal + prune
+| Argo CD `Application` spec in the same template
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

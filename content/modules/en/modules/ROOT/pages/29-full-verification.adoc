@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::29-full-verification.png[Full stack workshop verification,960]
+image::29-full-verification.png[Full-stack verification — hub, spokes, mesh, GitOps, security, and AI checkpoints,960]
+
+.Facilitator verification scope
+[cols="1,1", options="header"]
+|===
+| Pillar | Scripts / checks
+
+| Fleet + GitOps
+| `oc get managedclusters`, Argo CD app health
+
+| Mesh + IE
+| Skupper links, line-dashboard reachability
+
+| Security
+| ACS, Kuadrant keys, NetworkPolicy demo
+
+| AI stack
+| MaaS smoke test, NeuroFace, MCP gateway
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

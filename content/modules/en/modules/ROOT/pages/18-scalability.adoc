@@ -4,7 +4,22 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::18-scalability.png[HPA and Kafka scalability,960]
+image::18-scalability.png[Three-tier scaling — Kairos nodes, HPA pods, Kafka buffering on IE workloads,960]
+
+.Scaling levers in the lab
+[cols="1,1", options="header"]
+|===
+| Lever | Component
+
+| Node-level recommendations
+| Module 14 — Kairos SmartScalingPolicy on hub
+
+| Pod autoscaling
+| HPA on `line-dashboard` and IE deployments
+
+| Event back-pressure
+| Strimzi Kafka topics absorb sensor bursts before pods scale
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

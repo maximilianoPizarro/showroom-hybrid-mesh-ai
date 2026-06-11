@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::17-service-mesh.png[OpenShift Service Mesh ambient,960]
+image::17-service-mesh.png[OpenShift Service Mesh ambient — ztunnel mTLS without sidecars,960]
+
+.Ambient mesh in the lab
+[cols="1,1", options="header"]
+|===
+| Piece | CRD / namespace
+
+| Control plane (ambient profile)
+| `Istio` CR in `istio-system` (`components/servicemeshoperator3/`)
+
+| ztunnel dataplane
+| DaemonSet — automatic mTLS between meshed pods
+
+| Namespace enrollment
+| Label `istio.io/dataplane-mode: ambient`
+
+| Deliberate exclusions
+| `stackrox`, `gitea`, `redhat-connectivity-link-operator` — no mesh label
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::03-security-scale-hybrid.png[Hybrid cloud security and scale,960]
+image::03-security-scale-hybrid.png[Defense in depth — Kuadrant, ambient mesh, ACS, and NetworkPolicy across hub and spokes,960]
+
+.Four security layers in this lab
+[cols="1,1", options="header"]
+|===
+| Layer | Where you verify it
+
+| 1 — Kuadrant AuthPolicy at hub gateway
+| Modules 20, 23 — `hub-gateway-system`, API key in Developer Hub
+
+| 2 — Ambient mesh mTLS (ztunnel)
+| Module 17 — `istio.io/dataplane-mode: ambient` on app namespaces
+
+| 3 — ACS Central + SecuredCluster
+| Module 20 — `stackrox` namespace, eBPF collectors on spokes
+
+| 4 — OVN NetworkPolicy micro-segmentation
+| Module 19 — `industrial-edge-tst-all` dashboard policy
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::27-neuroface.png[NeuroFace AI dashboard with webcam and chat,960]
+image::27-neuroface.png[NeuroFace — OVMS vision on-browser plus MaaS chat for factory operators,960]
+
+.NeuroFace architecture
+[cols="1,1", options="header"]
+|===
+| Capability | Backend
+
+| Face / object detection
+| OVMS in-browser (local webcam inference)
+
+| Operator chat
+| MaaS `/v1/chat/completions` (module 23)
+
+| Deployment
+| `components/neuroface/` on hub
+
+| URL
+| `https://neuroface.%HUB_DOMAIN%`
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

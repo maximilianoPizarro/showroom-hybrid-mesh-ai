@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::10-acm-multicluster.png[ACM multicluster fleet management,960]
+image::10-acm-multicluster.png[ACM multicluster fleet — hub governing east and west OpenShift spokes,960]
+
+.This fleet maps to production like this
+[cols="1,1", options="header"]
+|===
+| Production (ROSA + ACM) | In this lab
+
+| Fleet hub with ACM console
+| Hub cluster — `oc get managedclusters`
+
+| Imported worker clusters
+| `east` and `west` ManagedClusters
+
+| Placement + ApplicationSet GitOps
+| Modules 16, 13 — same CRDs in `components/acm-hub-spoke/`
+
+| Policy and observability federation
+| Modules 15, 19–20 — metrics and governance across spokes
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

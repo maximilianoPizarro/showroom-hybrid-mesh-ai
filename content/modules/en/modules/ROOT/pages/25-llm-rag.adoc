@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-image::25-llm-rag.png[LLM and RAG with MaaS,960]
+image::25-llm-rag.png[LLM + RAG — factory runbooks retrieved and answered via governed MaaS,960]
+
+.RAG flow in the lab
+[cols="1,1", options="header"]
+|===
+| Step | Component
+
+| Document source
+| Factory runbooks / TechDocs in Developer Hub
+
+| Embedding + vector store
+| OpenShift AI workbench notebooks
+
+| Governed inference
+| MaaS endpoint (module 23) — not raw model Route
+
+| Consumer
+| Lightspeed or `curl` chat/completions with context
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

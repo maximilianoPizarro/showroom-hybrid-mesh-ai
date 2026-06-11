@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::22-openshift-ai.png[OpenShift AI DataScienceCluster,960]
+image::22-openshift-ai.png[OpenShift AI — DataScienceCluster, KServe, and ModelMesh inference on the hub,960]
+
+.OpenShift AI stack in the lab
+[cols="1,1", options="header"]
+|===
+| Layer | Resource
+
+| Platform operator
+| DataScienceCluster in `redhat-ods-applications`
+
+| Model serving
+| KServe InferenceService + ModelMesh
+
+| Developer workspace
+| `workshop-notebook` in project `ai-%USER_NAME%`
+
+| Downstream consumers
+| Modules 23–27 — MaaS, NeuroFace, Lightspeed
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

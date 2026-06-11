@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::23-ai-gateway.png[AI Gateway Kuadrant MaaS,960]
+image::23-ai-gateway.png[AI Gateway — Kuadrant-governed MaaS endpoint with OpenAI-compatible API,960]
+
+.MaaS gateway in the lab
+[cols="1,1", options="header"]
+|===
+| Piece | Location
+
+| HTTPRoute + Gateway
+| `hub-gateway-system` — `workshop-maas`
+
+| Auth + rate limits
+| Kuadrant AuthPolicy + RateLimitPolicy
+
+| Inference backend
+| OpenShift AI ModelMesh on hub
+
+| Client access
+| API key from Developer Hub → `curl` chat/completions
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

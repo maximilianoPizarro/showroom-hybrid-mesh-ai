@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::20-acs-kuadrant.png[ACS and Kuadrant API security,960]
+image::20-acs-kuadrant.png[ACS runtime security plus Kuadrant API management at the hub gateway,960]
+
+.Security + API management split
+[cols="1,1", options="header"]
+|===
+| Capability | Lab location
+
+| Vulnerability + runtime policies
+| ACS Central — `central-stackrox` route on hub
+
+| Spoke visibility (eBPF)
+| SecuredCluster on `east` / `west`
+
+| API key auth + rate limits
+| Kuadrant AuthPolicy — module 23, keys via Developer Hub
+
+| Published factory APIs
+| APIProduct `demo-ie-api-product` through hub gateway
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

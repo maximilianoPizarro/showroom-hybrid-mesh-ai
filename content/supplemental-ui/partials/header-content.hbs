@@ -35,9 +35,12 @@
             <a id="workshop-register-link" href="https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%" class="workshop-quick-link workshop-quick-link--register" title="Workshop registration">
               <i class="fa fa-id-badge"></i><span class="workshop-link-label">Register</span>
             </a>
-            <span id="user-badge" class="workshop-user-badge-nav">
+            <span id="user-badge" class="workshop-user-badge-nav" style="display:none;">
               <i class="fa fa-user"></i>
-              <span id="user-badge-name">guest</span>
+              <span id="user-badge-name"></span>
+              <button type="button" id="vars-edit-btn" title="Change lab user" class="workshop-user-badge-edit" aria-label="Change lab user">
+                <i class="fa fa-pencil"></i>
+              </button>
             </span>
             <div id="vars-edit-panel" class="workshop-vars-edit" style="display:none;">
               <label for="user-name-input">User:</label>
@@ -45,9 +48,6 @@
               <button type="button" id="vars-save">Save</button>
               <button type="button" id="vars-cancel-edit">Cancel</button>
             </div>
-            <button type="button" id="vars-edit-btn" title="Change lab user" class="workshop-vars-edit-btn">
-              <i class="fa fa-pencil"></i>
-            </button>
           </div>
         </div>
       </div>

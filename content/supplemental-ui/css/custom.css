@@ -69,29 +69,36 @@
 
 .workshop-navbar-links {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
+  min-width: 0;
 }
 
 .workshop-navbar-lab {
   display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
+  gap: 0.3rem;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
+  flex: 1 1 auto;
   min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
 .workshop-navbar-identity {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.3rem;
   flex-wrap: nowrap;
   align-items: center;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   padding-left: 0.35rem;
+  margin-left: 0.15rem;
   border-left: 1px solid #555;
 }
 
@@ -172,27 +179,35 @@ button.workshop-quick-link.workshop-terminal-toggle.is-active {
 .workshop-user-badge-nav {
   display: inline-flex;
   align-items: center;
-  background: #292929;
+  gap: 0.35rem;
+  background: #1f3d5c;
   color: #fff;
-  padding: 0.25rem 0.75rem;
+  padding: 0.2rem 0.45rem 0.2rem 0.65rem;
   border-radius: 16px;
   font-size: 0.82rem;
-  border: 1px solid #444;
+  border: 1px solid #0066cc;
   white-space: nowrap;
 }
 
-.workshop-user-badge-nav i {
-  margin-right: 0.35rem;
+.workshop-user-badge-nav > .fa-user {
+  margin-right: 0.15rem;
   color: #73bcf7;
 }
 
-.workshop-user-badge-nav.is-registered {
-  background: #1f3d5c;
-  border-color: #0066cc;
+.workshop-user-badge-edit {
+  background: transparent;
+  border: 0;
+  color: #73bcf7;
+  cursor: pointer;
+  padding: 0.1rem 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  border-radius: 4px;
 }
 
-.workshop-user-badge-nav.is-guest {
-  color: #c7c7c7;
+.workshop-user-badge-edit:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .workshop-vars-edit {
@@ -425,7 +440,7 @@ a.workshop-lab-link:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1400px) {
   .workshop-quick-link .workshop-link-label {
     display: none;
   }
@@ -436,6 +451,24 @@ a.workshop-lab-link:hover {
 
   .workshop-quick-link {
     padding: 0.3rem 0.45rem;
+  }
+
+  .workshop-quick-link--register .workshop-link-label {
+    display: inline;
+  }
+}
+
+@media (max-width: 1100px) {
+  .workshop-brand-text .site-title {
+    max-width: 9.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .navbar-logo-img {
+    min-width: 7rem;
+    max-width: 8.5rem;
   }
 }
 
@@ -454,15 +487,8 @@ a.workshop-lab-link:hover {
     max-width: 8rem;
   }
 
-  .workshop-navbar-identity {
-    border-left: 0;
-    padding-left: 0;
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .workshop-navbar-links {
-    gap: 0.35rem;
+  .workshop-quick-link--register .workshop-link-label {
+    display: none;
   }
 
   .workshop-terminal-panel {

@@ -284,13 +284,13 @@
   }
 
   function syncUserDisplay(user) {
-    var display = user || 'guest';
     var badgeName = document.getElementById('user-badge-name');
     var badge = document.getElementById('user-badge');
-    if (badgeName) badgeName.textContent = display;
+    var editBtn = document.getElementById('vars-edit-btn');
+    if (badgeName) badgeName.textContent = user || '';
     if (badge) {
+      badge.style.display = user ? 'inline-flex' : 'none';
       badge.classList.toggle('is-registered', Boolean(user));
-      badge.classList.toggle('is-guest', !user);
     }
   }
 
@@ -304,21 +304,12 @@
 
     syncUserDisplay(user);
 
-    if (user) {
-      if (badge) badge.style.display = 'inline-flex';
-      if (editBtn) editBtn.style.display = 'inline-block';
-      if (editPanel) editPanel.style.display = 'none';
-    } else {
-      if (badge) badge.style.display = 'inline-flex';
-      if (editBtn) editBtn.style.display = 'inline-block';
-      if (editPanel) editPanel.style.display = 'none';
-      if (ui) ui.value = '';
-    }
+    if (editPanel) editPanel.style.display = 'none';
+    if (!user && ui) ui.value = '';
 
     if (editBtn) {
       editBtn.onclick = function () {
-        badge.style.display = 'none';
-        editBtn.style.display = 'none';
+        if (badge) badge.style.display = 'none';
         var regLink = document.getElementById('workshop-register-link');
         if (regLink) regLink.style.display = 'none';
         editPanel.style.display = 'flex';
@@ -332,8 +323,7 @@
     if (cancelEdit) {
       cancelEdit.onclick = function () {
         editPanel.style.display = 'none';
-        badge.style.display = 'inline-flex';
-        editBtn.style.display = 'inline-block';
+        syncUserDisplay(user);
         var regLink = document.getElementById('workshop-register-link');
         if (regLink) regLink.style.display = user ? 'none' : '';
       };

@@ -4,7 +4,34 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::05-cases-roadmap.png[Customer cases and workshop roadmap,960]
+image::05-cases-roadmap.png[Industrial Edge data flow — factory sensors through Kafka to dashboards and AI,960]
+
+.Customer journey → workshop modules
+[cols="1,2", options="header"]
+|===
+| Case milestone (automotive IoT) | Lab module
+
+| Factory sensors → MQTT → Kafka
+| 13 — Deploy Industrial Edge (east spoke)
+
+| Anomaly detection + ACS runtime policies
+| 19–20 — NetworkPolicy + ACS/Kuadrant
+
+| Predictive scaling (34% node savings)
+| 14 — Kairos SmartScalingPolicy
+
+| Central analytics on ROSA hub
+| 15 — Observability (Grafana multi-cluster)
+
+| OpenShift AI predictive maintenance
+| 22–25 — OpenShift AI, LLM, RAG, NeuroFace
+
+| Developer self-service templates
+| 12 — Software Templates (golden path)
+
+| FinOps chargeback by plant/namespace
+| 21 — Kubecost federated ETL
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

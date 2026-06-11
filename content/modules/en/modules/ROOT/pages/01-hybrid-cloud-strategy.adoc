@@ -4,7 +4,28 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::01-hybrid-strategy.png[Hybrid cloud strategy overview,960]
+image::01-hybrid-strategy.png[Hybrid Mesh AI platform — centralized hub, edge and cloud spokes,960]
+
+.This strategy maps to the lab like this
+[cols="1,1", options="header"]
+|===
+| Strategic pillar | Where you see it in Part B
+
+| Edge — low latency, factory OT
+| Modules 13–14 — Industrial Edge + Kairos on east spoke
+
+| Cloud — burst analytics and AI
+| Modules 22–26 — OpenShift AI + MaaS on hub
+
+| Hub — governance, GitOps, security
+| Modules 10, 16, 19–20 — ACM, Argo CD, NP, ACS/Kuadrant
+
+| Developer velocity
+| Modules 12, 28 — Software Templates + end-user apps
+
+| FinOps and chargeback
+| Module 21 — Kubecost federated across spokes
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

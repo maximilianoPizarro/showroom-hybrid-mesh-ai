@@ -4,7 +4,28 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::04-aws-ai-integration.png[AWS and AI integration on OpenShift,960]
+image::04-aws-ai-integration.png[OpenShift AI inference architecture — portable alternative to Bedrock and SageMaker,960]
+
+.AWS AI services vs this lab
+[cols="1,1", options="header"]
+|===
+| In AWS (production) | In this lab (RHDP hub-spoke)
+
+| Amazon Bedrock — managed LLM API
+| MaaS on hub — OpenAI-compatible `/v1/chat/completions`
+
+| SageMaker — training and hosting
+| `DataScienceCluster` + KServe/ModelMesh (module 22)
+
+| IAM OIDC — pod identity to AWS
+| `openshift-ai-maas-credentials` secret + Kuadrant API keys
+
+| Bedrock per-app API keys
+| Shared MaaS endpoint — NeuroFace, Lightspeed, DevSpaces consume one URL
+
+| SageMaker endpoints in VPC
+| `InferenceService` pods on hub; consumers on spokes via Skupper
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::22-openshift-ai.png[OpenShift AI DataScienceCluster,600]
+image::22-openshift-ai.png[OpenShift AI DataScienceCluster,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -24,6 +24,11 @@ OpenShift AI en el hub ejecuta **ModelMesh + Serverless (Knative)** vía `defaul
 **Hands-on (~30 min):** Abrir **workshop-notebook**, ejecutar `maas-smoke-test.ipynb`, registrar **MCP Server** `ods-maas-mcp-server` en extensiones OpenShift AI. En **ai-%USER_NAME%** → **Models**, confirmar **`workshop-sklearn`** (ModelMesh) Ready y probar inferencia.
 
 GitOps: `components/openshift-ai-hub/`. Verificar: `oc get notebook,inferenceservice -n ai-%USER_NAME%`.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/es/documentation/red_hat_openshift_ai_self-managed[Documentación OpenShift AI]
+* link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Cargas de IA en OpenShift AI]
 
 
 == Acceso al producto — URLs y credenciales

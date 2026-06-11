@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::20-acs-kuadrant.png[ACS and Kuadrant API security,600]
+image::20-acs-kuadrant.png[ACS and Kuadrant API security,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
@@ -22,6 +22,13 @@ Red Hat Advanced Cluster Security provides vulnerability scanning, compliance be
 Connectivity Link and Kuadrant extend API management to the hub gateway: AuthPolicy validates tokens, RateLimitPolicy protects backends, and APIProduct publishes Industrial Edge APIs for external consumers. Demo `demo-ie-api-product` in Plan B catalog exposes the same Kuadrant resources without scaffolding.
 
 As `%USER_NAME%`, verify ACS sees your spoke workloads and test APIProduct routes through the hub gateway. Remember ACS runs outside ambient mesh — this coexistence pattern is deliberate and matches production ROSA + ACS deployments.
+
+=== Learn more
+
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes[ACS documentation]
+* link:https://www.kuadrant.io/docs/[Kuadrant documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-kuadrant-plugin[Developer Hub Kuadrant plugin]
+* link:https://developers.redhat.com/articles/2024/08/22/api-management-kubernetes-kuadrant[Developer article — API management with Kuadrant]
 
 
 == Lab access — URLs & credentials

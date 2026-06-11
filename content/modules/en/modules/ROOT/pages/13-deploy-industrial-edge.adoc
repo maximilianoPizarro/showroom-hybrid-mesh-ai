@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,600]
+image::13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
@@ -22,6 +22,12 @@ Industrial Edge on OpenShift combines event streaming, integration, and visualiz
 Run the Industrial Edge template as `%USER_NAME%` and confirm your Gitea organization `ws-%USER_NAME%` contains the generated repository. Argo CD on east syncs the Application into namespace `industrial-edge-tst-all` (or your user-scoped equivalent). Plan B demo `demo-industrial-edge-east` offers the same topology if scaffolding is skipped.
 
 This module is the operational heart of Part B: later observability, scaling, network policy, anomaly detection, and AI modules all assume IE workloads are running on your spoke. Verify the line-dashboard route and Kafka topics before proceeding to Kairos scaling.
+
+=== Learn more
+
+* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/industrial-edge[Industrial Edge on OpenShift]
+* link:https://docs.redhat.com/en/documentation/red_hat_amq_streams[AMQ Streams documentation]
+* link:https://developers.redhat.com/topics/microservices[Microservices learning hub]
 
 
 == Lab access — URLs & credentials

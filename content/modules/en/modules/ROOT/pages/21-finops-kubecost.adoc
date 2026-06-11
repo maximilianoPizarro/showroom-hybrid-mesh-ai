@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::21-finops-kubecost.png[FinOps Kubecost cost allocation,600]
+image::21-finops-kubecost.png[FinOps Kubecost cost allocation,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
@@ -20,6 +20,12 @@ Kubecost on OpenShift allocates Kubernetes spend by namespace, label, and cluste
 In this lab, Kubecost deploys from `components/kubecost/` with agents on east/west reporting to the hub primary. Filter allocations to namespaces owned by `%USER_NAME%` and correlate idle capacity with Kairos recommendations from module 14.
 
 FinOps closes the executive loop from module 01: hybrid strategy without cost visibility fails in CFO review. Kubecost complements AWS Cost Explorer tags on ROSA by exposing pod-level waste inside the cluster boundary.
+
+=== Learn more
+
+* link:https://docs.kubecost.com/[Kubecost documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_container_platform/4.16/html/nodes/index[OpenShift capacity and nodes]
+* link:https://www.redhat.com/en/blog/tag/finops[Red Hat FinOps blog tag]
 
 
 == Lab access — URLs & credentials

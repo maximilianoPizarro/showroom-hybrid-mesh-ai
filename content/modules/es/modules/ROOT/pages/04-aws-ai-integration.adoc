@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::04-aws-ai-integration.png[AWS and AI integration on OpenShift,600]
+image::04-aws-ai-integration.png[AWS and AI integration on OpenShift,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -17,6 +17,13 @@ Los clientes AWS suelen combinar ROSA con servicios nativos de IA — Amazon Bed
 Este taller sustituye intencionalmente OpenShift AI más Model-as-a-Service (MaaS) por Bedrock/SageMaker para que experimentes un patrón portable: `DataScienceCluster` en el hub, endpoint LLM compartido y apps consumidoras (NeuroFace, Developer Hub Lightspeed) en spokes. El secret `openshift-ai-maas-credentials` y la URL base MaaS reflejan cómo los equipos centralizan acceso a modelos en lugar de incrustar API keys en cada despliegue.
 
 Desde el módulo 22 se activa este stack hands-on. Los ejecutivos deben reconocer que OpenShift AI en ROSA u on-prem evita reescribir aplicaciones cuando cambian precios o reglas de residencia — la capa de serving nativa Kubernetes se mueve con el cluster.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws[ROSA on AWS]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI — self-managed]
+* link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Developer article — AI workloads on OpenShift AI]
+* link:https://aws.amazon.com/rosa/[AWS — Red Hat OpenShift Service on AWS]
 
 
 == Acceso al producto — URLs y credenciales

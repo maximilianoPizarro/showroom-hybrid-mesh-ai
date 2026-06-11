@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::15-observability.png[Observability dashboards and tracing,600]
+image::15-observability.png[Observability dashboards and tracing,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
@@ -20,6 +20,12 @@ OpenShift observability spans cluster metrics, logs, traces, and custom dashboar
 This workshop deploys multicluster Grafana dashboards on the hub, OpenTelemetry collectors via `components/opentelemetry/`, and Kafka Console for IE topic inspection. As `%USER_NAME%`, filter dashboards to your namespace and correlate latency spikes with mesh traces in module 17.
 
 Executives should connect this module to module 21 (Kubecost): metrics prove SLO compliance while cost metrics prove efficiency — both required for hybrid FinOps. Use Showroom `oc` to list `GrafanaDashboard` CRs and confirm IE workloads emit scrape targets.
+
+=== Learn more
+
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/monitoring/index[OpenShift monitoring]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/distributed_tracing/distributed-tracing-overview[Distributed tracing]
+* link:https://grafana.com/docs/[Grafana documentation]
 
 
 == Lab access — URLs & credentials

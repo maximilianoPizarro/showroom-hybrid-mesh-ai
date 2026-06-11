@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::12-software-templates.png[Developer Hub software templates,600]
+image::12-software-templates.png[Developer Hub software templates,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -22,6 +22,13 @@ Las plantillas software de Red Hat Developer Hub codifican golden paths: accione
 Este taller incluye plantillas para Industrial Edge, Camel Kaoto, API products, workspaces OpenShift AI, VMs CNV y NeuroFace. Si el scaffold de `%USER_NAME%` falla por quota o timing de Gitea, cambia a Plan B — Developer Hub System `hybrid-mesh-shared-demos` expone Components pre-desplegados con las mismas URLs y entradas Topology.
 
 Las plantillas son el puente entre estrategia ejecutiva (módulo 01) y despliegues spoke (módulo 13). Inspecciona `docs/assets/backstage/software-templates/` y ConfigMaps de catálogo para ver cómo OpenShift GitOps recoge repos generados automáticamente.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub documentation]
+* link:https://backstage.io/docs/features/software-templates/[Backstage Software Templates]
+* link:https://developers.redhat.com/products/red-hat-developer-hub/getting-started[Developer Hub getting started]
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index[Developer Hub plugins]
 
 
 == Acceso al producto — URLs y credenciales

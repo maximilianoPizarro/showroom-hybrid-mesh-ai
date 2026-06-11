@@ -4,24 +4,40 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::23-ai-gateway.png[AI Gateway Kuadrant MaaS,600]
+image::23-ai-gateway.png[AI Gateway Kuadrant MaaS,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
 == Qué harás
 
-Abre **Developer Hub → Catálogo → workshop-ai-gateway** y sigue GitOps en `components/workshop-kuadrant-apis/`. Crea API key Kuadrant y llama la ruta MaaS LLM.
+En este módulo expones inferencia LLM **Model-as-a-Service (MaaS)** a través de un **AI Gateway** gobernado — no compartiendo rutas crudas de OpenShift AI. Harás:
+
+. Abrir **Developer Hub → Catálogo → workshop-ai-gateway** y seguir enlaces a Topology, TechDocs y portal API Kuadrant.
+. Rastrear GitOps en `components/workshop-kuadrant-apis/` — `HTTPRoute` Gateway API, `Gateway` Istio, y políticas Kuadrant.
+. Crear API key para `%USER_NAME%` en UI Kuadrant y llamar `https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions` con Bearer token.
+. Comparar latencia y errores contra MaaS directo desde notebook OpenShift AI (módulo 22).
+
+*Prerrequisito:* módulo **22 OpenShift AI** — playground `maas-workshop` activo.
 
 == Panorama
 
 
 NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo visualización** (~5–10 min) y **Hands-on** (lab completo). Omite Hands-on para un tour ejecutivo ~90 min.
 
-El **AI Gateway** (`workshop-apis.%HUB_DOMAIN%`) expone MaaS externo con **Gateway API**, Istio y **Kuadrant**. GitOps: `components/workshop-kuadrant-apis/`.
+El patrón **AI Gateway** centraliza cómo aplicaciones de fábrica, edge y partners consumen LLM en OpenShift. El tráfico entra por **`workshop-apis.%HUB_DOMAIN%`**, con **Gateway API** `HTTPRoute`, gateway Istio y políticas **Kuadrant** (`AuthPolicy`, `TokenRateLimitPolicy`).
 
-**Solo visualización (~5 min):** Catálogo → **workshop-ai-gateway**; UI Kuadrant.
+**Por qué Kuadrant:** extiende Gateway API con gestión de APIs — keys, límites de uso y políticas en rutas que frontean inferencia. GitOps: `components/workshop-kuadrant-apis/`. Entidad catálogo **workshop-ai-gateway** documenta el flujo para `%USER_NAME%`.
 
-**Hands-on (~25 min):** Crear API key, `curl` a `/llm/v1/chat/completions`, comparar con MaaS directo.
+**Solo visualización (~5 min):** Catálogo → **workshop-ai-gateway**; UI Kuadrant → forma de API key.
+
+**Hands-on (~25 min):** Crear key, `curl` a `/llm/v1/chat/completions` con JSON chat-completions; comparar con MaaS directo desde notebook en `ai-%USER_NAME%`.
+
+=== Profundizar
+
+* link:https://www.kuadrant.io/docs/[Kuadrant — gestión de APIs en Kubernetes]
+* link:https://docs.redhat.com/es/documentation/red_hat_openshift_ai_self-managed[Serving de modelos — OpenShift AI]
+* link:https://docs.redhat.com/es/documentation/openshift_container_platform/4.16/html/service_mesh/gateway-api-for-service-mesh[Gateway API en OpenShift Service Mesh]
+* link:https://developers.redhat.com/articles/2024/08/22/api-management-kubernetes-kuadrant[Gestión de APIs con Kuadrant]
 
 
 == Acceso al producto — URLs y credenciales

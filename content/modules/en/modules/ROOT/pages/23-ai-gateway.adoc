@@ -4,24 +4,59 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::23-ai-gateway.png[AI Gateway Kuadrant MaaS,600]
+image::23-ai-gateway.png[AI Gateway Kuadrant MaaS,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 
-Open **Developer Hub → Catalog → workshop-ai-gateway** and trace GitOps in `components/workshop-kuadrant-apis/`. Create a Kuadrant API key and call the MaaS LLM route at `workshop-apis.%HUB_DOMAIN%/llm`.
+In this module you expose **Model-as-a-Service (MaaS)** LLM inference through a governed **AI Gateway** — not by sharing raw OpenShift AI routes. You will:
+
+. Open **Developer Hub → Catalog → workshop-ai-gateway** and follow links to Topology, TechDocs, and the Kuadrant API portal.
+. Trace GitOps in `components/workshop-kuadrant-apis/` — `HTTPRoute` on the hub Gateway API, Istio `Gateway`, and Kuadrant `AuthPolicy` + `TokenRateLimitPolicy`.
+. Mint an API key for `%USER_NAME%` in the Kuadrant UI and call `https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions` with a Bearer token.
+. Compare latency, headers, and error responses against direct MaaS from the OpenShift AI notebook (module 22) — the gateway adds auth, rate limits, and a stable external hostname for factory apps.
+
+*Prerequisite:* module **22 OpenShift AI** — you need a running `maas-workshop` playground and familiarity with chat-completions JSON.
 
 == Overview
 
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-The **AI Gateway** (`workshop-apis.%HUB_DOMAIN%`) fronts external MaaS with **Gateway API HTTPRoute**, Istio hub gateway, and **Kuadrant** (`AuthPolicy`, `TokenRateLimitPolicy`, API keys). GitOps: `components/workshop-kuadrant-apis/templates/routes.yaml` + `policies.yaml`.
+The **AI Gateway** pattern centralizes how factory, edge, and partner applications consume large language models on OpenShift. Instead of every team embedding cluster-internal URLs and shared credentials, traffic enters through **`workshop-apis.%HUB_DOMAIN%`**, backed by **Gateway API** `HTTPRoute` resources on the hub, the Istio ingress gateway, and **Kuadrant** policies for authentication (`AuthPolicy`) and token-based rate limiting (`TokenRateLimitPolicy`).
 
-**Overview-only (~5 min):** Catalog → **workshop-ai-gateway**; Kuadrant UI → show API key shape.
+**Why Kuadrant on OpenShift AI workloads:** Kuadrant extends Gateway API with first-class API management — API keys, usage limits, and policy attachment to routes that front inference services. This matches how platform teams govern REST and gRPC APIs while still allowing data science teams to iterate in OpenShift AI projects. See the Kuadrant documentation for policy CRDs and the Developer Hub Kuadrant plugin for self-service key minting.
 
-**Hands-on (~25 min):** Mint key for `%USER_NAME%`, `curl -H "Authorization: Bearer $KEY" https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions` with JSON body; compare to direct MaaS from notebook.
+**Architecture in this lab:** GitOps repo path `components/workshop-kuadrant-apis/` defines the public hostname, routes `/llm` to the MaaS backend in `maas-workshop`, and attaches Kuadrant policies scoped per workshop user. Developer Hub catalog entity **workshop-ai-gateway** documents the flow for `%USER_NAME%` and links Topology to the live `HTTPRoute`.
+
+**Overview-only (~5 min):** Catalog → **workshop-ai-gateway** → Topology; Kuadrant UI → show API key shape and rate-limit policy names (do not run full curl).
+
+**Hands-on (~25 min):** Mint key for `%USER_NAME%`, then:
+
+[source,bash]
+----
+export KEY="<your-kuadrant-api-key>"
+curl -sk "https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions" \
+  -H "Authorization: Bearer $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"granite-3-8b-instruct","messages":[{"role":"user","content":"Summarize hybrid mesh in one sentence."}]}'
+----
+
+Compare response time and HTTP 429 behavior (if you exceed limits) to a direct call from the **workshop-notebook** in project `ai-%USER_NAME%`. Record which headers prove the request passed through the gateway (auth, rate-limit counters).
+
+**Operations angle:** The same gateway hostname can front additional model routes (embeddings, vision) without changing client apps — add `HTTPRoute` rules and Kuadrant policies in GitOps, sync with Argo CD, validate in module **29 Full verification**.
+
+=== Learn more
+
+* link:https://www.kuadrant.io/docs/[Kuadrant — API management for Kubernetes]
+* link:https://www.kuadrant.io/docs/3.2/authorino/overview/[Authorino — authentication and authorization]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[OpenShift AI — model serving]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/service_mesh/gateway-api-for-service-mesh[Gateway API on OpenShift Service Mesh]
+* link:https://gateway-api.sigs.k8s.io/[Kubernetes Gateway API specification]
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-kuadrant-plugin[Developer Hub Kuadrant plugin — API keys]
+* link:https://developers.redhat.com/articles/2024/08/22/api-management-kubernetes-kuadrant[API management on Kubernetes with Kuadrant]
+* link:https://www.redhat.com/en/blog/building-trusted-ai-platform-openshift[Building a trusted AI platform on OpenShift]
 
 
 == Lab access — URLs & credentials

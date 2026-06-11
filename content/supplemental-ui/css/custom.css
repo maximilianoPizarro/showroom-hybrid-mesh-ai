@@ -46,11 +46,10 @@
   margin: 0;
 }
 
-.workshop-event-tag {
+.workshop-footer-lab-label {
   color: #c7c7c7;
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-weight: 400;
-  letter-spacing: 0.01em;
 }
 
 .workshop-navbar-links {
@@ -220,7 +219,7 @@
   object-fit: contain;
 }
 
-.workshop-footer-event {
+.workshop-footer-lab-label {
   color: #c7c7c7;
   font-size: 0.82rem;
   font-family: "Red Hat Text", "RedHatText", helvetica, arial, sans-serif;
@@ -330,18 +329,32 @@
   font-size: 0.95rem;
 }
 
-/* Module hero images — full width, readable on light content background */
+/* Module hero images — use horizontal space; AsciiDoc width attr is 960px */
+.doc .imageblock,
+.doc .image {
+  margin: 1rem 0 1.75rem;
+  text-align: center;
+}
+
 .doc .imageblock img,
 .doc .image img {
-  max-width: 100%;
+  width: 100%;
+  max-width: 960px;
   height: auto;
   border: 1px solid #d2d2d2;
   border-radius: 4px;
   background: #fff;
+  display: block;
+  margin: 0 auto;
 }
 
-.doc .imageblock {
-  margin: 1rem 0 1.5rem;
+/* Preserve acronyms (AI, MCP, LLM) — Antora/breadcrumbs must not title-case nav labels */
+.nav-panel .nav-link,
+.breadcrumbs li,
+.doc h1.page,
+.doc h1,
+.doc h2 {
+  text-transform: none;
 }
 
 a.workshop-lab-link {

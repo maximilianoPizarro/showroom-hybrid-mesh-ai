@@ -19,6 +19,12 @@ Recursos opcionales KServe InferenceService en el hub demuestran model serving c
 
 Conecta alertas predictivas al módulo 26 de apps finales: rutas Camel pueden distribuir eventos de anomalía a overlays line-dashboard y notificaciones NeuroFace. Esto cierra el loop telemetría → detección ML/estadística → respuesta humana + IA generativa en el mismo footprint OpenShift.
 
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[Model serving on OpenShift AI]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/working_with_connected_applications/index[Notebooks and connected apps]
+* link:https://www.redhat.com/en/blog/tag/artificial-intelligence[Red Hat AI blog]
+
 
 == Acceso al producto — URLs y credenciales
 

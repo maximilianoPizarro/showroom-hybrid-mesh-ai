@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::10-acm-multicluster.png[ACM multicluster fleet management,600]
+image::10-acm-multicluster.png[ACM multicluster fleet management,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -22,6 +22,13 @@ Red Hat Advanced Cluster Management for Kubernetes convierte OpenShift en plano 
 En este lab, abre ACM Clusters en el hub y localiza east y west — cada spoke se bootstrapeó desde manifiestos GitOps de `components/acm-hub-spoke/`. Como `%USER_NAME%`, tus cargas aterrizan en east por defecto; Topology en Developer Hub usa APIs OCM para mostrar el mismo grafo que ACM.
 
 Este módulo establece el modelo mental para cada ejercicio Parte B: el hub posee ingress, política, agregación FinOps y planos de control IA; los spokes ejecutan Industrial Edge y namespaces con alcance de usuario. Verifica con `oc get managedclusters` desde la terminal Showroom.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes[ACM documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.14/html/clusters/index[ACM — cluster lifecycle]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_gitops[OpenShift GitOps — fleet patterns]
+* link:https://access.redhat.com/labs/[Red Hat Interactive Labs]
 
 
 == Acceso al producto — URLs y credenciales

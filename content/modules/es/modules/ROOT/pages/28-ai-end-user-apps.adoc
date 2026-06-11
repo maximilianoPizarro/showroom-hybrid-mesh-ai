@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::26-ai-end-user-apps.png[AI in end-user applications,600]
+image::26-ai-end-user-apps.png[AI in end-user applications,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -22,6 +22,12 @@ Las aplicaciones finales — dashboards de operador, alertas móviles, integraci
 Este módulo integra módulos 13–25: verifica que line-dashboard muestra datos IE en vivo, dispara umbrales ie-anomaly-alerter y opcionalmente embebe iframe NeuroFace o enlace chat para ayuda IA contextual. Integraciones Camel K de plantillas `demo-camel-kaoto-east` y `demo-camel-cdc-east` muestran patrones event-driven que equipos de fábrica despliegan en OpenShift junto a sistemas OT.
 
 Los equipos de plataforma ganan cuando la IA es infraestructura invisible: OpenShift AI, MaaS y NeuroFace son entradas de catálogo — squads de app los vinculan vía dependencias Developer Hub sin reconstruir pipelines ML por planta.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub — golden paths for apps]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI — production patterns]
+* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/industrial-edge[Industrial Edge on OpenShift]
 
 
 == Acceso al producto — URLs y credenciales

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::02-rosa-architecture.png[ROSA and OpenShift hub-spoke architecture,600]
+image::02-rosa-architecture.png[ROSA and OpenShift hub-spoke architecture,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
@@ -17,6 +17,13 @@ Red Hat OpenShift Service on AWS (ROSA) provides a fully managed control plane i
 This workshop's hub-spoke layout maps cleanly to ROSA concepts: the hub is your fleet management cluster (like an ACM hub on ROSA), spokes are regional or edge clusters importing via ManagedCluster resources. You will inspect `ManagedCluster` objects and GitOpsCluster links in module 10 — the same CRDs a ROSA customer uses when joining factory edge clusters to a central governance hub.
 
 Understanding ROSA architecture helps you explain SLA boundaries: Red Hat manages the control plane; you own worker sizing, networking, and data. In the lab, Kairos and HPA on spokes simulate ROSA autoscaling decisions without AWS billing, preparing you for FinOps modules later.
+
+=== Learn more
+
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws[ROSA product documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/html-single/planning_your_environment/index[ROSA — planning your environment]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_container_platform/4.16/html/architecture/architecture-overview[OpenShift architecture overview]
+* link:https://developers.redhat.com/blog/tag/openshift[Red Hat Developer blog — OpenShift]
 
 
 == Lab access — URLs & credentials

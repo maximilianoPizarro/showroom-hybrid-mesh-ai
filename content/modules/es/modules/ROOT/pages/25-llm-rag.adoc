@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-image::23-llm-rag.png[LLM and RAG with MaaS,600]
+image::23-llm-rag.png[LLM and RAG with MaaS,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -20,6 +20,13 @@ Los modelos de lenguaje grande y RAG (retrieval-augmented generation) en OpenShi
 La arquitectura RAG en manufactura híbrida típicamente indexa PDFs y SOPs en un vector store (elección del cliente) mientras el LLM corre en OpenShift AI ModelMesh o MaaS externo. En este lab, configuras el despliegue Lightspeed en `components/developer-hub/templates/lightspeed.yaml` y pruebas prompts contra el endpoint MaaS compartido — observa latencia y uso de tokens adecuados para restricciones Wi-Fi de planta.
 
 Como `%USER_NAME%`, abre Developer Hub, dispara Lightspeed en un Component de catálogo y compara respuestas con Continue AI en un workspace DevSpaces. El módulo 25 extiende la misma ruta MaaS a chat multimodal NeuroFace — demostrando un modelo de gobernanza para superficies IA de dev, ops y usuario final.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-lightspeed-plugin[Developer Hub Lightspeed plugin]
+* link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[AI workloads on OpenShift AI]
+* link:https://www.redhat.com/en/topics/ai/what-is-retrieval-augmented-generation[What is RAG — Red Hat]
 
 
 == Acceso al producto — URLs y credenciales

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::16-openshift-gitops.png[OpenShift GitOps and Argo CD,600]
+image::16-openshift-gitops.png[OpenShift GitOps and Argo CD,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -20,6 +20,12 @@ OpenShift GitOps instala Argo CD como operador gestionado e integra con Applicat
 En este lab, Applications hub bajo `templates/component-applications.yaml` despliegan servicios compartidos mientras Applications spoke (por ejemplo Industrial Edge) sincronizan desde repos Gitea de usuario creados en el módulo 13. ApplicationSet `industrial-edge-spoke` demuestra generadores matrix apuntando a labels east/west.
 
 Inspecciona estado de sync en UI Argo CD como `%USER_NAME%` e identifica qué revisión de repo disparó tu despliegue. GitOps es la columna operativa: cada módulo de producto (mesh, ACS, IA) resuelve en YAML rastreado en `platform-hub-spoke-config`.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_gitops[OpenShift GitOps documentation]
+* link:https://argo-cd.readthedocs.io/[Argo CD documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.14/html/gitops/gitops-overview[ACM GitOps overview]
 
 
 == Acceso al producto — URLs y credenciales

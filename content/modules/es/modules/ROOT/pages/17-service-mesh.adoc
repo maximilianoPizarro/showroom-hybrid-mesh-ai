@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::17-service-mesh.png[OpenShift Service Mesh ambient,600]
+image::17-service-mesh.png[OpenShift Service Mesh ambient,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -20,6 +20,13 @@ OpenShift Service Mesh 3 introduce modo ambient: una capa ztunnel compartida man
 En este taller, OSSM3 se suscribe vía `components/operators/templates/servicemeshoperator3.yaml` y se configura en modo dataplane ambient en namespaces IE — excluyendo `stackrox` donde ACS requiere visibilidad de red directa. Compara con despliegues ROSA usando App Mesh o meshes de terceros: OpenShift mantiene CRDs y políticas mesh nativas al ciclo de vida de plataforma.
 
 Usa Kiali desde la consola OpenShift para ver tráfico en vivo de despliegues de `%USER_NAME%` y validar mTLS entre line-dashboard y servicios orientados a Kafka. El módulo 17 combina con dashboards de observabilidad del módulo 15 para análisis de latencia end-to-end.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/service_mesh/index[OpenShift Service Mesh]
+* link:https://istio.io/latest/docs/[Istio documentation]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/service_mesh/ambient-overview[Ambient mesh overview]
+* link:https://kiali.io/docs/[Kiali service mesh observability]
 
 
 == Acceso al producto — URLs y credenciales

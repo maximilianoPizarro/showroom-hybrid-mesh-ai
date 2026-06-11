@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::03-security-scale-hybrid.png[Hybrid cloud security and scale,600]
+image::03-security-scale-hybrid.png[Hybrid cloud security and scale,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -17,6 +17,13 @@ Seguridad y escala en entornos OpenShift híbridos requieren defensa en profundi
 En este lab, ACS Central corre en el hub con agentes SecuredCluster en spokes — el namespace `stackrox` evita deliberadamente labels de mesh ambient para no interferir con sensores ACS. Los demos NetworkPolicy del módulo 19 usan OVN en spokes, análogos a security groups más NP Kubernetes en ROSA. AuthPolicy Kuadrant en el gateway del hub muestra autenticación y rate limiting antes de backends Industrial Edge.
 
 Escalar flotas híbridas implica automatizar placement y capacidad: políticas ACM, Kairos SmartScalingPolicy, buffering Kafka y HPA manejan picos de sensores sin colas manuales. Como `%USER_NAME%`, observarás estos controles en los módulos 14 y 18 en cargas que simulan ráfagas de telemetría de fábrica.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes[Advanced Cluster Security (ACS) documentation]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/security_and_compliance/index[OpenShift security and compliance]
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.14/html/governance/governance-overview[ACM governance overview]
+* link:https://www.redhat.com/en/blog/tag/security[Red Hat security blog]
 
 
 == Acceso al producto — URLs y credenciales

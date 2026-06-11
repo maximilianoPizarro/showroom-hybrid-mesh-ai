@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,600]
+image::11-hybrid-mesh.png[Hybrid mesh traffic flow hub to spokes,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -22,6 +22,13 @@ La arquitectura hybrid mesh conecta redes de aplicación entre clusters sin apla
 En este taller, el gateway del hub termina tráfico externo y reenvía a frontends Industrial Edge en east/west vía Sites y Connectors Skupper en `components/service-interconnect/` y `components/hub-gateway/`. Es el análogo lab a ALB ROSA más conectividad privada a redes de fábrica — mismas rutas y políticas OpenShift, distinto underlay.
 
 Observa recursos `HTTPRoute` y estado Skupper en la consola; el módulo 13 despliega apps IE alcanzables por esta malla. Entender esta capa explica por qué las políticas Kuadrant se adjuntan en el gateway del hub en el módulo 20.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/service_mesh/index[OpenShift Service Mesh documentation]
+* link:https://skupper.io/[Skupper — service interconnect]
+* link:https://gateway-api.sigs.k8s.io/[Kubernetes Gateway API]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/service_mesh/gateway-api-for-service-mesh[Gateway API for OpenShift Service Mesh]
 
 
 == Acceso al producto — URLs y credenciales

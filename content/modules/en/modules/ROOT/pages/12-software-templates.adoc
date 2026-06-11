@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::12-software-templates.png[Developer Hub software templates,600]
+image::12-software-templates.png[Developer Hub software templates,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
@@ -22,6 +22,13 @@ Red Hat Developer Hub software templates encode golden paths: parameterized scaf
 This workshop ships templates for Industrial Edge, Camel Kaoto, API products, OpenShift AI workspaces, CNV VMs, and NeuroFace. If your `%USER_NAME%` scaffold fails due to quota or Gitea timing, switch to Plan B — Developer Hub System `hybrid-mesh-shared-demos` exposes pre-deployed Components with the same URLs and Topology entries.
 
 Templates are the bridge between executive strategy (module 01) and spoke deployments (module 13). Inspect `docs/assets/backstage/software-templates/` and catalog ConfigMaps to see how OpenShift GitOps picks up generated repos automatically.
+
+=== Learn more
+
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub documentation]
+* link:https://backstage.io/docs/features/software-templates/[Backstage Software Templates]
+* link:https://developers.redhat.com/products/red-hat-developer-hub/getting-started[Developer Hub getting started]
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index[Developer Hub plugins]
 
 
 == Lab access — URLs & credentials

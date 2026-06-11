@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::24-mcp-gateway.png[MCP Gateway federated tools,600]
+image::24-mcp-gateway.png[MCP Gateway federated tools,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -22,6 +22,11 @@ NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo
 **Solo visualización (~8 min):** Catálogo → **workshop-mcp-gateway**; demo Lightspeed.
 
 **Hands-on (~30 min):** **/lightspeed** — actividad: listar apps Argo CD OutOfSync y proponer sync.
+
+=== Profundizar
+
+* link:https://modelcontextprotocol.io/[Especificación Model Context Protocol]
+* link:https://www.kuadrant.io/docs/[Kuadrant MCP Gateway]
 
 
 == Acceso al producto — URLs y credenciales

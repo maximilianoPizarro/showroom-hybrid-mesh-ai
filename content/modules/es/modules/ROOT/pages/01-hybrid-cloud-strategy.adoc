@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::01-hybrid-strategy.png[Hybrid cloud strategy overview,600]
+image::01-hybrid-strategy.png[Hybrid cloud strategy overview,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -17,6 +17,13 @@ La estrategia de nube híbrida comienza con la ubicación de cargas: sistemas de
 En este lab, ACM en el hub representa esa capa de gobernanza — políticas, federación de observabilidad y placement GitOps hacia spokes east y west como un cliente hacia clusters ROSA y on-prem. No aprendes diapositivas abstractas; cada módulo de la Parte B refuerza un pilar estratégico: automatización, seguridad, velocidad de desarrollo o preparación para IA.
 
 Los ejecutivos deben notar que OpenShift evita replatformear dos veces: microservicios, VMs (CNV) e pipelines de IA comparten RBAC, red y CI/CD. Al registrarte como `%USER_NAME%`, tu ruta hands-on refleja cómo los equipos de plataforma incorporan squads en producción.
+
+=== Profundizar
+
+* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/cloud-services[Red Hat OpenShift cloud services overview]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws[OpenShift Service on AWS (ROSA) documentation]
+* link:https://developers.redhat.com/learn[Red Hat Developer — learning paths]
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes[ACM — multicluster management]
 
 
 == Acceso al producto — URLs y credenciales

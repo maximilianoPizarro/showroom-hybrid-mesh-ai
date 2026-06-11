@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::05-cases-roadmap.png[Customer cases and workshop roadmap,600]
+image::05-cases-roadmap.png[Customer cases and workshop roadmap,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -17,6 +17,12 @@ NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 
 El roadmap de ese cliente llevó a OpenShift AI para modelos de mantenimiento predictivo y plantillas Developer Hub para que cada planta scaffoldeara pipelines conformes sin shadow IT. Este taller reproduce ese recorrido a escala lab: módulos 13–18 despliegan IE en spokes east/west, módulos 22–26 añaden MaaS y NeuroFace, módulo 21 añade chargeback Kubecost por namespace.
 
 Tu siguiente paso es verificar registro Parte B — confirma que `%USER_NAME%` funciona en Showroom, luego continúa al módulo 10 para visibilidad de flota ACM. Los demos compartidos Plan B siguen disponibles si tu slot de scaffold no está libre.
+
+=== Profundizar
+
+* link:https://www.redhat.com/en/success-stories[Red Hat customer success stories]
+* link:https://developers.redhat.com/products/red-hat-developer-hub[Developer Hub product page]
+* link:https://www.redhat.com/en/technologies/management/advanced-cluster-management[ACM product page]
 
 
 == Acceso al producto — URLs y credenciales

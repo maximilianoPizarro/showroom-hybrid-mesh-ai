@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture diagram,600]
+image::00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture diagram,960]
 
 == Welcome
 

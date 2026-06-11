@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::18-scalability.png[HPA and Kafka scalability,600]
+image::18-scalability.png[HPA and Kafka scalability,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -20,6 +20,11 @@ La escalabilidad en OpenShift abarca autoscaling horizontal de pods, escalado de
 En este lab, line-dashboard y despliegues IE relacionados incluyen HPAs en manifiestos bajo `components/industrial-edge-tst/`. Dispara carga vía scripts del taller o tasas simuladas de sensores, luego observa pods escalar en Topology como `%USER_NAME%`. El escalado Kafka complementa HPA absorbiendo ráfagas de eventos antes de que pods rechacen tráfico.
 
 Este módulo completa la historia de capacidad iniciada en el módulo 14: Kairos propone nodos, HPA añade pods, Kafka bufferiza eventos — juntos reflejan cómo un cliente ROSA escala edge de fábrica en picos de producción sin intervención manual del admin de cluster.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/nodes/automatically-scaling-a-deployment[Horizontal Pod Autoscaler]
+* link:https://docs.redhat.com/en/documentation/red_hat_amq_streams[AMQ Streams — Kafka on OpenShift]
 
 
 == Acceso al producto — URLs y credenciales

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-image::14-kairos-scaling.png[Kairos SmartScaling recommendations,600]
+image::14-kairos-scaling.png[Kairos SmartScaling recommendations,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -20,6 +20,12 @@ Kairos Community en OpenShift analiza métricas de cargas y recomienda ajustes d
 En este lab, la política sensor-scan observa métricas Industrial Edge y propone escalado cuando las tasas de scan disparan — análogo a autoscaling MachineSet ROSA por métricas CloudWatch custom. Combina este módulo con el 18 (HPA + Kafka) para mostrar dos capas: pods escalan horizontalmente mientras Kairos evalúa capacidad de nodos.
 
 Abre Kairos Console desde el menú OpenShift, localiza recomendaciones pendientes en namespaces de `%USER_NAME%` y aprueba o debate trade-offs con el facilitador. Ejecuta `oc get smartscalingpolicy -A` para correlacionar CRDs con acciones UI.
+
+=== Profundizar
+
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_container_platform/4.16/html/nodes/index[OpenShift nodes and scaling]
+* link:https://www.redhat.com/en/technologies/management/advanced-cluster-management[ACM — capacity planning]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/nodes/automatically-scaling-a-cluster[Cluster autoscaler documentation]
 
 
 == Acceso al producto — URLs y credenciales

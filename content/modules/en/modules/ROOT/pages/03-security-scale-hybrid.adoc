@@ -11,8 +11,8 @@ image::03-security-scale-hybrid.png[Defense in depth — Kuadrant, ambient mesh,
 |===
 | Layer | Where you verify it
 
-| 1 — Kuadrant AuthPolicy at hub gateway
-| Modules 20, 23 — `hub-gateway-system`, API key in Developer Hub
+| 1 — RHCL Kuadrant AuthPolicy at hub gateway
+| Modules 20, 23 — Connectivity Link (`rhcl-operator`), API key in Developer Hub
 
 | 2 — Ambient mesh mTLS (ztunnel)
 | Module 17 — `istio.io/dataplane-mode: ambient` on app namespaces

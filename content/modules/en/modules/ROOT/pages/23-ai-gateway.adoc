@@ -15,7 +15,7 @@ image::23-ai-gateway.png[AI Gateway — Kuadrant-governed MaaS endpoint with Ope
 | `hub-gateway-system` — `workshop-maas`
 
 | Auth + rate limits
-| Kuadrant AuthPolicy + RateLimitPolicy
+| RHCL Kuadrant AuthPolicy + TokenRateLimitPolicy (`workshop-kuadrant-apis/`)
 
 | Inference backend
 | OpenShift AI ModelMesh on hub

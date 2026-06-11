@@ -18,10 +18,10 @@ image::20-acs-kuadrant.png[ACS runtime security plus Kuadrant API management at 
 | SecuredCluster on `east` / `west`
 
 | API key auth + rate limits
-| Kuadrant AuthPolicy — module 23, keys via Developer Hub
+| RHCL Kuadrant — modules 20/23, keys via Developer Hub
 
 | Published factory APIs
-| APIProduct `demo-ie-api-product` through hub gateway
+| APIProduct `demo-ie-api-product` via Connectivity Link on hub gateway
 |===
 
 NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
@@ -35,9 +35,9 @@ You will use **ACS Central** on this cluster (`central-stackrox` route) for runt
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-Red Hat Advanced Cluster Security provides vulnerability scanning, compliance benchmarks, and runtime threat detection across ACM-managed clusters. SecuredCluster agents on spokes report to ACS Central on the hub; init bundles sync via GitOps jobs in `components/acs-init-bundle-sync/`. See link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes[ACS documentation] for runtime policies and link:https://www.kuadrant.io/docs/[Kuadrant documentation] for API management CRDs.
+Red Hat Advanced Cluster Security provides vulnerability scanning, compliance benchmarks, and runtime threat detection across ACM-managed clusters. SecuredCluster agents on spokes report to ACS Central on the hub; init bundles sync via GitOps jobs in `components/acs-init-bundle-sync/`. See link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes[ACS documentation] for runtime policies and link:https://docs.redhat.com/en/documentation/red_hat_connectivity_link/[Connectivity Link documentation] for the RHCL bundle (Kuadrant API management CRDs).
 
-Connectivity Link and Kuadrant extend API management to the hub gateway: AuthPolicy validates tokens, RateLimitPolicy protects backends, and APIProduct publishes Industrial Edge APIs for external consumers. Demo `demo-ie-api-product` in Plan B catalog exposes the same Kuadrant resources without scaffolding.
+**Red Hat Connectivity Link (RHCL)** is a separate Application Foundation bundle — Kuadrant is included, not a standalone product beside it. RHCL extends the hub gateway with APIProduct catalog, AuthPolicy, PlanPolicy, and TokenRateLimitPolicy (`components/workshop-kuadrant-apis/`). Demo `demo-ie-api-product` in Plan B catalog exposes the same resources without scaffolding.
 
 As `%USER_NAME%`, verify ACS sees your spoke workloads and test APIProduct routes through the hub gateway. Remember ACS runs outside ambient mesh — this coexistence pattern is deliberate and matches production ROSA + ACS deployments.
 
@@ -54,8 +54,8 @@ As `%USER_NAME%`, verify ACS sees your spoke workloads and test APIProduct route
 === Key features
 
 * **ACS Central** — vulnerability and runtime policy for containers across fleet.
-* **Kuadrant** — API keys, AuthPolicy, rate limits on `workshop-apis` routes.
-* Developer Hub Kuadrant plugin for self-service key minting.
+* **Connectivity Link (RHCL)** — Kuadrant APIProduct, AuthPolicy, PlanPolicy, TokenRateLimitPolicy on `workshop-apis` routes.
+* Developer Hub Kuadrant plugin for self-service key minting (RHCL-backed).
 
 === Business benefits
 

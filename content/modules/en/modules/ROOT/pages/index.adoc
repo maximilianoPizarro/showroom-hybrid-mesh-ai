@@ -148,9 +148,9 @@ stringData:
 
 Any application that speaks the OpenAI REST API can consume MaaS without code changes — just point `OPENAI_API_BASE` to the in-cluster service.
 
-== Kuadrant API gateway
+== Connectivity Link — API management
 
-Kuadrant manages API rate limiting and auth policies across the hub gateway. Each workshop user gets their own API key scoped to a plan:
+**Red Hat Connectivity Link (RHCL)** is an Application Foundation bundle (operator in `components/rhcl-operator/`) that includes **Kuadrant** controllers for Gateway API ingress and API management. Workshop policies live in `components/workshop-kuadrant-apis/`. Each workshop user gets an API key scoped to a plan:
 
 [source,yaml]
 ----
@@ -246,8 +246,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 
 === Red Hat Application Foundation
 * **Apache Camel on Kubernetes** — integrations and CDC pipelines in the Industrial Edge demo.
-* **Connectivity Link** — Gateway API ingress/egress patterns at the hub gateway (Skupper, HTTPRoute, external backends).
-* **Kuadrant** — APIProduct catalog, AuthPolicy, PlanPolicy, and TokenRateLimitPolicy (separate from Connectivity Link).
+* **Red Hat Connectivity Link (RHCL)** — Application Foundation bundle (`components/rhcl-operator/`) that delivers Gateway API ingress and **Kuadrant** API management at the hub: APIProduct catalog, AuthPolicy, PlanPolicy, and TokenRateLimitPolicy. Workshop routes and policies are in `components/workshop-kuadrant-apis/` and `components/hub-gateway/`.
 
 === Red Hat Advanced Developer Suite
 * **Developer Hub (Backstage)** — software catalog, scaffolder templates, and Topology for multicluster views.

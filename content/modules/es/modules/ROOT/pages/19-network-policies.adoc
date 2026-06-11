@@ -4,6 +4,8 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
+image::19-network-policies.png[Network policies workshop demo,600]
+
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
 

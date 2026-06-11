@@ -4,6 +4,8 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
+image::15-observability.png[Observability dashboards and tracing,600]
+
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 

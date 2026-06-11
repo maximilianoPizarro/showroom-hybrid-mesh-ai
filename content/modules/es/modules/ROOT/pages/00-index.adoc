@@ -8,7 +8,7 @@ image::00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture diagram,60
 
 == Bienvenida
 
-Bienvenido al **Taller Hybrid Mesh AI** — experiencia dual en flota hub-spoke RHDP. Parte A (01–05) es narrativa ejecutiva; Parte B (10–26) es hands-on en este Showroom y la consola OpenShift.
+Bienvenido al **Taller Hybrid Mesh AI** — experiencia dual en flota hub-spoke RHDP. Parte A (01–05) es narrativa ejecutiva; Parte B (10–28) es hands-on en este Showroom y la consola OpenShift.
 
 Regístrate en link:https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[registro del taller] para obtener **%USER_NAME%**. Abre link:https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[Showroom] para la terminal `oc` integrada. Si falla el scaffolder, usa demos **Plan B** en link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/hybrid-mesh-shared-demos[Developer Hub — hybrid-mesh-shared-demos].
 

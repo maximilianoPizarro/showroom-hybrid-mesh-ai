@@ -4,6 +4,8 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
+image::18-scalability.png[HPA and Kafka scalability,600]
+
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 

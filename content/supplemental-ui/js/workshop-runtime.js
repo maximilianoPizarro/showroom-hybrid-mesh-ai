@@ -87,7 +87,7 @@
     return hubDomain ? 'https://workshop-registration.' + hubDomain : '';
   }
 
-  function replaceInText(text, hubDomain, eastDomain, westDomain, user) {
+  function replaceInText(text, hubDomain, eastDomain, westDomain, user, regUrl) {
     if (!text) return text;
     if (hubDomain) {
       text = text.replace(/YOUR_HUB_DOMAIN/g, hubDomain);
@@ -110,17 +110,33 @@
     text = text.replace(/pass:\[%USER_NAME%\]/g, displayUser);
     if (user) {
       text = text.replace(/\bguest \(register first\)/g, user);
-      text = text.replace(/\bguest\b/g, user);
+    }
+    if (regUrl) {
+      text = text.replace(/%REGISTRATION_URL%/g, regUrl);
     }
     return text;
   }
 
-  function replacePlaceholders(hubDomain, eastDomain, westDomain, user) {
+  function linkifyLabTables() {
+    document.querySelectorAll('table.tableblock code').forEach(function (code) {
+      var t = (code.textContent || '').trim();
+      if (!/^https?:\/\//.test(t)) return;
+      var a = document.createElement('a');
+      a.href = t;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.className = 'workshop-lab-link';
+      a.textContent = t.replace(/^https?:\/\//, '');
+      if (code.parentNode) code.parentNode.replaceChild(a, code);
+    });
+  }
+
+  function replacePlaceholders(hubDomain, eastDomain, westDomain, user, regUrl) {
     document.querySelectorAll('a[href]').forEach(function (a) {
-      a.href = replaceInText(a.href, hubDomain, eastDomain, westDomain, user);
+      a.href = replaceInText(a.href, hubDomain, eastDomain, westDomain, user, regUrl);
     });
     document.querySelectorAll('code').forEach(function (el) {
-      el.textContent = replaceInText(el.textContent, hubDomain, eastDomain, westDomain, user);
+      el.textContent = replaceInText(el.textContent, hubDomain, eastDomain, westDomain, user, regUrl);
     });
     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
     var nodes = [];
@@ -141,14 +157,16 @@
         t.indexOf('{hub_domain}') !== -1 ||
         t.indexOf('{user_name}') !== -1 ||
         t.indexOf('%USER_NAME%') !== -1 ||
-        (user && t.indexOf('guest') !== -1)
+        (user && t.indexOf('guest (register first)') !== -1) ||
+        t.indexOf('%REGISTRATION_URL%') !== -1
       ) {
         nodes.push(n);
       }
     }
     nodes.forEach(function (n) {
-      n.textContent = replaceInText(n.textContent, hubDomain, eastDomain, westDomain, user);
+      n.textContent = replaceInText(n.textContent, hubDomain, eastDomain, westDomain, user, regUrl);
     });
+    linkifyLabTables();
   }
 
   function wireQuickLinks(hubDomain, eastDomain) {
@@ -257,12 +275,13 @@
     var hubDomain = hubDomainFromMeta();
     var eastDomain = eastDomainFromMeta(hubDomain);
     var westDomain = westDomainFromMeta(hubDomain);
+    var regUrl = registrationUrl(hubDomain);
 
     if (hubDomain) {
       localStorage.setItem('CLUSTER_DOMAIN', hubDomain);
     }
 
-    replacePlaceholders(hubDomain, eastDomain, westDomain, user);
+    replacePlaceholders(hubDomain, eastDomain, westDomain, user, regUrl);
     wireQuickLinks(hubDomain, eastDomain);
     wireRegistrationLinks(hubDomain, user);
     initUserBadge(user);

@@ -1,10 +1,13 @@
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <a class="navbar-item navbar-logo" href="https://demo.redhat.com" target="_blank" rel="noopener noreferrer">
-        <img src="{{{uiRootPath}}}/img/logo-demo-platform.svg" alt="Red Hat Demo Platform" class="navbar-logo-img">
+      <a class="navbar-item navbar-logo" href="https://commons.redhat.com" target="_blank" rel="noopener noreferrer" title="Red Hat OpenShift Commons">
+        <img src="{{uiRootPath}}/img/logo-openshift-commons.png" alt="Red Hat OpenShift Commons" class="navbar-logo-img">
       </a>
-      <a class="navbar-item site-title" href="../{{page.component.name}}/00-index.html">{{site.title}}</a>
+      <div class="workshop-brand-text">
+        <a class="navbar-item site-title" href="../{{page.component.name}}/00-index.html">{{site.title}}</a>
+        <span class="workshop-event-tag">OpenShift Commons Gathering — Buenos Aires 2026</span>
+      </div>
     </div>
     <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
@@ -29,12 +32,12 @@
           </span>
           <span class="workshop-navbar-sep" aria-hidden="true"></span>
           <a id="workshop-register-link" href="https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%" class="workshop-quick-link workshop-quick-link--register" title="Workshop registration">
-            <i class="fa fa-user-plus"></i> Register
+            <i class="fa fa-id-badge"></i> <span id="register-link-label">Register</span>
           </a>
           <span class="workshop-navbar-sep" aria-hidden="true"></span>
-          <span id="user-badge" class="workshop-user-badge-nav" style="display:none;">
+          <span id="user-badge" class="workshop-user-badge-nav">
             <i class="fa fa-user"></i>
-            <span id="user-badge-name"></span>
+            <span id="user-badge-name">guest</span>
           </span>
           <div id="vars-edit-panel" class="workshop-vars-edit" style="display:none;">
             <label for="user-name-input">User:</label>
@@ -42,7 +45,7 @@
             <button type="button" id="vars-save">Save</button>
             <button type="button" id="vars-cancel-edit">Cancel</button>
           </div>
-          <button type="button" id="vars-edit-btn" title="Change user" style="display:none;" class="workshop-vars-edit-btn">
+          <button type="button" id="vars-edit-btn" title="Change lab user" class="workshop-vars-edit-btn">
             <i class="fa fa-pencil"></i>
           </button>
         </div>

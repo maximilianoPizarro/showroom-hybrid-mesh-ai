@@ -6,3 +6,6 @@ captures/
 *.mkv
 *.webm
 *.mov
+node_modules/
+www/
+.tmp-ui-bundle/

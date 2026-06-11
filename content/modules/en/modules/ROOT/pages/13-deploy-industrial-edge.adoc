@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::images/13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,600]
+image::13-deploy-industrial-edge.png[Industrial Edge deployment on spoke,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

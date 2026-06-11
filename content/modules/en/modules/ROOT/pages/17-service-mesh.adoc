@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::images/17-service-mesh.png[OpenShift Service Mesh ambient,600]
+image::17-service-mesh.png[OpenShift Service Mesh ambient,600]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

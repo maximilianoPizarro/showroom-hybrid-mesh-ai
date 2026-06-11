@@ -1,45 +1,88 @@
-/* Navbar quick links (PF6 dark toolbar) */
+/* RHDP PF6 masthead — OpenShift Commons workshop branding */
+.header {
+  background: var(--navbar-background, #151515);
+  border-bottom: 3px solid #ee0000;
+}
+
+.navbar {
+  min-height: 3.75rem;
+  padding: 0 1rem;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .navbar-logo-img {
-  height: 40px;
+  height: 2.5rem;
   width: auto;
   display: block;
 }
 
+.workshop-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  line-height: 1.2;
+}
+
+.workshop-brand-text .site-title {
+  font-family: "Red Hat Display", "RedHatDisplay", overpass, helvetica, arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff !important;
+  padding: 0;
+  margin: 0;
+}
+
+.workshop-event-tag {
+  color: #c7c7c7;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
 .workshop-navbar-links {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
 }
 
 .workshop-quick-link {
   color: #73bcf7;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   text-decoration: none;
-  padding: 3px 8px;
+  padding: 0.25rem 0.55rem;
   border: 1px solid #444;
   border-radius: 4px;
   white-space: nowrap;
+  font-family: "Red Hat Text", "RedHatText", helvetica, arial, sans-serif;
 }
 
 .workshop-quick-link:hover {
   color: #a3daff;
   border-color: #666;
   text-decoration: none;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .workshop-quick-link i {
-  margin-right: 3px;
+  margin-right: 0.25rem;
 }
 
 .workshop-quick-link--register {
   color: #f0ab00;
+  border-color: #8a6914;
 }
 
 .workshop-navbar-sep {
   border-left: 1px solid #555;
-  height: 20px;
-  margin: 0 4px;
+  height: 1.25rem;
+  margin: 0 0.15rem;
 }
 
 .workshop-lang-bar {
@@ -66,22 +109,25 @@
 }
 
 .workshop-user-badge-nav {
+  display: inline-flex;
+  align-items: center;
   background: #292929;
   color: #fff;
-  padding: 4px 12px;
+  padding: 0.25rem 0.75rem;
   border-radius: 16px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   border: 1px solid #444;
   white-space: nowrap;
 }
 
 .workshop-user-badge-nav i {
-  margin-right: 4px;
+  margin-right: 0.35rem;
+  color: #73bcf7;
 }
 
 .workshop-vars-edit {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -93,8 +139,8 @@
 }
 
 .workshop-vars-edit input {
-  width: 80px;
-  padding: 2px 6px;
+  width: 5.5rem;
+  padding: 0.15rem 0.4rem;
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 0.85rem;
@@ -102,7 +148,7 @@
 
 .workshop-vars-edit button {
   border: none;
-  padding: 3px 10px;
+  padding: 0.2rem 0.6rem;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.8rem;
@@ -122,10 +168,85 @@
   background: transparent;
   color: #ccc;
   border: 1px solid #555;
-  padding: 2px 8px;
+  padding: 0.15rem 0.45rem;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.75rem;
+}
+
+.workshop-vars-edit-btn:hover {
+  color: #fff;
+  border-color: #888;
+}
+
+/* Footer — registration + lab user */
+.workshop-footer {
+  background: #151515 !important;
+  border-top: 1px solid #292929;
+  padding: 0 !important;
+  margin-top: auto;
+}
+
+.workshop-footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.85rem 1.5rem;
+  max-width: none;
+}
+
+.workshop-footer-left,
+.workshop-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.workshop-footer-logo {
+  height: 1.75rem;
+  width: auto;
+  opacity: 0.9;
+}
+
+.workshop-footer-event {
+  color: #c7c7c7;
+  font-size: 0.82rem;
+  font-family: "Red Hat Text", "RedHatText", helvetica, arial, sans-serif;
+}
+
+.workshop-footer-lab {
+  color: #fff;
+  font-size: 0.82rem;
+}
+
+.workshop-footer-lab strong {
+  color: #73bcf7;
+  font-weight: 600;
+}
+
+.workshop-footer-sep {
+  color: #6a6e73;
+}
+
+.workshop-footer-register {
+  color: #f0ab00 !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+.workshop-footer-register:hover {
+  color: #ffc766 !important;
+  text-decoration: underline !important;
+}
+
+/* Hide default RHDP "Powered by Demo Platform" when workshop footer is active */
+.workshop-footer + .footer,
+.footer .poweredBy {
+  display: none;
 }
 
 /* Wider content area */
@@ -198,4 +319,15 @@
 .workshop-time-badge {
   color: #6a6e73;
   font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .workshop-footer-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .workshop-brand-text .site-title {
+    font-size: 0.9rem;
+  }
 }

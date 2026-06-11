@@ -168,7 +168,7 @@
   function wireRegistrationLinks(hubDomain, user) {
     var base = registrationUrl(hubDomain);
     var href = base ? base + (user ? '?USER_NAME=' + encodeURIComponent(user) : '') : '#';
-    ['workshop-register-link', 'workshop-register-cta-main'].forEach(function (id) {
+    ['workshop-register-link', 'workshop-register-cta-main', 'footer-register-link'].forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
       if (base) {
@@ -182,26 +182,38 @@
         };
       }
     });
+    var regLabel = document.getElementById('register-link-label');
+    if (regLabel) {
+      regLabel.textContent = user ? user : 'Register';
+    }
+  }
+
+  function syncUserDisplay(user) {
+    var display = user || 'guest';
+    var badgeName = document.getElementById('user-badge-name');
+    var footerName = document.getElementById('footer-user-name');
+    if (badgeName) badgeName.textContent = display;
+    if (footerName) footerName.textContent = display;
   }
 
   function initUserBadge(user) {
     var badge = document.getElementById('user-badge');
-    var badgeName = document.getElementById('user-badge-name');
     var editPanel = document.getElementById('vars-edit-panel');
     var editBtn = document.getElementById('vars-edit-btn');
     var ui = document.getElementById('user-name-input');
     var save = document.getElementById('vars-save');
     var cancelEdit = document.getElementById('vars-cancel-edit');
 
-    if (user && badge && badgeName) {
-      badgeName.textContent = user;
-      badge.style.display = 'inline-flex';
+    syncUserDisplay(user);
+
+    if (user) {
+      if (badge) badge.style.display = 'inline-flex';
       if (editBtn) editBtn.style.display = 'inline-block';
       if (editPanel) editPanel.style.display = 'none';
     } else {
-      if (badge) badge.style.display = 'none';
-      if (editBtn) editBtn.style.display = 'none';
-      if (editPanel) editPanel.style.display = 'flex';
+      if (badge) badge.style.display = 'inline-flex';
+      if (editBtn) editBtn.style.display = 'inline-block';
+      if (editPanel) editPanel.style.display = 'none';
       if (ui) ui.value = '';
     }
 

@@ -24,7 +24,7 @@ image::12-software-templates.png[Developer Hub software templates — golden pat
 | Developer Hub → Topology + OpenShift GitOps app sync
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 

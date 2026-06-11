@@ -342,6 +342,89 @@
     }
   }
 
+  function closeImageLightbox() {
+    var overlay = document.getElementById('workshop-image-lightbox');
+    if (overlay) overlay.classList.remove('is-open');
+    document.body.classList.remove('workshop-lightbox-open');
+  }
+
+  function openImageLightbox(src, alt) {
+    var overlay = document.getElementById('workshop-image-lightbox');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'workshop-image-lightbox';
+      overlay.className = 'workshop-image-lightbox';
+      overlay.innerHTML =
+        '<button type="button" class="workshop-image-lightbox-close" aria-label="Close image">&times;</button>' +
+        '<figure class="workshop-image-lightbox-figure">' +
+        '<img class="workshop-image-lightbox-img" alt="">' +
+        '<figcaption class="workshop-image-lightbox-caption"></figcaption>' +
+        '</figure>';
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', function (e) {
+        if (
+          e.target === overlay ||
+          e.target.classList.contains('workshop-image-lightbox-close')
+        ) {
+          closeImageLightbox();
+        }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeImageLightbox();
+      });
+    }
+    overlay.querySelector('.workshop-image-lightbox-img').src = src;
+    overlay.querySelector('.workshop-image-lightbox-img').alt = alt || '';
+    overlay.querySelector('.workshop-image-lightbox-caption').textContent = alt || '';
+    overlay.classList.add('is-open');
+    document.body.classList.add('workshop-lightbox-open');
+  }
+
+  function wireImageLightbox() {
+    document
+      .querySelectorAll('.doc .imageblock img, .doc .image img, .doc .imageblock object')
+      .forEach(function (img) {
+        if (img.dataset.lightboxBound) return;
+        img.dataset.lightboxBound = '1';
+        img.classList.add('workshop-zoomable');
+        if (img.tagName === 'IMG') {
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Click to enlarge image');
+        }
+        var open = function (e) {
+          e.preventDefault();
+          var src = img.currentSrc || img.src || img.getAttribute('data');
+          if (src) openImageLightbox(src, img.alt || img.title || '');
+        };
+        img.addEventListener('click', open);
+        img.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            open(e);
+          }
+        });
+      });
+  }
+
+  function fixComponentHomeLinks() {
+    document.querySelectorAll('a[href$="00-index.html"]').forEach(function (a) {
+      a.href = a.href.replace(/00-index\.html$/, 'index.html');
+    });
+    document.querySelectorAll('.nav-panel-menu .title a, .breadcrumbs a').forEach(function (a) {
+      var text = (a.textContent || '').trim();
+      if (text.indexOf('(English)') !== -1) {
+        a.textContent = text.replace(/\s*\(English\)\s*/g, ' ').trim();
+      }
+    });
+    document.querySelectorAll('.nav-panel-explore .components .title').forEach(function (el) {
+      var text = (el.textContent || '').trim();
+      if (text.indexOf('(English)') !== -1) {
+        el.textContent = text.replace(/\s*\(English\)\s*/g, ' ').trim();
+      }
+    });
+  }
+
   function applyUser() {
     var user = queryUser();
     var hubDomain = hubDomainFromMeta();
@@ -359,6 +442,8 @@
     wireTerminalPanel();
     wireRegistrationLinks(hubDomain, user);
     initUserBadge(user);
+    fixComponentHomeLinks();
+    wireImageLightbox();
 
     if (hubDomain) {
       var regMeta = document.querySelector('meta[name="workshop-registration-url"]');

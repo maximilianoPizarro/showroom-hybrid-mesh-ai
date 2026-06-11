@@ -24,7 +24,7 @@ image::10-acm-multicluster.png[ACM multicluster fleet — hub governing east and
 | Modules 15, 19–20 — metrics and governance across spokes
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 

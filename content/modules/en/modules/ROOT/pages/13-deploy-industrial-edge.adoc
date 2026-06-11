@@ -24,7 +24,7 @@ image::13-deploy-industrial-edge.png[Industrial Edge factory stack on the east s
 | `line-dashboard` — reachable via hub gateway + Skupper
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 

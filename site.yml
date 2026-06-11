@@ -2,7 +2,7 @@
 site:
   title: "Hybrid Mesh AI Workshop"
   url: https://github.com/maximilianoPizarro/showroom-hybrid-mesh-ai
-  start_page: en:ROOT:00-index.adoc
+  start_page: en:ROOT:index.adoc
 
 content:
   sources:

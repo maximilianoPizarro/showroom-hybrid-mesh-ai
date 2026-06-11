@@ -24,7 +24,7 @@ image::03-security-scale-hybrid.png[Defense in depth — Kuadrant, ambient mesh,
 | Module 19 — `industrial-edge-tst-all` dashboard policy
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 
 

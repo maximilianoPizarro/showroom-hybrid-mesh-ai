@@ -1,5 +1,5 @@
 name: en
-title: Hybrid Mesh AI Workshop (English)
+title: Hybrid Mesh AI Workshop
 version: ~
 nav:
   - modules/ROOT/nav.adoc

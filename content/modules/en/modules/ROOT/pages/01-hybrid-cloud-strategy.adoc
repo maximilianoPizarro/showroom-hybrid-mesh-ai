@@ -27,7 +27,7 @@ image::01-hybrid-strategy.png[Hybrid Mesh AI platform — centralized hub, edge 
 | Module 21 — Kubecost federated across spokes
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 
 

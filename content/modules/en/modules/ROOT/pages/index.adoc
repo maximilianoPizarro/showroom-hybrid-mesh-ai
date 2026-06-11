@@ -386,10 +386,10 @@ curl -s http://maas-api.maas-workshop.svc.cluster.local:8080/v1/models | jq '.da
 
 
 ++++
-<div class="workshop-progress" data-module="00-index">
+<div class="workshop-progress" data-module="index">
   <label><input type="checkbox" data-completed> I completed this module</label>
   <label><input type="checkbox" data-interest> I want to learn more</label>
-  <button type="button" onclick="saveWorkshopProgress('00-index')">Save progress</button>
+  <button type="button" onclick="saveWorkshopProgress('index')">Save progress</button>
 </div>
 ++++
 

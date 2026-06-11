@@ -21,7 +21,7 @@ image::19-network-policies.png[OVN-Kubernetes NetworkPolicy — micro-segmentati
 | `components/workshop-demos/templates/network-policy-demo.yaml`
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 
 

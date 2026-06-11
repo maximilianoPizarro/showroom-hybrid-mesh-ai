@@ -1,4 +1,4 @@
-* xref:00-index.adoc[Welcome]
+* xref:index.adoc[Welcome]
 
 .Part A — Strategy
 * xref:01-hybrid-cloud-strategy.adoc[01. Hybrid Cloud Strategy]

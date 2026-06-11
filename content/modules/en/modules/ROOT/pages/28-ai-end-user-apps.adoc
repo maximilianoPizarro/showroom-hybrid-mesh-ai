@@ -21,7 +21,7 @@ image::28-ai-end-user-apps.png[AI embedded in factory operator apps — line das
 | MaaS-backed assistance without exposing raw models
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 

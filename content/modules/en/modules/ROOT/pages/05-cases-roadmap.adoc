@@ -33,7 +33,7 @@ image::05-cases-roadmap.png[Industrial Edge data flow — factory sensors throug
 | 21 — Kubecost federated ETL
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 
 

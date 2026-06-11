@@ -24,7 +24,7 @@ image::20-acs-kuadrant.png[ACS runtime security plus Kuadrant API management at 
 | APIProduct `demo-ie-api-product` through hub gateway
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 

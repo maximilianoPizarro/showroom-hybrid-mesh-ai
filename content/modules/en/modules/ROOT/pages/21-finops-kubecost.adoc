@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::21-finops-kubecost.png[FinOps Kubecost cost allocation,960]
+image::21-finops-kubecost.png[FinOps with Kubecost — federated cost allocation across hub and spokes,960]
+
+.Kubecost federation in the lab
+[cols="1,1", options="header"]
+|===
+| Component | Role
+
+| Kubecost primary
+| Hub — `components/kubecost/`
+
+| Spoke agents
+| `east` / `west` report into hub ETL (MinIO-backed)
+
+| Chargeback filter
+| Namespace labels for `%USER_NAME%` workloads
+
+| Tie-in
+| Module 14 Kairos — idle capacity vs right-sizing recommendations
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

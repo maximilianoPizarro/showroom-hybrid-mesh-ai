@@ -172,12 +172,31 @@
   function wireQuickLinks(hubDomain, eastDomain) {
     if (!hubDomain) return;
     var links = {
-      'link-developer-hub': 'https://developer-hub.' + hubDomain,
       'link-console': 'https://console-openshift-console.' + hubDomain,
+      'link-developer-hub': 'https://developer-hub.' + hubDomain,
       'link-gitea': 'https://gitea-gitea.' + hubDomain,
       'link-devspaces': 'https://devspaces.' + (eastDomain || hubDomain),
       'link-openshift-ai':
         'https://rhods-dashboard-redhat-ods-applications.' + hubDomain
+    };
+    Object.keys(links).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.href = links[id];
+    });
+  }
+
+  function wireFooterLinks(hubDomain) {
+    if (!hubDomain) return;
+    var links = {
+      'footer-link-skupper':
+        'https://field-content-skupper-network-observer-service-interconnect.' +
+        hubDomain,
+      'footer-link-apis': 'https://workshop-apis.' + hubDomain,
+      'footer-link-neuroface': 'https://neuroface.' + hubDomain,
+      'footer-link-planb':
+        'https://developer-hub.' +
+        hubDomain +
+        '/catalog/default/system/hybrid-mesh-shared-demos'
     };
     Object.keys(links).forEach(function (id) {
       var el = document.getElementById(id);
@@ -244,7 +263,7 @@
   function wireRegistrationLinks(hubDomain, user) {
     var base = registrationUrl(hubDomain);
     var href = base ? base + (user ? '?USER_NAME=' + encodeURIComponent(user) : '') : '#';
-    ['workshop-register-link', 'workshop-register-cta-main', 'footer-register-link'].forEach(function (id) {
+    ['workshop-register-link', 'workshop-register-cta-main'].forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
       if (base) {
@@ -267,9 +286,7 @@
   function syncUserDisplay(user) {
     var display = user || 'guest';
     var badgeName = document.getElementById('user-badge-name');
-    var footerName = document.getElementById('footer-user-name');
     if (badgeName) badgeName.textContent = display;
-    if (footerName) footerName.textContent = display;
   }
 
   function initUserBadge(user) {
@@ -341,6 +358,7 @@
 
     replacePlaceholders(hubDomain, eastDomain, westDomain, user, regUrl);
     wireQuickLinks(hubDomain, eastDomain);
+    wireFooterLinks(hubDomain);
     wireTerminalPanel();
     wireRegistrationLinks(hubDomain, user);
     initUserBadge(user);

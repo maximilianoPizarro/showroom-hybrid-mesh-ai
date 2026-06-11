@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::15-observability.png[Observability dashboards and tracing,960]
+image::15-observability.png[Multicluster observability — metrics, logs, traces, and IE Kafka dashboards,960]
+
+.Observability stack in the lab
+[cols="1,1", options="header"]
+|===
+| Signal | Where to look
+
+| Cluster metrics
+| Hub Grafana — ACM federated dashboards
+
+| Application traces
+| OpenTelemetry (`components/opentelemetry/`) + Jaeger/Tempo
+
+| IE Kafka topics
+| Kafka Console on hub — `temperature`, `vibration`
+
+| Mesh telemetry
+| Module 17 — Kiali service graph on ambient ztunnel
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

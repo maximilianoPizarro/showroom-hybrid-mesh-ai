@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-image::14-kairos-scaling.png[Kairos SmartScaling recommendations,960]
+image::14-kairos-scaling.png[Kairos SmartScaling — node and workload recommendations before HPA kicks in,960]
+
+.Kairos policies in the lab
+[cols="1,1", options="header"]
+|===
+| Policy target | GitOps source
+
+| `machine-sensor-1` / `machine-sensor-2`
+| `components/kairos/templates/sensor-scan-policies.yaml`
+
+| Hub mirror policy
+| SmartScalingPolicy on hub (fleet-wide view)
+
+| Complements
+| Module 18 HPA — pods scale after Kairos rightsizes requests
+
+| Console
+| OpenShift → Operators → Kairos Community
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

@@ -4,7 +4,25 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::12-software-templates.png[Developer Hub software templates,960]
+image::12-software-templates.png[Developer Hub software templates — golden paths from catalog to GitOps,960]
+
+.Golden paths in this lab
+[cols="1,1", options="header"]
+|===
+| Template / demo | What it provisions
+
+| Scaffolder (hands-on)
+| Git repo in Gitea + Argo CD Application for `%USER_NAME%`
+
+| Plan B — `hybrid-mesh-shared-demos`
+| Pre-deployed IE, AI Gateway, MCP, NeuroFace without scaffold
+
+| Catalog source
+| `components/developer-hub/files/catalog/`
+
+| Post-scaffold verify
+| Developer Hub → Topology + OpenShift GitOps app sync
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

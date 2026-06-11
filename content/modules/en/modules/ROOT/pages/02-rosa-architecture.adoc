@@ -4,7 +4,28 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::02-rosa-architecture.png[ROSA and OpenShift hub-spoke architecture,960]
+image::02-rosa-architecture.png[Red Hat OpenShift hub-spoke topology — same fleet pattern as ROSA + ACM in production,960]
+
+.This lab maps to ROSA like this
+[cols="1,1", options="header"]
+|===
+| In production (ROSA + ACM) | In this lab (RHDP hub-spoke)
+
+| Managed control plane (Red Hat SRE, 99.95% SLA)
+| Hub cluster — ACM, Argo CD, Developer Hub
+
+| Worker MachineSets in customer VPC
+| East and West spoke worker nodes
+
+| `ManagedCluster` import + ApplicationSet GitOps
+| Same CRDs — you verify in module 10
+
+| Route 53 + ALB ingress
+| Hub Gateway API + OpenShift Routes
+
+| IAM OIDC / STS for pod identity
+| Kuadrant API keys + OpenShift OAuth
+|===
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 

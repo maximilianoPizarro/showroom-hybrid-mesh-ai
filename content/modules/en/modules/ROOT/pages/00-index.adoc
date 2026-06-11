@@ -224,6 +224,174 @@ spec:
         - auth.identity.username
 ----
 
+== CLI tools in Showroom terminal
+
+The embedded terminal includes all workshop CLIs. Extra tools (`rosa`, `aws`, `az`, `yq`, `argocd`) are downloaded to `~/.local/bin/` on first launch and persisted on the PVC.
+
+.Available CLIs
+[cols="1,2,2", options="header"]
+|===
+| CLI | Purpose | Login command
+
+| `oc` / `kubectl`
+| OpenShift / Kubernetes operations
+| `hub-login {user_name}` (or `east-login` / `west-login`)
+
+| `rosa`
+| ROSA cluster lifecycle (create, describe, delete)
+| `rosa login --token=<ocm-token>` — get token at link:https://console.redhat.com/openshift/token[console.redhat.com/openshift/token]
+
+| `aws`
+| AWS services (S3, IAM, EC2, Bedrock)
+| `aws configure` — enter Access Key ID + Secret from IAM
+
+| `az`
+| Azure CLI (AKS, OpenAI, Defender)
+| `az login --use-device-code` — follow the link printed in terminal
+
+| `argocd`
+| Argo CD API (sync, app list, diff)
+| `argocd login argocd-server-openshift-gitops.{hub_domain} --sso --insecure`
+
+| `helm`
+| Helm chart operations
+| No login required (uses `oc` kubeconfig)
+
+| `roxctl`
+| ACS image scanning and policy checks
+| `roxctl central login --endpoint central-stackrox.{hub_domain}:443 --insecure`
+
+| `tkn`
+| Tekton pipeline runs and logs
+| No login required (uses `oc` kubeconfig)
+
+| `virtctl`
+| CNV VM console, start/stop
+| No login required (uses `oc` kubeconfig)
+
+| `yq`
+| YAML processor (jq for YAML)
+| No login required
+|===
+
+=== How to login — step by step
+
+*OpenShift (`oc`) — hub, east, or west cluster:*
+[source,bash]
+----
+# Hub cluster (shortcut defined in terminal):
+hub-login {user_name}
+# Equivalent to:
+oc login -u {user_name} -p Welcome123! https://api.<hub-cluster>:6443 --insecure-skip-tls-verify
+
+# East spoke:
+east-login {user_name}
+
+# West spoke:
+west-login {user_name}
+
+# Verify:
+oc whoami            # → {user_name}
+oc project           # → default (or last project)
+----
+
+*ROSA CLI — managing ROSA clusters (requires Red Hat account):*
+[source,bash]
+----
+# 1. Get token from https://console.redhat.com/openshift/token
+# 2. Login:
+rosa login --token="eyJhbGciOi..."
+
+# 3. Verify:
+rosa whoami
+rosa list clusters
+
+# Download for local use:
+# https://console.redhat.com/openshift/downloads#tool-rosa
+----
+
+*AWS CLI — interacting with AWS services:*
+[source,bash]
+----
+# 1. Configure credentials (from IAM → Users → Security credentials):
+aws configure
+# AWS Access Key ID: AKIA...
+# AWS Secret Access Key: ...
+# Default region: us-east-1
+# Default output format: json
+
+# 2. Verify:
+aws sts get-caller-identity
+
+# Download for local use:
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+----
+
+*Azure CLI — AKS and Azure services:*
+[source,bash]
+----
+# 1. Login with device code (no browser required in terminal):
+az login --use-device-code
+# Follow the URL printed and enter the code
+
+# 2. Verify:
+az account show
+
+# Download for local use:
+# https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+----
+
+*Argo CD CLI — direct API interaction:*
+[source,bash]
+----
+# Login via SSO (uses OpenShift OAuth):
+argocd login argocd-server-openshift-gitops.{hub_domain} --sso --insecure
+
+# Or with admin token:
+ARGOCD_PWD=$(oc get secret openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.admin\.password}' | base64 -d)
+argocd login argocd-server-openshift-gitops.{hub_domain} --username admin --password "$ARGOCD_PWD" --insecure
+
+# Verify:
+argocd app list
+
+# Download for local use:
+# https://argo-cd.readthedocs.io/en/stable/cli_installation/
+----
+
+=== Download CLIs for local use
+
+[cols="1,2", options="header"]
+|===
+| CLI | Download URL
+
+| `oc` / `kubectl`
+| link:https://console-openshift-console.{hub_domain}/command-line-tools[OpenShift Console → Command Line Tools] or link:https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/[mirror.openshift.com]
+
+| `rosa`
+| link:https://console.redhat.com/openshift/downloads#tool-rosa[console.redhat.com/openshift/downloads]
+
+| `aws`
+| link:https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html[AWS CLI install guide]
+
+| `az`
+| link:https://learn.microsoft.com/en-us/cli/azure/install-azure-cli[Azure CLI install guide]
+
+| `argocd`
+| link:https://argo-cd.readthedocs.io/en/stable/cli_installation/[Argo CD CLI releases]
+
+| `helm`
+| link:https://helm.sh/docs/intro/install/[helm.sh/docs/intro/install]
+
+| `roxctl`
+| `https://central-stackrox.{hub_domain}/api/cli/download/roxctl-linux` (from ACS Central)
+
+| `tkn`
+| link:https://tekton.dev/docs/cli/[Tekton CLI releases]
+
+| `virtctl`
+| link:https://kubevirt.io/user-guide/user_workloads/virtctl_client_tool/[KubeVirt virtctl]
+|===
+
 == Lab access — URLs & credentials
 
 NOTE: *Workshop login* — {user_name} / `Welcome123!` (Keycloak Developer Hub; htpasswd OpenShift hub/east/west; DevSpaces east). OAuth products use the same OpenShift identity.

@@ -175,11 +175,69 @@
       'link-developer-hub': 'https://developer-hub.' + hubDomain,
       'link-console': 'https://console-openshift-console.' + hubDomain,
       'link-gitea': 'https://gitea-gitea.' + hubDomain,
-      'link-devspaces': 'https://devspaces.' + (eastDomain || hubDomain)
+      'link-devspaces': 'https://devspaces.' + (eastDomain || hubDomain),
+      'link-openshift-ai':
+        'https://rhods-dashboard-redhat-ods-applications.' + hubDomain
     };
     Object.keys(links).forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.href = links[id];
+    });
+  }
+
+  function terminalBasePath() {
+    var path = window.location.pathname || '/';
+    var idx = path.indexOf('/en/');
+    if (idx === -1) idx = path.indexOf('/es/');
+    if (idx > 0) {
+      return path.slice(0, idx) + '/terminal/';
+    }
+    return '/terminal/';
+  }
+
+  function wireTerminalPanel() {
+    var toggle = document.getElementById('workshop-terminal-toggle');
+    var panel = document.getElementById('workshop-terminal-panel');
+    var frame = document.getElementById('workshop-terminal-frame');
+    var closeBtn = document.getElementById('workshop-terminal-close');
+    var newTabBtn = document.getElementById('workshop-terminal-newtab');
+    if (!toggle || !panel || !frame) return;
+
+    var terminalUrl = terminalBasePath();
+    var loaded = false;
+
+    function setOpen(open) {
+      panel.classList.toggle('is-open', open);
+      panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.classList.toggle('is-active', open);
+      document.body.classList.toggle('workshop-terminal-open', open);
+      if (open && !loaded) {
+        frame.src = terminalUrl;
+        loaded = true;
+      }
+    }
+
+    toggle.onclick = function () {
+      setOpen(!panel.classList.contains('is-open'));
+    };
+
+    if (closeBtn) {
+      closeBtn.onclick = function () {
+        setOpen(false);
+      };
+    }
+
+    if (newTabBtn) {
+      newTabBtn.onclick = function () {
+        window.open(terminalUrl, '_blank', 'noopener,noreferrer');
+      };
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel.classList.contains('is-open')) {
+        setOpen(false);
+      }
     });
   }
 
@@ -283,6 +341,7 @@
 
     replacePlaceholders(hubDomain, eastDomain, westDomain, user, regUrl);
     wireQuickLinks(hubDomain, eastDomain);
+    wireTerminalPanel();
     wireRegistrationLinks(hubDomain, user);
     initUserBadge(user);
 

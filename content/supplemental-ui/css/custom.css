@@ -81,6 +81,19 @@
   margin-right: 0.25rem;
 }
 
+button.workshop-quick-link {
+  background: transparent;
+  cursor: pointer;
+  font-family: "Red Hat Text", "RedHatText", helvetica, arial, sans-serif;
+  line-height: inherit;
+}
+
+button.workshop-quick-link.workshop-terminal-toggle.is-active {
+  color: #fff;
+  background: rgba(238, 0, 0, 0.25);
+  border-color: #ee0000;
+}
+
 .workshop-quick-link--register {
   color: #f0ab00;
   border-color: #8a6914;
@@ -376,4 +389,85 @@ a.workshop-lab-link:hover {
   .workshop-brand-text .site-title {
     font-size: 0.9rem;
   }
+
+  .workshop-terminal-panel {
+    height: 55vh;
+  }
+}
+
+/* Slide-up integrated oc terminal (proxied at /terminal/) */
+.workshop-terminal-panel {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 42vh;
+  min-height: 260px;
+  max-height: 72vh;
+  z-index: 1200;
+  background: #151515;
+  border-top: 3px solid #ee0000;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+  flex-direction: column;
+}
+
+.workshop-terminal-panel.is-open {
+  display: flex;
+}
+
+body.workshop-terminal-open {
+  padding-bottom: 42vh;
+}
+
+.workshop-terminal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0.75rem;
+  background: #292929;
+  border-bottom: 1px solid #444;
+  flex-shrink: 0;
+}
+
+.workshop-terminal-title {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: "Red Hat Display", "RedHatDisplay", overpass, helvetica, arial, sans-serif;
+}
+
+.workshop-terminal-title code {
+  color: #73bcf7;
+  background: transparent;
+  font-size: 0.82rem;
+}
+
+.workshop-terminal-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.workshop-terminal-action {
+  background: transparent;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #73bcf7;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.workshop-terminal-action:hover {
+  color: #a3daff;
+  border-color: #777;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.workshop-terminal-frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #000;
 }

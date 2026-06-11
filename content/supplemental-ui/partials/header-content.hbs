@@ -11,41 +11,44 @@
     <div id="topbar-nav" class="navbar-menu">
       <div class="navbar-end">
         <div class="navbar-item workshop-navbar-links">
-          <a id="link-console" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="OpenShift Console">
-            <i class="fa fa-cube"></i> Console
-          </a>
-          <a id="link-developer-hub" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="Developer Hub">
-            <i class="fa fa-th-large"></i> Dev Hub
-          </a>
-          <a id="link-gitea" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="Gitea">
-            <i class="fa fa-code-fork"></i> Gitea
-          </a>
-          <a id="link-devspaces" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="DevSpaces">
-            <i class="fa fa-cloud"></i> DevSpaces
-          </a>
-          <a id="link-openshift-ai" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="OpenShift AI dashboard">
-            <i class="fa fa-magic"></i> OCP AI
-          </a>
-          <button type="button" id="workshop-terminal-toggle" class="workshop-quick-link workshop-terminal-toggle" title="Integrated oc terminal" aria-expanded="false" aria-controls="workshop-terminal-panel">
-            <i class="fa fa-terminal"></i> Terminal
-          </button>
-          <span class="workshop-navbar-sep" aria-hidden="true"></span>
-          <a id="workshop-register-link" href="https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%" class="workshop-quick-link workshop-quick-link--register" title="Workshop registration">
-            <i class="fa fa-id-badge"></i> <span id="register-link-label">Register</span>
-          </a>
-          <span id="user-badge" class="workshop-user-badge-nav">
-            <i class="fa fa-user"></i>
-            <span id="user-badge-name">guest</span>
-          </span>
-          <div id="vars-edit-panel" class="workshop-vars-edit" style="display:none;">
-            <label for="user-name-input">User:</label>
-            <input type="text" id="user-name-input" placeholder="user1">
-            <button type="button" id="vars-save">Save</button>
-            <button type="button" id="vars-cancel-edit">Cancel</button>
+          <div class="workshop-navbar-lab">
+            <a id="link-console" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="OpenShift Console">
+              <i class="fa fa-cube"></i><span class="workshop-link-label">Console</span>
+            </a>
+            <a id="link-developer-hub" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="Developer Hub">
+              <i class="fa fa-th-large"></i><span class="workshop-link-label">Dev Hub</span>
+            </a>
+            <a id="link-gitea" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="Gitea">
+              <i class="fa fa-code-fork"></i><span class="workshop-link-label">Gitea</span>
+            </a>
+            <a id="link-devspaces" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="DevSpaces">
+              <i class="fa fa-cloud"></i><span class="workshop-link-label">DevSpaces</span>
+            </a>
+            <a id="link-openshift-ai" href="#" target="_blank" rel="noopener noreferrer" class="workshop-quick-link" title="OpenShift AI dashboard">
+              <i class="fa fa-magic"></i><span class="workshop-link-label">OCP AI</span>
+            </a>
+            <button type="button" id="workshop-terminal-toggle" class="workshop-quick-link workshop-terminal-toggle" title="Integrated oc terminal" aria-expanded="false" aria-controls="workshop-terminal-panel">
+              <i class="fa fa-terminal"></i><span class="workshop-link-label">Terminal</span>
+            </button>
           </div>
-          <button type="button" id="vars-edit-btn" title="Change lab user" class="workshop-vars-edit-btn">
-            <i class="fa fa-pencil"></i>
-          </button>
+          <div class="workshop-navbar-identity">
+            <a id="workshop-register-link" href="https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%" class="workshop-quick-link workshop-quick-link--register" title="Workshop registration">
+              <i class="fa fa-id-badge"></i><span class="workshop-link-label">Register</span>
+            </a>
+            <span id="user-badge" class="workshop-user-badge-nav">
+              <i class="fa fa-user"></i>
+              <span id="user-badge-name">guest</span>
+            </span>
+            <div id="vars-edit-panel" class="workshop-vars-edit" style="display:none;">
+              <label for="user-name-input">User:</label>
+              <input type="text" id="user-name-input" placeholder="user1">
+              <button type="button" id="vars-save">Save</button>
+              <button type="button" id="vars-cancel-edit">Cancel</button>
+            </div>
+            <button type="button" id="vars-edit-btn" title="Change lab user" class="workshop-vars-edit-btn">
+              <i class="fa fa-pencil"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>

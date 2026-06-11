@@ -6,14 +6,19 @@
 
 .navbar {
   min-height: 3.75rem;
-  padding: 0 1rem;
+  padding: 0 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
 }
 
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 0.65rem;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .navbar-logo {
@@ -52,21 +57,42 @@
   font-weight: 400;
 }
 
-#topbar-nav .navbar-end {
-  flex: 1 1 auto;
+#topbar-nav {
+  flex: 1 1 320px;
   min-width: 0;
+}
+
+#topbar-nav .navbar-end {
+  width: 100%;
   justify-content: flex-end;
 }
 
 .workshop-navbar-links {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.workshop-navbar-lab {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.workshop-navbar-identity {
+  display: flex;
+  gap: 0.35rem;
   flex-wrap: nowrap;
   align-items: center;
-  overflow-x: auto;
-  max-width: 100%;
-  padding-bottom: 0.1rem;
-  scrollbar-width: thin;
+  flex-shrink: 0;
+  padding-left: 0.35rem;
+  border-left: 1px solid #555;
 }
 
 .workshop-quick-link {
@@ -89,6 +115,11 @@
 
 .workshop-quick-link i {
   margin-right: 0.25rem;
+}
+
+.workshop-quick-link i:only-child,
+.workshop-quick-link i:last-child:first-child {
+  margin-right: 0;
 }
 
 button.workshop-quick-link {
@@ -153,6 +184,15 @@ button.workshop-quick-link.workshop-terminal-toggle.is-active {
 .workshop-user-badge-nav i {
   margin-right: 0.35rem;
   color: #73bcf7;
+}
+
+.workshop-user-badge-nav.is-registered {
+  background: #1f3d5c;
+  border-color: #0066cc;
+}
+
+.workshop-user-badge-nav.is-guest {
+  color: #c7c7c7;
 }
 
 .workshop-vars-edit {
@@ -385,6 +425,20 @@ a.workshop-lab-link:hover {
   text-decoration: underline;
 }
 
+@media (max-width: 1280px) {
+  .workshop-quick-link .workshop-link-label {
+    display: none;
+  }
+
+  .workshop-quick-link i {
+    margin-right: 0;
+  }
+
+  .workshop-quick-link {
+    padding: 0.3rem 0.45rem;
+  }
+}
+
 @media (max-width: 768px) {
   .workshop-footer-bar {
     flex-direction: column;
@@ -392,7 +446,23 @@ a.workshop-lab-link:hover {
   }
 
   .workshop-brand-text .site-title {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  .navbar-logo-img {
+    min-width: 6.5rem;
+    max-width: 8rem;
+  }
+
+  .workshop-navbar-identity {
+    border-left: 0;
+    padding-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .workshop-navbar-links {
+    gap: 0.35rem;
   }
 
   .workshop-terminal-panel {

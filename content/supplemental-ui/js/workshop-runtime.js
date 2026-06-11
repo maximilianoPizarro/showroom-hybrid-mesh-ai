@@ -277,16 +277,21 @@
         };
       }
     });
-    var regLabel = document.getElementById('register-link-label');
-    if (regLabel) {
-      regLabel.textContent = user ? user : 'Register';
+    var regLink = document.getElementById('workshop-register-link');
+    if (regLink) {
+      regLink.style.display = user ? 'none' : '';
     }
   }
 
   function syncUserDisplay(user) {
     var display = user || 'guest';
     var badgeName = document.getElementById('user-badge-name');
+    var badge = document.getElementById('user-badge');
     if (badgeName) badgeName.textContent = display;
+    if (badge) {
+      badge.classList.toggle('is-registered', Boolean(user));
+      badge.classList.toggle('is-guest', !user);
+    }
   }
 
   function initUserBadge(user) {
@@ -314,6 +319,8 @@
       editBtn.onclick = function () {
         badge.style.display = 'none';
         editBtn.style.display = 'none';
+        var regLink = document.getElementById('workshop-register-link');
+        if (regLink) regLink.style.display = 'none';
         editPanel.style.display = 'flex';
         if (ui) {
           ui.value = user || '';
@@ -325,10 +332,10 @@
     if (cancelEdit) {
       cancelEdit.onclick = function () {
         editPanel.style.display = 'none';
-        if (user) {
-          badge.style.display = 'inline-flex';
-          editBtn.style.display = 'inline-block';
-        }
+        badge.style.display = 'inline-flex';
+        editBtn.style.display = 'inline-block';
+        var regLink = document.getElementById('workshop-register-link');
+        if (regLink) regLink.style.display = user ? 'none' : '';
       };
     }
 

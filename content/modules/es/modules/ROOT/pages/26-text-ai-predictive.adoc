@@ -26,6 +26,20 @@ Conecta alertas predictivas al módulo 26 de apps finales: rutas Camel pueden di
 * link:https://www.redhat.com/en/blog/tag/artificial-intelligence[Red Hat AI blog]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **ie-anomaly-alerter** + MaaS para resúmenes generativos.
+
+=== AWS Lookout for Equipment
+
+[source,bash]
+----
+aws lookoutequipment create-dataset --dataset-name vibration-line-01 --dataset-schema file://schema.json
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

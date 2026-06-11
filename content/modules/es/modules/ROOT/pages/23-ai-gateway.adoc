@@ -40,6 +40,22 @@ El patrón **AI Gateway** centraliza cómo aplicaciones de fábrica, edge y part
 * link:https://developers.redhat.com/articles/2024/08/22/api-management-kubernetes-kuadrant[Gestión de APIs con Kuadrant]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **HTTPRoute** Gateway API + Kuadrant en hub.
+* API keys por usuario en **`workshop-apis.%HUB_DOMAIN%`**.
+
+=== AWS API Gateway
+
+[source,bash]
+----
+aws apigateway create-rest-api --name factory-llm-gateway
+aws wafv2 create-web-acl --name llm-rate-limit --scope REGIONAL --default-action Allow={}
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

@@ -26,6 +26,33 @@ Los ejecutivos deben notar que OpenShift evita replatformear dos veces: microser
 * link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes[ACM — multicluster management]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características clave
+
+* Marco de ubicación de cargas: edge por latencia, cloud por burst, hub por gobernanza.
+* API OpenShift unificada en ROSA, bare metal y edge.
+
+=== Beneficios
+
+* Evita replatformear dos veces cuando la IA se mueve cloud → edge.
+* Onboarding de plantas más rápido con namespaces `%USER_NAME%`.
+
+=== AWS — ROSA
+
+[source,bash]
+----
+aws ec2 create-tags --resources i-EXAMPLE --tags Key=cost-center,Value=plant-01
+----
+
+=== Azure
+
+[source,bash]
+----
+az monitor log-analytics workspace create --resource-group rg-hybrid-workshop --name hybrid-ops
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

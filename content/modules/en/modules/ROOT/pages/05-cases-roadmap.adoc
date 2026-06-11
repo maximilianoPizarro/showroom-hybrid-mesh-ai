@@ -25,6 +25,37 @@ Your next step is Part B registration verification — ensure `%USER_NAME%` work
 * link:https://www.redhat.com/en/technologies/management/advanced-cluster-management[ACM product page]
 
 
+== Features, benefits & cloud configuration
+
+=== Key features
+
+* Customer journey map from edge IoT → hub analytics → OpenShift AI → FinOps.
+* Plan B **hybrid-mesh-shared-demos** for rooms without scaffolder capacity.
+* Module numbering ties executive story to hands-on checkpoints.
+
+=== Business benefits
+
+* Stakeholders see ROI metrics (downtime $, detection time, node savings) before deep technical labs.
+* Roadmap reduces "pilot purgatory" — each module is a production milestone.
+
+=== AWS — landing zone alignment
+
+[source,bash]
+----
+# Organize ROSA accounts per plant (Control Tower / Organizations)
+aws organizations create-account --email plant-01@example.com --account-name factory-east
+aws servicecatalog provision-product --product-id prod-rosa-spoke --provisioned-product-name plant-01
+----
+
+=== Azure — enterprise scale
+
+[source,bash]
+----
+az account create --enrollment-account-name hybrid --offer-type MS-AZR-0017P
+az deployment sub create --location eastus --template-file landing-zone.json
+----
+
+
 == Lab access — URLs & credentials
 
 NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.

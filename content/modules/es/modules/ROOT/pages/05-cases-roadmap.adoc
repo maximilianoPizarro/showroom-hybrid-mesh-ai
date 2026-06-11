@@ -25,6 +25,21 @@ Tu siguiente paso es verificar registro Parte B — confirma que `%USER_NAME%` f
 * link:https://www.redhat.com/en/technologies/management/advanced-cluster-management[ACM product page]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* Mapa de viaje cliente IoT edge → hub → OpenShift AI → FinOps.
+* Demos Plan B **hybrid-mesh-shared-demos**.
+
+=== AWS Organizations
+
+[source,bash]
+----
+aws organizations create-account --email plant-01@example.com --account-name factory-east
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

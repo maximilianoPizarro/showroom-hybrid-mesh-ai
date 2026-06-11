@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-image::23-llm-rag.png[LLM and RAG with MaaS,960]
+image::25-llm-rag.png[LLM and RAG with MaaS,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -27,6 +27,20 @@ Como `%USER_NAME%`, abre Developer Hub, dispara Lightspeed en un Component de ca
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-lightspeed-plugin[Developer Hub Lightspeed plugin]
 * link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[AI workloads on OpenShift AI]
 * link:https://www.redhat.com/en/topics/ai/what-is-retrieval-augmented-generation[What is RAG — Red Hat]
+
+
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **Lightspeed** + RAG con MaaS en OpenShift AI.
+
+=== AWS Bedrock Knowledge Bases
+
+[source,bash]
+----
+aws bedrock-agent create-knowledge-base --name factory-sops --role-arn arn:aws:iam::123:role/BedrockKBRole --knowledge-base-configuration file://kb-config.json
+----
 
 
 == Acceso al producto — URLs y credenciales

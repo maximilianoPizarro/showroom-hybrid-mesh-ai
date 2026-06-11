@@ -26,6 +26,28 @@ Desde el módulo 22 se activa este stack hands-on. Los ejecutivos deben reconoce
 * link:https://aws.amazon.com/rosa/[AWS — Red Hat OpenShift Service on AWS]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* OpenShift AI con ModelMesh/KServe en hub.
+* MaaS como alternativa portable a Bedrock/SageMaker.
+
+=== AWS — Bedrock
+
+[source,bash]
+----
+aws bedrock-runtime invoke-model --model-id anthropic.claude-3-sonnet-20240229-v1:0   --body file://prompt.json --cli-binary-format raw-in-base64-out out.json
+----
+
+=== Azure OpenAI
+
+[source,bash]
+----
+az cognitiveservices account create --name hybrid-openai --resource-group rg-workshop --kind OpenAI --sku S0
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

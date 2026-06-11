@@ -28,6 +28,20 @@ FinOps cierra el loop ejecutivo del módulo 01: estrategia híbrida sin visibili
 * link:https://www.redhat.com/en/blog/tag/finops[Red Hat FinOps blog tag]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **Kubecost** hub + agentes spokes; asignación por namespace.
+
+=== AWS Cost Explorer
+
+[source,bash]
+----
+aws ce get-cost-and-usage --time-period Start=2026-01-01,End=2026-02-01 --granularity MONTHLY --metrics BlendedCost
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

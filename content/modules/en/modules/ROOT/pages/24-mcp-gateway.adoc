@@ -31,6 +31,35 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 * link:https://developers.redhat.com/products/red-hat-developer-hub[Developer Hub product overview]
 
 
+== Features, benefits & cloud configuration
+
+=== Key features
+
+* **MCP Gateway** — Kuadrant CRDs, ArgoCD MCP, k8s MCP tools.
+* **Developer Hub Lightspeed** invokes tools via `remote::mcp`.
+* Public URL `https://mcp-gateway.%HUB_DOMAIN%/mcp`.
+
+=== Business benefits
+
+* Developers ask natural-language questions that trigger safe, scoped automation.
+* Same MCP pattern for OpenShift AI assistant servers (module 22).
+
+=== AWS — Lambda tools (contrast)
+
+[source,bash]
+----
+aws lambda create-function --function-name list-argocd-apps   --runtime python3.12 --handler app.handler --role arn:aws:iam::123456789012:role/lambda-basic   --zip-file fileb://function.zip
+# MCP Gateway on OpenShift replaces ad-hoc Lambda glue for K8s operations
+----
+
+=== Azure — Functions
+
+[source,bash]
+----
+az functionapp create --resource-group rg-workshop --name hybrid-tools --storage-account hybridstore   --consumption-plan-location eastus --runtime python --functions-version 4
+----
+
+
 == Lab access — URLs & credentials
 
 NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.

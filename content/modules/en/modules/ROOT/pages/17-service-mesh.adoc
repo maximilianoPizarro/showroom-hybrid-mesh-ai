@@ -29,6 +29,37 @@ Use Kiali from the OpenShift console to view live traffic for `%USER_NAME%` depl
 * link:https://kiali.io/docs/[Kiali service mesh observability]
 
 
+== Features, benefits & cloud configuration
+
+=== Key features
+
+* **OpenShift Service Mesh 3** ambient mode — no sidecar injection for many workloads.
+* **Kiali** observability, **mTLS** between services, **waypoint** proxies where needed.
+* `stackrox` namespace excluded from ambient to protect ACS sensors.
+
+=== Business benefits
+
+* Zero-trust east-west without rewriting apps for sidecars.
+* Consistent telemetry for IE microservices crossing namespaces.
+
+=== AWS — App Mesh contrast
+
+[source,bash]
+----
+aws appmesh create-mesh --mesh-name factory-mesh
+aws appmesh create-virtual-node --mesh-name factory-mesh --virtual-node-name ie-backend   --spec file://virtual-node.json
+# OpenShift Service Mesh preferred when already on ROSA/ARO
+----
+
+=== Azure — Service Fabric mesh (legacy contrast)
+
+[source,bash]
+----
+# Prefer OpenShift Service Mesh on ARO for Kubernetes-native teams
+az network application-gateway create --name mesh-ingress --resource-group rg-workshop --sku Standard_v2
+----
+
+
 == Lab access — URLs & credentials
 
 NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,960]
+image::27-neuroface.png[NeuroFace AI dashboard with webcam and chat,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
@@ -28,6 +28,20 @@ NeuroFace combina **visión OVMS local** (`ovms.enabled: true`) y **chat MaaS** 
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[OpenShift AI model serving]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI overview]
 * link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Run AI workloads on OpenShift AI]
+
+
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **OVMS** visión local + chat **MaaS** en NeuroFace.
+
+=== AWS Rekognition + Bedrock
+
+[source,bash]
+----
+aws rekognition create-collection --collection-id factory-faces
+----
 
 
 == Acceso al producto — URLs y credenciales

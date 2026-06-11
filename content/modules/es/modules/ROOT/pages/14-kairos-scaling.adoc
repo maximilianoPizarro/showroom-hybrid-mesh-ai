@@ -28,6 +28,20 @@ Abre Kairos Console desde el menú OpenShift, localiza recomendaciones pendiente
 * link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/nodes/automatically-scaling-a-cluster[Cluster autoscaler documentation]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **SmartScalingPolicy** + consola Kairos para recomendaciones.
+
+=== AWS ROSA machine pools
+
+[source,bash]
+----
+rosa edit machinepool --cluster=workshop-hub --machinepool=worker --replicas=5
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

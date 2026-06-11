@@ -27,6 +27,20 @@ Compara con security groups ROSA más NP Kubernetes: defensa en profundidad en V
 * link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/networking/understanding-network-policies[Understanding network policies]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **NetworkPolicy** demo OVN en spoke east.
+
+=== AWS security groups
+
+[source,bash]
+----
+aws ec2 authorize-security-group-ingress --group-id sg-ie --protocol tcp --port 8080 --cidr 10.128.0.0/14
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

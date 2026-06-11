@@ -29,6 +29,20 @@ NOTE: **Ritmo del taller (~4 h hands-on)** — Cada módulo incluye pasos **Solo
 * link:https://www.kuadrant.io/docs/[Kuadrant MCP Gateway]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **MCP Gateway** + Lightspeed en Developer Hub.
+
+=== AWS Lambda (contraste)
+
+[source,bash]
+----
+aws lambda create-function --function-name list-argocd-apps --runtime python3.12 --handler app.handler --role arn:aws:iam::123:role/lambda-basic --zip-file fileb://function.zip
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

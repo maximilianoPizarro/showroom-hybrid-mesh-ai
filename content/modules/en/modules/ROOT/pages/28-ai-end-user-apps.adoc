@@ -4,13 +4,21 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::26-ai-end-user-apps.png[AI in end-user applications,960]
+image::28-ai-end-user-apps.png[AI in end-user applications,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 
-Capstone: tie together IE dashboard, Developer Hub catalog entries, and Grafana for `%USER_NAME%`. This is the **last learner module (28)** — facilitators run automated verification separately.
+Capstone module **28 — AI in End-User Apps**. You will connect everything operators touch on the factory floor:
+
+. Open link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge line-dashboard] — confirm live Kafka sensor metrics for east spoke workloads.
+. Developer Hub → **Catalog** — locate `%USER_NAME%` IE components, Grafana dashboards, and AI catalog dependencies.
+. Review **ie-anomaly-alerter** alerts: `oc logs -l app=ie-anomaly-alerter -n industrial-edge-tst-all --tail=30` in the Showroom **Terminal**.
+. Optional: open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] for operator AI assist; compare with MaaS summaries from module 23.
+. Trace Camel K demos `demo-camel-kaoto-east` / `demo-camel-cdc-east` in catalog Topology for event-driven OT/IT integration.
+
+*Success criteria:* line-dashboard shows data, at least one catalog entity links IE → AI, and you can explain how AWS Kinesis or Azure Event Hubs would mirror the same event path in production.
 
 == Overview
 
@@ -28,6 +36,55 @@ Platform teams win when AI is invisible infrastructure: OpenShift AI, MaaS, and 
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub — golden paths for apps]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI — production patterns]
 * link:https://www.redhat.com/en/technologies/cloud-computing/openshift/industrial-edge[Industrial Edge on OpenShift]
+
+
+== Features, benefits & cloud configuration
+
+=== Key features
+
+* **line-dashboard** — live Kafka sensor visualization on east spoke for operators.
+* **ie-anomaly-alerter** — statistical/predictive alerts surfaced in the plant UX.
+* **Camel K** integrations (`demo-camel-kaoto-east`, `demo-camel-cdc-east`) — event-driven OT/IT bridges.
+* **NeuroFace + MaaS** — contextual AI help embedded in end-user flows, not only notebooks.
+
+=== Business benefits
+
+* Operators act on AI insights in the same dashboard they use for line status — no context switching.
+* Platform teams publish catalog dependencies once; each plant binds AI services via Developer Hub.
+* `%USER_NAME%` capstone proves multi-tenant factory rollout without shadow IT pipelines.
+
+=== AWS — stream plant events to cloud analytics
+
+[source,bash]
+----
+# Mirror Kafka topics to Kinesis (optional hybrid analytics)
+aws kinesis create-stream --stream-name plant-sensors --shard-count 2
+# MSK cluster for ROSA-adjacent streaming
+aws kafka create-cluster --cluster-name factory-msk   --broker-node-group-info file://broker-nodes.json   --kafka-version 3.5.1
+
+# SNS mobile push for operator alerts (analog to anomaly → notification)
+aws sns create-topic --name plant-anomaly-alerts
+aws sns subscribe --topic-arn arn:aws:sns:us-east-1:123456789012:plant-anomaly-alerts   --protocol email --notification-endpoint ops@factory.example.com
+----
+
+=== Azure — Event Hubs + IoT
+
+[source,bash]
+----
+az eventhubs namespace create --resource-group rg-workshop --name plant-events --sku Standard
+az eventhubs eventhub create --resource-group rg-workshop --namespace-name plant-events --name sensors
+az iot hub create --resource-group rg-workshop --name plant-iot --sku S1
+
+# Route IE anomaly events (conceptual CDC pattern from Camel demo)
+az eventhubs eventhub consumer-group create --resource-group rg-workshop   --namespace-name plant-events --eventhub-name sensors --name line-dashboard
+----
+
+=== Lab hands-on sequence
+
+. Open link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge line-dashboard] — confirm live metrics.
+. Developer Hub → catalog components for `%USER_NAME%` IE namespace and Grafana dashboards.
+. Trigger anomaly threshold or review ie-anomaly-alerter logs: `oc logs -l app=ie-anomaly-alerter -n industrial-edge-tst-all --tail=20`.
+. Optional: embed link:https://neuroface.%HUB_DOMAIN%[NeuroFace] for operator AI assist.
 
 
 == Lab access — URLs & credentials

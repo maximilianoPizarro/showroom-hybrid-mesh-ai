@@ -31,6 +31,21 @@ GitOps: `components/openshift-ai-hub/`. Verificar: `oc get notebook,inferenceser
 * link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Cargas de IA en OpenShift AI]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **DataScienceCluster** con ModelMesh, notebooks y MaaS.
+* Proyecto **`ai-%USER_NAME%`** con notebook y modelos.
+
+=== AWS SageMaker (alternativa cloud)
+
+[source,bash]
+----
+aws sagemaker create-endpoint --endpoint-name sklearn-factory --endpoint-config-name sklearn-cfg
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

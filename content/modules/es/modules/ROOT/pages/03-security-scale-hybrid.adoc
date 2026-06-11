@@ -26,6 +26,22 @@ Escalar flotas híbridas implica automatizar placement y capacidad: políticas A
 * link:https://www.redhat.com/en/blog/tag/security[Red Hat security blog]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* ACS Central para política de imagen/runtime en hub y spokes.
+* NetworkPolicies OVN en spokes; mesh ambient en apps.
+
+=== AWS
+
+[source,bash]
+----
+aws guardduty create-detector --enable
+aws ec2 create-vpc-endpoint --vpc-id vpc-xxx --service-name com.amazonaws.us-east-1.sts
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::25-neuroface-dashboard.png[NeuroFace AI dashboard with webcam and chat,960]
+image::27-neuroface.png[NeuroFace AI dashboard with webcam and chat,960]
 
 NOTE: For AWS/Azure integration snippets see xref:00-index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
@@ -30,6 +30,39 @@ Catalog: System `hybrid-mesh-ai-platform` → Component **neuroface-workshop** (
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[OpenShift AI model serving]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI overview]
 * link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Run AI workloads on OpenShift AI]
+
+
+== Features, benefits & cloud configuration
+
+=== Key features
+
+* **OVMS** local vision inference for webcam latency-sensitive detection.
+* **MaaS chat** at `/api/chat` for operator Q&A.
+* Catalog entity **neuroface-workshop** links UI, routes, and OpenShift AI.
+
+=== Business benefits
+
+* Vision at edge; generative answers from governed hub MaaS — split latency/cost optimally.
+* Demo of multimodal AI in factory safety and training scenarios.
+
+=== AWS — Rekognition + Bedrock combo
+
+[source,bash]
+----
+aws rekognition create-collection --collection-id factory-faces
+aws rekognition index-faces --collection-id factory-faces --image '{"S3Object":{"Bucket":"photos","Name":"worker.jpg"}}'
+
+aws bedrock-runtime invoke-model --model-id anthropic.claude-3-haiku-20240307-v1:0   --body file://chat.json --cli-binary-format raw-in-base64-out chat-out.json
+# Lab: OVMS + MaaS on OpenShift instead
+----
+
+=== Azure — Vision + OpenAI
+
+[source,bash]
+----
+az cognitiveservices account create --name factory-vision --kind ComputerVision --resource-group rg-workshop --sku S1
+az cognitiveservices account create --name factory-openai --kind OpenAI --resource-group rg-workshop --sku S0
+----
 
 
 == Lab access — URLs & credentials

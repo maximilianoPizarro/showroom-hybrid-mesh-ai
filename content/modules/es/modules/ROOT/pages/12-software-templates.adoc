@@ -31,6 +31,20 @@ Las plantillas son el puente entre estrategia ejecutiva (módulo 01) y despliegu
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index[Developer Hub plugins]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **Software Templates** en Developer Hub con GitOps y catálogo.
+
+=== AWS CodeCommit
+
+[source,bash]
+----
+aws codecommit create-repository --repository-name ie-app-user1
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

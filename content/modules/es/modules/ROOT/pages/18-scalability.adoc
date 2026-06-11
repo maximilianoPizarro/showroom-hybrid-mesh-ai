@@ -27,6 +27,20 @@ Este módulo completa la historia de capacidad iniciada en el módulo 14: Kairos
 * link:https://docs.redhat.com/en/documentation/red_hat_amq_streams[AMQ Streams — Kafka on OpenShift]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **HPA** + **Kafka** para picos de sensores.
+
+=== AWS MSK
+
+[source,bash]
+----
+aws kafka create-cluster --cluster-name ie-kafka --kafka-version 3.5.1 --number-of-broker-nodes 3 --broker-node-group-info file://brokers.json
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

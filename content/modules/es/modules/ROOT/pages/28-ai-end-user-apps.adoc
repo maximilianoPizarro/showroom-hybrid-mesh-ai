@@ -4,13 +4,21 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::26-ai-end-user-apps.png[AI in end-user applications,960]
+image::28-ai-end-user-apps.png[AI in end-user applications,960]
 
 NOTE: Para snippets AWS/Azure ver xref:00-index.adoc#hybrid-integration[Módulo 00 — integración híbrida].
 
 == Qué harás
 
-Cierre: conecta dashboard IE, entradas Developer Hub y Grafana para `%USER_NAME%`. Este es el **último módulo del participante (28)**.
+Módulo cierre **28 — IA en apps finales**. Conectarás lo que operadores usan en planta:
+
+. Abrir link:https://industrial-edge.%HUB_DOMAIN%[line-dashboard IE] — confirmar métricas Kafka en vivo.
+. Developer Hub → **Catálogo** — componentes `%USER_NAME%`, Grafana y dependencias IA.
+. Revisar alertas **ie-anomaly-alerter** en terminal Showroom.
+. Opcional: link:https://neuroface.%HUB_DOMAIN%[NeuroFace] para asistencia IA.
+. Rastrear demos Camel K en Topology.
+
+*Éxito:* dashboard con datos, entidad catálogo IE → IA, y explicar equivalente AWS/Azure del flujo de eventos.
 
 == Panorama
 
@@ -28,6 +36,37 @@ Los equipos de plataforma ganan cuando la IA es infraestructura invisible: OpenS
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub — golden paths for apps]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI — production patterns]
 * link:https://www.redhat.com/en/technologies/cloud-computing/openshift/industrial-edge[Industrial Edge on OpenShift]
+
+
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **line-dashboard** — visualización Kafka en vivo en spoke east.
+* **ie-anomaly-alerter** — alertas predictivas en UX de planta.
+* **Camel K** — integraciones event-driven OT/IT.
+* **NeuroFace + MaaS** — IA contextual en flujos finales.
+
+=== Beneficios
+
+* Operadores actúan sobre insights IA en el mismo dashboard de línea.
+* Equipos de plataforma publican dependencias de catálogo una vez.
+
+=== AWS
+
+[source,bash]
+----
+aws kinesis create-stream --stream-name plant-sensors --shard-count 2
+aws sns create-topic --name plant-anomaly-alerts
+----
+
+=== Azure
+
+[source,bash]
+----
+az eventhubs namespace create --resource-group rg-workshop --name plant-events --sku Standard
+az iot hub create --resource-group rg-workshop --name plant-iot --sku S1
+----
 
 
 == Acceso al producto — URLs y credenciales

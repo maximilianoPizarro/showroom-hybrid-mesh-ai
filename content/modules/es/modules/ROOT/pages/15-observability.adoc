@@ -28,6 +28,20 @@ Los ejecutivos deben conectar este módulo con el 21 (Kubecost): métricas demue
 * link:https://grafana.com/docs/[Grafana documentation]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **Prometheus** + **Grafana** + tracing distribuido.
+
+=== AWS CloudWatch
+
+[source,bash]
+----
+aws logs create-log-group --log-group-name /rosa/workshop-hub/application
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

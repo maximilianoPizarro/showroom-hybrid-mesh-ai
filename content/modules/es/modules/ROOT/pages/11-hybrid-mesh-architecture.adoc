@@ -31,6 +31,20 @@ Observa recursos `HTTPRoute` y estado Skupper en la consola; el módulo 13 despl
 * link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/service_mesh/gateway-api-for-service-mesh[Gateway API for OpenShift Service Mesh]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **Skupper** + **HTTPRoute** hub → spokes IE.
+
+=== AWS ALB
+
+[source,bash]
+----
+aws elbv2 create-load-balancer --name hybrid-ingress --type application --subnets subnet-a subnet-b
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

@@ -31,6 +31,22 @@ Este módulo establece el modelo mental para cada ejercicio Parte B: el hub pose
 * link:https://access.redhat.com/labs/[Red Hat Interactive Labs]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* Import **ManagedCluster** para spokes east/west.
+* APIs OCM en Topology Developer Hub.
+
+=== AWS
+
+[source,bash]
+----
+rosa list clusters
+oc get managedclusters
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

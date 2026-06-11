@@ -28,6 +28,20 @@ Inspecciona estado de sync en UI Argo CD como `%USER_NAME%` e identifica qué re
 * link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.14/html/gitops/gitops-overview[ACM GitOps overview]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **Argo CD** + ApplicationSet + Placements ACM.
+
+=== AWS CodePipeline
+
+[source,bash]
+----
+aws codebuild create-project --name gitops-sync --source type=GITHUB,location=org/platform-hub-spoke-config
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

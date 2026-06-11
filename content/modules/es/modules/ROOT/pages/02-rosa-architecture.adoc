@@ -26,6 +26,22 @@ Entender la arquitectura ROSA ayuda a explicar límites de SLA: Red Hat gestiona
 * link:https://developers.redhat.com/blog/tag/openshift[Red Hat Developer blog — OpenShift]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características ROSA
+
+* Plano de control gestionado; workers bajo tu cuenta AWS.
+* Integración STS/IAM para identidad de pods.
+
+=== AWS — ciclo de vida ROSA
+
+[source,bash]
+----
+rosa create cluster --cluster-name=workshop-hub --region=us-east-1 --multi-az
+rosa create idp --cluster=workshop-hub --type htpasswd --name workshop-users
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

@@ -29,6 +29,20 @@ Usa Kiali desde la consola OpenShift para ver tráfico en vivo de despliegues de
 * link:https://kiali.io/docs/[Kiali service mesh observability]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **Service Mesh 3** ambient + Kiali.
+
+=== AWS App Mesh
+
+[source,bash]
+----
+aws appmesh create-mesh --mesh-name factory-mesh
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

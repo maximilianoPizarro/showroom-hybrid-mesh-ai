@@ -31,6 +31,20 @@ Como `%USER_NAME%`, verifica que ACS ve tus cargas spoke y prueba rutas APIProdu
 * link:https://developers.redhat.com/articles/2024/08/22/api-management-kubernetes-kuadrant[Developer article — API management with Kuadrant]
 
 
+== Características, beneficios y configuración cloud
+
+=== Características
+
+* **ACS Central** + **Kuadrant** API keys en hub.
+
+=== AWS
+
+[source,bash]
+----
+aws secretsmanager create-secret --name kuadrant-api-keys --secret-string '{}'
+----
+
+
 == Acceso al producto — URLs y credenciales
 
 NOTE: *Login del taller* — %USER_NAME% / `Welcome123!` (Keycloak en Developer Hub; htpasswd en consola OpenShift hub/east/west; DevSpaces en spoke east). Productos OAuth usan la misma identidad OpenShift.

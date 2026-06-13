@@ -176,15 +176,16 @@ Prefer these when expanding AI modules:
 5. Reference `charts/all/` paths from hybrid-mesh-platform
 6. Include at least one annotated YAML block and 5+ official links for AI-related topics
 
-## Screenshot sources (live cluster only)
+## Screenshot sources (Gemini + optional live capture)
 
-Hero PNGs are captured from the hub cluster UI, not Gemini/diagram art.
+Hero PNGs use **Gemini-generated diagrams** (Red Hat branding) in `docs/assets/images/workshop/`, restored from git `8d41c0d`. Manually edited heroes are kept on top when re-syncing from Gemini.
 
-- **Canonical manifest:** `hybrid-mesh-platform/scripts/workshop-screenshot-manifest.yaml` — URL, viewport, `wait_for`, `preserve` per file
-- **Batch capture:** `node scripts/capture-workshop-screenshots.mjs` (Playwright; skips `preserve: true` entries)
+- **Gemini baseline commit:** `8d41c0d` (pre live-capture batch)
+- **Manual overrides (do not overwrite from Gemini):** `18-scalability`, `20-acs-kuadrant`, `23-ai-gateway`, `24-mcp-gateway`, `30-ai-show-and-tell`
+- **Live cluster optional:** `scripts/capture-workshop-screenshots.mjs` (Playwright; run `npm install` locally — `node_modules/` is gitignored)
+- **Restore all Gemini workshop heroes:** `git checkout 8d41c0d -- docs/assets/images/workshop/ && git checkout HEAD -- docs/assets/images/workshop/{19-openshift-virtualization,22-openshift-ia-stack,26-text-ai-predictive}.png` then re-copy manual files
 - **Sync to showroom:** `SHOWROOM_DIR=../showroom-hybrid-mesh-ai bash scripts/sync-showroom-content.sh`
-- **Preserve ACS heroes:** `03-security-scale-hybrid.png` and `20-acs-kuadrant.png` — do not overwrite; ACS Central dashboard UI
-- **CNV fallback:** if KubeVirt CRD missing, use Developer Hub Self-service → “OpenShift Virtualization: Workshop VM” (`19-openshift-virtualization.png`)
+- **Preserve ACS:** `03-security-scale-hybrid.png` shares ACS capture with module 20 unless manually replaced
 
 Maintainer guide (GitHub Pages): https://maximilianopizarro.github.io/hybrid-mesh-platform/validatedpatterns-docs/workshop/
 

@@ -189,7 +189,7 @@
     if (!hubDomain) return;
     var links = {
       'footer-link-skupper':
-        'https://field-content-skupper-network-observer-service-interconnect.' +
+        'https://skupper-network-observer-service-interconnect.' +
         hubDomain,
       'footer-link-apis': 'https://workshop-apis.' + hubDomain,
       'footer-link-neuroface': 'https://neuroface.' + hubDomain,

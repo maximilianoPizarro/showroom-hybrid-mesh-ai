@@ -4,7 +4,9 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::11-hybrid-mesh.png[Hybrid mesh architecture,960]
+image::11-arch-spoke-gateway.png[Hub gateway to spoke Industrial Edge,640]
+
+image::11-arch-skupper-topology.png[Skupper VAN — three sites, kafka and IE listeners,640]
 
 .Traffic path through the lab
 [cols="1,1", options="header"]
@@ -158,7 +160,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 | Service | URL | Credentials
 
 | Industrial Edge (via hub gateway) | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge (via hub gateway)] | Public (no login)
-| Skupper network observer | link:https://field-content-skupper-network-observer-service-interconnect.%HUB_DOMAIN%[Skupper network observer] | OpenShift OAuth
+| Skupper network observer | link:https://skupper-network-observer-service-interconnect.%HUB_DOMAIN%[Skupper network observer] | OpenShift OAuth
 | Hub Gateway routes | link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/hub-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute[Hub Gateway routes] | Workshop user
 | Kiali | link:https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%[Kiali] | OpenShift OAuth
 |===

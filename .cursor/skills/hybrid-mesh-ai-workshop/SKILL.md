@@ -40,9 +40,9 @@ Platform GitOps repo (separate): https://github.com/maximilianoPizarro/hybrid-me
 | Welcome | index | All |
 | Part A — Strategy | 01–05 | Executive / show-and-tell |
 | Part B — Hands-on | 10–28 | `%USER_NAME%` lab |
-| Facilitator | 29-full-verification | Not in nav |
+| Facilitator | 29-full-verification, 30-ai-show-and-tell | 29 not in nav; 30 in Part C |
 
-AI track: 22 OpenShift AI → 23 AI Gateway → 24 MCP → 25 LLM/RAG → 26 Predictive → 27 NeuroFace → 28 End-user apps
+AI track: 30 Show and Tell (facilitator) → 22 OpenShift AI → 23 AI Gateway → 24 MCP → 25 LLM/RAG → 26 Predictive → 27 NeuroFace → 28 End-user apps
 
 ## Standard page template
 

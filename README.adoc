@@ -4,11 +4,18 @@ Antora content for the **Hybrid Mesh AI Workshop** Showroom (hub-spoke RHDP lab)
 
 Push this directory to https://github.com/maximilianoPizarro/showroom-hybrid-mesh-ai for in-cluster git-cloner.
 
-Regenerate modules from platform repo:
+Regenerate images from platform repo:
 
 [source,bash]
 ----
-python3 scripts/generate-workshop-content.py
+bash ../hybrid-mesh-platform/scripts/sync-showroom-content.sh
+----
+
+Or from hybrid-mesh-platform:
+
+[source,bash]
+----
+SHOWROOM_DIR=../showroom-hybrid-mesh-ai bash scripts/sync-showroom-content.sh
 ----
 
 Screen recordings are **not** stored in Git — see `verification/recording-runbook.md`.

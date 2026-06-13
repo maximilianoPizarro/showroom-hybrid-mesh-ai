@@ -1,0 +1,217 @@
+= AI Show and Tell — Facilitator Track
+
+++++
+<span class="workshop-time-badge">~60 min executive demo</span>
+++++
+
+image::30-ai-show-and-tell.png[AI show and tell — MaaS models across the platform,960]
+
+.AI surfaces in this lab (one MaaS endpoint, many consumers)
+[cols="2,2,2", options="header"]
+|===
+| Demo station | Product | Default model
+
+| 1 — Developer Hub Lightspeed
+| RHDH `/lightspeed` + Llama Stack + MCP
+| `granite-3-2-8b-instruct`
+
+| 2 — OpenShift AI playground
+| ODS dashboard → `maas-workshop`
+| `llama-scout-17b`, `deepseek-r1-distill-qwen-14b`
+
+| 3 — NeuroFace
+| OVMS vision + MaaS chat
+| `llama-scout-17b`
+
+| 4 — DevSpaces + Continue
+| Kaoto IDE on **east** spoke
+| `deepseek-r1-distill-qwen-14b`
+
+| 5 — Kairos (optional)
+| Smart scaling / remediation console
+| `llama-scout-17b`
+|===
+
+NOTE: MaaS API keys are injected **post-install** (RHDP `litemaas`, Vault + External Secrets, or `oc create secret`) — never committed to Git. Allow 5 minutes after key rotation before demos.
+
+== What you will demo
+
+This module is a **facilitator-only** show-and-tell arc. It does not replace hands-on modules 22–28; it gives a timed script for executives and partners who want to see AI on the same hub-spoke platform as Industrial Edge, GitOps, and mesh.
+
+== Platform context (current architecture)
+
+The fleet matches the live Validated Pattern deployment — hub GitOps, ACM spokes, Skupper VAN, Istio ambient mesh, and Gateway API ingress:
+
+image::00-arch-hub-spoke-flow.png[Hub-spoke GitOps and Skupper flow,960]
+
+Cross-cluster traffic for Industrial Edge and observability:
+
+image::11-arch-spoke-gateway.png[Hub gateway to spoke IE via Skupper,640]
+image::11-arch-skupper-topology.png[Skupper sites and listeners,640]
+
+Sensor data to operator UX (ties AI alerts to module 28):
+
+image::13-arch-data-flow.png[MQTT → Kafka → dashboard and ML path,960]
+
+== Demo script (~60 minutes)
+
+=== Opening (5 min)
+
+. Show link:https://showroom-showroom.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[Showroom] registration flow — audience gets `userN`.
+. Open the architecture images above; state: **one OpenShift fleet**, AI is a shared service layer (MaaS), not a separate silo.
+. Bill of Materials: every product is `charts/all/*` synced by Argo CD (`xref:index.adoc[Welcome]`).
+
+=== Station 1 — Lightspeed + MCP (12 min)
+
+**Message:** Natural-language operations for `%USER_NAME%` — scoped MCP tools, not unrestricted cluster admin.
+
+. Developer Hub → link:https://developer-hub.%HUB_DOMAIN%/lightspeed[Lightspeed].
+. Prompt: _"Which Argo CD applications are OutOfSync on this hub?"_
+. Show MCP gateway link:https://mcp-gateway.%HUB_DOMAIN%/mcp[MCP Gateway] and catalog entity **workshop-mcp-gateway**.
+. Terminal (hub): `oc get mcpserverregistration -n mcp-system`
+. Deep dive: xref:24-mcp-gateway.adoc[Module 24 — MCP Gateway + Lightspeed]
+
+TIP: Lightspeed uses **granite-3-2-8b-instruct** via MaaS OpenAI-compatible API. If chat fails, verify `llama-stack-secrets` in `developer-hub` and MaaS key post-install.
+
+=== Station 2 — OpenShift AI + MaaS (12 min)
+
+**Message:** `%USER_NAME%` gets project `ai-%USER_NAME%` — same models as the rest of the workshop.
+
+. OpenShift AI dashboard → link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[ODS Dashboard].
+. Data Science Project **maas-workshop** → OpenShift AI Playground.
+. Compare models: **Llama Scout 17B** (default chat) vs **DeepSeek R1 Distill Qwen 14B** (reasoning).
+. Show per-user namespace: `oc get ns | grep ai-user`
+. Deep dive: xref:22-openshift-ai.adoc[Module 22 — OpenShift AI Workshop]
+
+image::22-openshift-ia-stack.png[OpenShift AI stack on hub,640]
+
+=== Station 3 — NeuroFace multimodal (10 min)
+
+**Message:** Edge vision (OVMS) + hub LLM (MaaS) — latency split for factory safety scenarios.
+
+. Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] — enable webcam, detect object.
+. Ask chat: _"What PPE is missing for this worker?"_
+. Developer Hub → **neuroface-workshop** → Topology (OVMS + Route).
+. Deep dive: xref:27-neuroface.adoc[Module 27 — NeuroFace]
+
+=== Station 4 — DevSpaces + Continue on east (12 min)
+
+**Message:** `%USER_NAME%` codes on the **same spoke** as Industrial Edge; Continue uses MaaS without exporting keys to laptops.
+
+. Switch to east console or Showroom terminal: `east-login %USER_NAME%`
+. Open link:https://devspaces.%EAST_DOMAIN%[DevSpaces east] → workspace for `%USER_NAME%`.
+. Open Kaoto / Camel route; invoke Continue — model **deepseek-r1-distill-qwen-14b**.
+. Explain: PostSync job `devspaces-continue-ai-sync` copies API key from `kairos-system/kairos-ai-credentials` into `{user}-devspaces/continue-ai-config`.
+. Deep dive: xref:12-software-templates.adoc[Module 12 — Templates] + platform docs for DevSpaces.
+
+=== Station 5 — Kairos + IE closure (9 min, optional)
+
+**Message:** AI-assisted scaling closes the loop from Kafka telemetry to remediation policies.
+
+. link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos Console] — show east/west sensor SmartScalingPolicy mirrors.
+. link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge dashboard] — live metrics while NeuroFace / alerts narrative plays.
+. image::14-kairos-ia-agents.png[Kairos agents and hub reporting,640]
+. Deep dive: xref:14-kairos-scaling.adoc[Module 14 — Kairos scaling]
+
+=== Close (5 min)
+
+. Recap xref:28-ai-end-user-apps.adoc[Module 28 — AI in end-user apps]: operators see AI where they work.
+. Tease Vault/ESO path for MaaS keys (post-install, rollout required).
+. Q&A — point advanced learners to modules 23–26 for gateway, RAG, and predictive text.
+
+== MaaS models reference
+
+.Endpoint (workshop RHDP)
+[source,text]
+----
+https://maas-rhdp.apps.maas.redhatworkshops.io/v1
+----
+
+.Models available in this lab
+[cols="2,2,3", options="header"]
+|===
+| Model ID | Typical use | Consumed by
+
+| `llama-scout-17b`
+| General chat, NeuroFace, Kairos default
+| NeuroFace, ODS playground, Kairos hub
+
+| `deepseek-r1-distill-qwen-14b`
+| Reasoning, code assist in IDE
+| DevSpaces Continue, ODS playground
+
+| `granite-3-2-8b-instruct`
+| Enterprise assistant, Lightspeed validation
+| Developer Hub Lightspeed / Llama Stack
+|===
+
+WARNING: Use **separate MaaS keys per model** when RHDP provides them. Keys live in Vault or cluster Secrets — not in Git or Showroom content.
+
+== Lab access — quick links
+
+[cols="2,3,2"]
+|===
+| Service | URL | Credentials
+
+| Lightspeed | link:https://developer-hub.%HUB_DOMAIN%/lightspeed[Lightspeed] | Workshop user
+| MCP Gateway | link:https://mcp-gateway.%HUB_DOMAIN%/mcp[MCP] | Workshop user
+| OpenShift AI | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[ODS] | OpenShift OAuth
+| NeuroFace | link:https://neuroface.%HUB_DOMAIN%[NeuroFace] | Public
+| DevSpaces (east) | link:https://devspaces.%EAST_DOMAIN%[DevSpaces] | Workshop user
+| Kairos | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos] | OpenShift OAuth
+| Skupper observer | link:https://skupper-network-observer-service-interconnect.%HUB_DOMAIN%[Skupper] | OpenShift OAuth
+|===
+
+== Show and Tell checklist
+
+Facilitator checklist before the room enters:
+
+* [ ] `oc get managedclusters` — east/west **Available**
+* [ ] MaaS keys applied post-install (Lightspeed, NeuroFace, Continue secrets present)
+* [ ] `curl -sk -o /dev/null -w '%{http_code}' https://developer-hub.%HUB_DOMAIN%/lightspeed` → 2xx
+* [ ] `curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/` → 2xx
+* [ ] Registration tested with a fresh `userN`
+* [ ] Webcam permission tested for NeuroFace (HTTPS required)
+
+== Where this lab is defined
+
+[cols="2,3"]
+|===
+| Capability | GitOps path
+
+| MaaS proxies | `charts/all/openshift-ai-hub/` |
+| Lightspeed | `charts/all/developer-hub/templates/lightspeed.yaml` |
+| MCP Gateway | `charts/all/mcp-gateway/` |
+| NeuroFace | `charts/all/neuroface/` |
+| DevSpaces Continue sync | `charts/all/devspaces/templates/continue-ai-sync.yaml` |
+| Kairos | `charts/all/kairos/` |
+| Architecture docs | link:https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/validatedpatterns-docs/architecture.md[architecture.md]
+|===
+
+== Verify
+
+[source,bash]
+----
+# Hub — AI surfaces reachable
+for u in developer-hub.%HUB_DOMAIN%/lightspeed neuroface.%HUB_DOMAIN%/ \
+  rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%/; do
+  printf '%s → ' "$u"
+  curl -sk -o /dev/null -w '%{http_code}\n' "https://$u"
+done
+----
+
+++++
+<div class="workshop-progress" data-module="30-ai-show-and-tell">
+  <label><input type="checkbox" data-completed> I completed this facilitator track</label>
+  <label><input type="checkbox" data-interest> I want the full hands-on AI modules (22–28)</label>
+  <button type="button" onclick="saveWorkshopProgress('30-ai-show-and-tell')">Save progress</button>
+</div>
+++++
+
+++++
+<div class="workshop-next-nav">
+  <a href="22-openshift-ai.html">Hands-on → 22 OpenShift AI</a>
+  &nbsp;|&nbsp;
+  <a href="index.html">← Welcome</a>
+</div>
+++++

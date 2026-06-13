@@ -178,13 +178,39 @@ Prefer these when expanding AI modules:
 
 ## Screenshot sources (live cluster only)
 
-Hero PNGs are captured from the hub cluster UI (`apps.cluster-22jv2.dynamic2.redhatworkshops.io`), not Gemini/diagram art.
+Hero PNGs are captured from the hub cluster UI, not Gemini/diagram art.
 
 - **Canonical manifest:** `hybrid-mesh-platform/scripts/workshop-screenshot-manifest.yaml` — URL, viewport, `wait_for`, `preserve` per file
 - **Batch capture:** `node scripts/capture-workshop-screenshots.mjs` (Playwright; skips `preserve: true` entries)
 - **Sync to showroom:** `SHOWROOM_DIR=../showroom-hybrid-mesh-ai bash scripts/sync-showroom-content.sh`
-- **Preserve ACS heroes:** `03-security-scale-hybrid.png` and `20-acs-kuadrant.png` — do not overwrite; ACS Central Clusters / registration secret UI
+- **Preserve ACS heroes:** `03-security-scale-hybrid.png` and `20-acs-kuadrant.png` — do not overwrite; ACS Central dashboard UI
 - **CNV fallback:** if KubeVirt CRD missing, use Developer Hub Self-service → “OpenShift Virtualization: Workshop VM” (`19-openshift-virtualization.png`)
+
+Maintainer guide (GitHub Pages): https://maximilianopizarro.github.io/hybrid-mesh-platform/validatedpatterns-docs/workshop/
+
+## Narrative ↔ hero alignment
+
+Each module hero must match the opening story (not a generic console screen):
+
+| Module | Hero must show |
+|--------|----------------|
+| 05 | Kafka Console multicluster — customer IoT journey |
+| 13 | ManuELA Realtime Data — live sensor charts on east |
+| 26 | Mailpit IE vibration anomaly alerts |
+| 28 | NeuroFace operator dashboard (AI in end-user apps) |
+| 29 | Argo CD Applications Healthy (facilitator only) |
+
+Before sync, dedupe module heroes (`md5sum content/.../ROOT/images/*.png`) — only **03 = 20** (ACS) may share a hash.
+
+## Showroom terminal (multi-tab)
+
+`content/supplemental-ui/js/workshop-runtime.js`:
+
+- Reload embedded iframe on `visibilitychange` / `pagehide` when returning to the Showroom tab
+- `blankFrame()` for quick links opened with `target=_blank`
+- Tooltip on Terminal drawer button
+
+After JS changes: commit, push, `oc rollout restart deployment/showroom -n showroom`.
 
 ## Verification
 

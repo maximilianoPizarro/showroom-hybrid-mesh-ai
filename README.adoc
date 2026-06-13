@@ -2,20 +2,63 @@
 
 Antora content for the **Hybrid Mesh AI Workshop** Showroom (hub-spoke RHDP lab).
 
-Push this directory to https://github.com/maximilianoPizarro/showroom-hybrid-mesh-ai for in-cluster git-cloner.
+== Links
 
-Regenerate images from platform repo:
+| Resource | URL |
+|----------|-----|
+| Platform GitOps | https://github.com/maximilianoPizarro/hybrid-mesh-platform |
+| GitHub Pages (maintainer) | https://maximilianopizarro.github.io/hybrid-mesh-platform/validatedpatterns-docs/workshop/ |
+| Live Showroom | `https://showroom-showroom.apps.<hub-domain>/` |
+| Registration | `https://workshop-registration.apps.<hub-domain>/` |
+
+== Layout
+
+[source]
+----
+showroom-hybrid-mesh-ai/
+├── site.yml
+├── content/modules/en/modules/ROOT/
+│   ├── nav.adoc          # learner nav (29 facilitator page excluded)
+│   ├── pages/*.adoc      # modules 01–05, 10–28, 30
+│   └── images/*.png      # synced from platform repo
+├── content/supplemental-ui/
+│   ├── js/workshop-runtime.js   # terminal multi-tab reload
+│   └── partials/header-content.hbs
+└── verification/         # facilitator checklist (not in Antora nav)
+----
+
+== Sync hero images from platform
+
+From this repo (sibling checkout):
 
 [source,bash]
 ----
 bash ../hybrid-mesh-platform/scripts/sync-showroom-content.sh
 ----
 
-Or from hybrid-mesh-platform:
+From `hybrid-mesh-platform`:
 
 [source,bash]
 ----
 SHOWROOM_DIR=../showroom-hybrid-mesh-ai bash scripts/sync-showroom-content.sh
+git -C ../showroom-hybrid-mesh-ai add content/modules/en/modules/ROOT/images/
 ----
+
+Hero PNGs are **live hub cluster captures** — see `hybrid-mesh-platform/scripts/workshop-screenshot-manifest.yaml`. Preserve ACS heroes `03` and `20` (do not overwrite).
+
+== Publish to cluster
+
+[source,bash]
+----
+git push origin main
+oc rollout restart deployment/showroom -n showroom
+oc rollout status deployment/showroom -n showroom --timeout=120s
+----
+
+If the showroom route returns 503, run `bash scripts/apply-workshop-showroom.sh` from the platform repo.
+
+== Cursor skill
+
+Authoring guardrails: `.cursor/skills/hybrid-mesh-ai-workshop/SKILL.md`
 
 Screen recordings are **not** stored in Git — see `verification/recording-runbook.md`.

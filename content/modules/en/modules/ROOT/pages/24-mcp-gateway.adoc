@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::24-mcp-gateway.png[MCP Gateway — federated Argo CD and Kubernetes tools for Lightspeed,960]
+image::24-mcp-gateway.png[MCP Gateway — Argo CD and k8s tools for Lightspeed,960]
 
 .MCP tools in the lab
 [cols="1,1", options="header"]
@@ -39,13 +39,13 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 **Overview-only (~8 min):** Catalog → **workshop-mcp-gateway**; `oc get mcpserverregistration -n mcp-system`; Lightspeed demo prompt.
 
-**Hands-on (~30 min):** Developer Hub **/lightspeed** — activity: "List Argo CD apps in OutOfSync state and suggest sync." Llama-stack uses `remote::mcp` to gateway (`components/developer-hub/files/lightspeed/llama-stack-run.yaml`).
+**Hands-on (~30 min):** Developer Hub **/lightspeed** — activity: "List Argo CD apps in OutOfSync state and suggest sync." Llama-stack uses `remote::mcp` to gateway (`charts/all/developer-hub/files/lightspeed/llama-stack-run.yaml`).
 
 The configuration is declarative and minimal:
 
 [source,yaml]
 ----
-# components/mcp-gateway/templates/mcp-server-registration.yaml
+# charts/all/mcp-gateway/templates/mcp-server-registration.yaml
 apiVersion: kuadrant.io/v1alpha1
 kind: MCPServerRegistration
 metadata:
@@ -60,11 +60,50 @@ spec:
     - name: get-application-health
 ----
 
+*MCPGatewayExtension* — binds the Gateway API ingress to the MCP controller:
+
+[source,yaml]
+----
+# charts/all/mcp-gateway/templates/mcp-gateway-extension.yaml
+apiVersion: kuadrant.io/v1alpha1
+kind: MCPGatewayExtension
+metadata:
+  name: mcp-gateway
+  namespace: mcp-system
+spec:
+  gatewayRef:
+    name: mcp-gateway              # Gateway API Gateway in mcp-system
+    namespace: mcp-system
+  listenerPort: 8080                 # MCP JSON-RPC over HTTP
+  auth:
+    enabled: true                    # workshop users authenticate via Developer Hub OIDC
+----
+
+*Llama Stack tool binding* — Lightspeed routes prompts to MCP tools via `remote::mcp`:
+
+[source,yaml]
+----
+# charts/all/developer-hub/files/lightspeed/llama-stack-run.yaml (excerpt)
+tool_groups:
+  - toolgroup_id: remote::mcp
+    provider_id: mcp
+    args:
+      url: https://mcp-gateway.%HUB_DOMAIN%/mcp
+      transport: streamable-http
+model: granite-3.1-8b-instruct       # aligned with Kairos / Lightspeed sidecar
+inference_store:
+  type: sqlite
+  db_path: /tmp/lightspeed.db
+----
+
 === Learn more
 
 * link:https://modelcontextprotocol.io/[Model Context Protocol (MCP) specification]
+* link:https://modelcontextprotocol.io/specification/2025-03-26/server/tools[MCP tools specification]
 * link:https://www.kuadrant.io/docs/[Kuadrant MCP Gateway extensions]
-* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub — Lightspeed and plugins]
+* link:https://llama-stack.readthedocs.io/[Llama Stack documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-lightspeed-plugin[Developer Hub Lightspeed plugin]
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub documentation]
 * link:https://developers.redhat.com/products/red-hat-developer-hub[Developer Hub product overview]
 
 
@@ -113,9 +152,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
+. Frame MCP as **safe automation for `%USER_NAME%`** — natural language triggers scoped tools, not raw cluster-admin `oc`.
 . `oc get mcpgatewayextension,mcpserverregistration -n mcp-system`.
-. Developer Hub `/lightspeed` — prompt: list Argo CD applications.
-. OpenShift AI dashboard → register MCP server URL from maas-workshop ConfigMap.
+. Developer Hub `/lightspeed` — prompt: "List Argo CD apps in OutOfSync state and suggest sync."
+. Show `llama-stack-run.yaml` tool_groups binding to `mcp-gateway.%HUB_DOMAIN%`.
+. OpenShift AI dashboard → register `ods-maas-mcp-server` MCP URL from maas-workshop ConfigMap.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Verify MCP CRDs and `MCPServerRegistration` in `mcp-system`
@@ -129,13 +170,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| MCP CRDs + controller | `components/mcp-gateway/` |
+| MCP CRDs + controller | `charts/all/mcp-gateway/` |
 | Lightspeed MCP | `llama-stack-run.yaml` tool_groups |
 |===
 

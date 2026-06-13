@@ -4,6 +4,8 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
+image::26-text-ai-predictive.png[Generative and predictive AI for factory alerts,960]
+
 NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 
@@ -17,12 +19,90 @@ Generative AI assists operators with natural-language summaries of alarms; predi
 
 Optional KServe InferenceService resources on the hub demonstrate full model serving for custom scikit-learn or ONNX models trained in DS workspaces. MaaS playground endpoints let `%USER_NAME%` test generative prompts for incident postmortems: "Summarize last hour Kafka lag and ACS violations for my namespace."
 
-Connect predictive alerts to module 26 end-user apps: Camel routes can fan out anomaly events to line-dashboard overlays and NeuroFace notifications. This closes the loop from telemetry → ML/statistical detection → human + generative AI response on the same OpenShift footprint. Verify with: `oc logs -l app=ie-anomaly-alerter -n industrial-edge-tst-all --tail=10`.
+Connect predictive alerts to module 28 end-user apps: Camel routes can fan out anomaly events to line-dashboard overlays and NeuroFace notifications. This closes the loop from telemetry → ML/statistical detection → human + generative AI response on the same OpenShift footprint.
+
+*ie-anomaly-alerter* — Prometheus-driven statistical alerts from Industrial Edge metrics:
+
+[source,yaml]
+----
+# charts/all/ie-anomaly-alerter/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ie-anomaly-alerter
+  namespace: industrial-edge-tst-all
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ie-anomaly-alerter
+  template:
+    metadata:
+      labels:
+        app: ie-anomaly-alerter
+    spec:
+      containers:
+        - name: alerter
+          image: quay.io/maximilianopizarro/ie-anomaly-alerter:latest
+          env:
+            - name: PROMETHEUS_URL
+              value: "http://prometheus-k8s.openshift-monitoring.svc:9090"
+            - name: QUERY
+              value: 'rate(kafka_consumer_lag{topic="dev-cluster"}[5m]) > 1000'
+            - name: ALERT_WEBHOOK
+              value: "http://mailpit.industrial-edge.svc:8025/api/v1/send"
+----
+
+*KServe InferenceService* — optional custom sklearn model on hub (trained in `ai-%USER_NAME%`):
+
+[source,yaml]
+----
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: custom-anomaly-model
+  namespace: ai-%USER_NAME%
+  annotations:
+    serving.kserve.io/deploymentMode: RawDeployment
+spec:
+  predictor:
+    model:
+      modelFormat:
+        name: sklearn
+      storage:
+        key: minio
+        path: anomaly-detection/custom-model
+      resources:
+        requests:
+          cpu: "200m"
+          memory: 1Gi
+----
+
+*MaaS generative prompt* — OpenAI-compatible request for incident postmortem:
+
+[source,yaml]
+----
+# POST https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions
+model: llama-scout-17b
+messages:
+  - role: system
+    content: "You are a factory shift supervisor summarizing Industrial Edge alerts."
+  - role: user
+    content: "Summarize last hour Kafka lag and ACS violations for namespace industrial-edge-tst-%USER_NAME%."
+max_tokens: 256
+temperature: 0.3
+# Authorization: APIKEY <kuadrant-key-from-module-23>
+----
+
+Verify with: `oc logs -l app=ie-anomaly-alerter -n industrial-edge-tst-all --tail=10`.
 
 === Learn more
 
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[Model serving on OpenShift AI]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.25/html/serving_models/[Model serving on OpenShift AI 2.25]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/working_with_connected_applications/index[Notebooks and connected apps]
+* link:https://onnxruntime.ai/docs/[ONNX Runtime — export path for custom models]
+* link:https://scikit-learn.org/stable/model_persistence.html[scikit-learn model persistence]
+* link:https://prometheus.io/docs/prometheus/latest/querying/basics/[Prometheus query basics]
 * link:https://www.redhat.com/en/blog/tag/artificial-intelligence[Red Hat AI blog]
 
 
@@ -72,9 +152,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Show ie-anomaly-alerter firing on threshold breach in metrics.
-. MaaS prompt: generative summary of recent IE alerts.
-. Mention optional KServe path for custom models.
+. Show `%USER_NAME%`'s predictive loop: sensor metrics → ie-anomaly-alerter → MaaS summary.
+. `oc logs -l app=ie-anomaly-alerter -n industrial-edge-tst-all --tail=20` — threshold breach.
+. MaaS prompt: generative postmortem of recent IE alerts via Kuadrant gateway.
+. Optional: KServe `custom-anomaly-model` in `ai-%USER_NAME%` for full ML path.
+. Bridge to module 28: alerts surface in line-dashboard operator UX.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Confirm ie-anomaly-alerter deployment running on your spoke
@@ -87,13 +169,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| IE alerter | `components/ie-anomaly-alerter/` |
+| IE alerter | `charts/all/ie-anomaly-alerter/` |
 | Kafka topics | `industrial-edge-tst-all` |
 |===
 

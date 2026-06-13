@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::13-deploy-industrial-edge.png[Industrial Edge factory stack on the east spoke — sensors, Kafka, dashboards,960]
+image::13-deploy-industrial-edge.png[Industrial Edge on east spoke,960]
 
 .IE stack in this lab
 [cols="1,1", options="header"]
@@ -35,13 +35,13 @@ Goal: confirm Industrial Edge workloads are reachable — line dashboard, Kafka 
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-Industrial Edge on OpenShift combines event streaming, integration, and visualization for factory and IoT scenarios. The entire stack is defined in `components/industrial-edge-tst/` and deployed via GitOps to spoke clusters.
+Industrial Edge on OpenShift combines event streaming, integration, and visualization for factory and IoT scenarios. The entire stack is defined in `charts/all/industrial-edge-tst/` and deployed via GitOps to spoke clusters.
 
 *Kafka cluster (KRaft mode):* A single-node KRaft broker with ephemeral storage, plus `temperature` and `vibration` topics for sensor data. Notice the Strimzi annotations and the Prometheus JMX exporter for observability:
 
 [source,yaml]
 ----
-# components/industrial-edge-tst/templates/kafka-cluster.yaml
+# charts/all/industrial-edge-tst/templates/kafka-cluster.yaml
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaNodePool
 metadata:
@@ -182,9 +182,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
+. `%USER_NAME%` now owns an Industrial Edge namespace on the east spoke — MQTT, Kafka, line-dashboard live.
 . Confirm Gitea org `ws-%USER_NAME%` and Argo CD sync on east.
-. Open line-dashboard route and Kafka Console topics.
-. Offer Plan B `demo-industrial-edge-east` if scaffold fails.
+. Open line-dashboard route and Kafka Console topics for sensor telemetry.
+. Offer Plan B `demo-industrial-edge-east` in `hybrid-mesh-shared-demos` if scaffold fails.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Scaffold IE or open Plan B `demo-industrial-edge-east`
@@ -197,13 +198,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| IE on spoke | `components/industrial-edge-tst/` (east Application) |
+| IE on spoke | `charts/all/industrial-edge-tst/` (east Application) |
 | Line dashboard | namespace `industrial-edge-tst-all` |
 |===
 

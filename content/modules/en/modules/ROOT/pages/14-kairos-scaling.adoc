@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-image::14-kairos-scaling.png[Kairos SmartScaling — node and workload recommendations before HPA kicks in,960]
+image::14-kairos-scaling.png[Kairos SmartScaling,960]
 
 .Kairos policies in the lab
 [cols="1,1", options="header"]
@@ -12,7 +12,7 @@ image::14-kairos-scaling.png[Kairos SmartScaling — node and workload recommend
 | Policy target | GitOps source
 
 | `machine-sensor-1` / `machine-sensor-2`
-| `components/kairos/templates/sensor-scan-policies.yaml`
+| `charts/all/kairos/templates/sensor-scan-policies.yaml`
 
 | Hub mirror policy
 | SmartScalingPolicy on hub (fleet-wide view)
@@ -33,13 +33,13 @@ NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-Kairos Community on OpenShift analyzes workload metrics and recommends resource adjustments through `SmartScalingPolicy` resources — bridging the gap between Kubernetes HPA (pod-level) and infrastructure provisioning (cluster-level). The policies live in `components/kairos/templates/sensor-scan-policies.yaml`.
+Kairos Community on OpenShift analyzes workload metrics and recommends resource adjustments through `SmartScalingPolicy` resources — bridging the gap between Kubernetes HPA (pod-level) and infrastructure provisioning (cluster-level). The policies live in `charts/all/kairos/templates/sensor-scan-policies.yaml`.
 
 *SmartScalingPolicy for sensor workloads:* Two policies monitor `machine-sensor-1` and `machine-sensor-2` deployments, each with CPU and memory rules that trigger resource increases with cooldown periods:
 
 [source,yaml]
 ----
-# components/kairos/templates/sensor-scan-policies.yaml
+# charts/all/kairos/templates/sensor-scan-policies.yaml
 apiVersion: kairos.maximilianopizarro.github.io/v1alpha1
 kind: SmartScalingPolicy
 metadata:
@@ -90,7 +90,7 @@ spec:
 
 [source,yaml]
 ----
-# components/kairos/templates/kairos-console.yaml
+# charts/all/kairos/templates/kairos-console.yaml
 apiVersion: kairos.maximilianopizarro.github.io/v1alpha1
 kind: KairosConsole
 metadata:
@@ -175,9 +175,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
+. Before HPA scales pods, Kairos rightsizes `%USER_NAME%`'s sensor workload requests — human-in-the-loop at the edge.
 . Open Kairos Console and walk through a pending SmartScalingPolicy recommendation.
 . Correlate UI action with `oc get smartscalingpolicy -A`.
-. Discuss human-in-the-loop approval for factory edge.
+. Discuss approval workflow for factory edge — automation with operator consent.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open Kairos Console and review one SmartScalingPolicy
@@ -190,14 +191,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| Kairos policies | `components/kairos/templates/sensor-scan-policies.yaml` |
-| Kairos Console | `components/kairos/` |
+| Kairos policies | `charts/all/kairos/templates/sensor-scan-policies.yaml` |
+| Kairos Console | `charts/all/kairos/` |
 |===
 
 Verify in the Showroom terminal:

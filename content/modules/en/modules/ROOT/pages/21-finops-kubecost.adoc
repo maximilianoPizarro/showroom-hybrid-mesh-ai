@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::21-finops-kubecost.png[FinOps with Kubecost — federated cost allocation across hub and spokes,960]
+image::21-finops-kubecost.png[Kubecost FinOps,960]
 
 .Kubecost federation in the lab
 [cols="1,1", options="header"]
@@ -12,7 +12,7 @@ image::21-finops-kubecost.png[FinOps with Kubecost — federated cost allocation
 | Component | Role
 
 | Kubecost primary
-| Hub — `components/kubecost/`
+| Hub — `charts/all/kubecost/`
 
 | Spoke agents
 | `east` / `west` report into hub ETL (MinIO-backed)
@@ -35,7 +35,7 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 Kubecost on OpenShift allocates Kubernetes spend by namespace, label, and cluster — federating data from hub primary and spoke agents into MinIO-backed ETL storage. Platform teams charge back factory edge tenants and compare ROSA node costs versus on-prem depreciation using consistent Kubernetes unit economics.
 
-In this lab, Kubecost deploys from `components/kubecost/` with agents on east/west reporting to the hub primary. Filter allocations to namespaces owned by `%USER_NAME%` and correlate idle capacity with Kairos recommendations from module 14.
+In this lab, Kubecost deploys from `charts/all/kubecost/` with agents on east/west reporting to the hub primary. Filter allocations to namespaces owned by `%USER_NAME%` and correlate idle capacity with Kairos recommendations from module 14.
 
 FinOps closes the executive loop from module 01: hybrid strategy without cost visibility fails in CFO review. Kubecost complements AWS Cost Explorer tags on ROSA by exposing pod-level waste inside the cluster boundary. Verify with: `oc get pods -n kubecost -l app=cost-analyzer`.
 
@@ -90,9 +90,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Kubecost UI: allocation by namespace for `%USER_NAME%`.
-. Show federated cluster dropdown (hub + spokes).
-. Compare idle cost with Kairos over-provision narrative.
+. FinOps closes the loop: `%USER_NAME%`'s namespace cost visible in Kubecost federated view (hub + spokes).
+. Kubecost UI: allocation by namespace for `ai-%USER_NAME%` and IE namespaces.
+. Show federated cluster dropdown (hub + east + west).
+. Compare idle cost with Kairos over-provision narrative from module 14.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open Kubecost and filter allocations to your namespace
@@ -105,14 +106,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| Kubecost | `components/kubecost/` |
-| MinIO data lake | `components/industrial-edge-minio/` |
+| Kubecost | `charts/all/kubecost/` |
+| MinIO data lake | `charts/all/industrial-edge-minio/` |
 |===
 
 Verify in the Showroom terminal:

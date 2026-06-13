@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~25 min</span>
 ++++
 
-image::23-ai-gateway.png[AI Gateway — Kuadrant-governed MaaS endpoint with OpenAI-compatible API,960]
+image::23-ai-gateway.png[AI Gateway — Kuadrant-governed MaaS endpoint,960]
 
 .MaaS gateway in the lab
 [cols="1,1", options="header"]
@@ -31,7 +31,7 @@ NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[
 In this module you expose **Model-as-a-Service (MaaS)** LLM inference through a governed **AI Gateway** — not by sharing raw OpenShift AI routes. You will:
 
 . Open **Developer Hub → Catalog → workshop-ai-gateway** and follow links to Topology, TechDocs, and the Kuadrant API portal.
-. Trace GitOps in `components/workshop-kuadrant-apis/` — `HTTPRoute` on the hub Gateway API, Istio `Gateway`, and Kuadrant `AuthPolicy` + `TokenRateLimitPolicy`.
+. Trace GitOps in `charts/all/workshop-kuadrant-apis/` — `HTTPRoute` on the hub Gateway API, Istio `Gateway`, and Kuadrant `AuthPolicy` + `TokenRateLimitPolicy`.
 . Mint an API key for `%USER_NAME%` in the Kuadrant UI and call `https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions` with a Bearer token.
 . Compare latency, headers, and error responses against direct MaaS from the OpenShift AI notebook (module 22) — the gateway adds auth, rate limits, and a stable external hostname for factory apps.
 
@@ -44,13 +44,17 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 The **AI Gateway** pattern centralizes how factory, edge, and partner applications consume large language models on OpenShift. Instead of every team embedding cluster-internal URLs and shared credentials, traffic enters through **`workshop-apis.%HUB_DOMAIN%`**, backed by **link:https://gateway-api.sigs.k8s.io/[Gateway API]** `HTTPRoute` resources on the hub, the Istio ingress gateway, and **link:https://www.kuadrant.io/docs/[Kuadrant]** policies for authentication, authorization, plan tiers, and token-based rate limiting.
 
-Three Kuadrant CRDs in `components/workshop-kuadrant-apis/templates/policies.yaml` govern the MaaS LLM endpoint — all attached to the same `HTTPRoute`:
+=== Why govern AI inference with an API gateway?
+
+Without a gateway, every factory app, OT script, and partner integration needs the raw MaaS URL and a shared API key — no per-user audit trail, no rate limits, and no plan tiers. The AI Gateway gives `%USER_NAME%` a Kuadrant API key scoped to `free` or `gold` plans: auth at the edge, token counters per user, and a stable external hostname that survives backend model changes.
+
+Three Kuadrant CRDs in `charts/all/workshop-kuadrant-apis/templates/policies.yaml` govern the MaaS LLM endpoint — all attached to the same `HTTPRoute`:
 
 *1. AuthPolicy — API key authentication + OPA authorization:*
 
 [source,yaml]
 ----
-# components/workshop-kuadrant-apis/templates/policies.yaml
+# charts/all/workshop-kuadrant-apis/templates/policies.yaml
 apiVersion: kuadrant.io/v1
 kind: AuthPolicy
 metadata:
@@ -166,7 +170,7 @@ spec:
 
 [source,yaml]
 ----
-# components/workshop-kuadrant-apis/templates/routes.yaml
+# charts/all/workshop-kuadrant-apis/templates/routes.yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -191,6 +195,27 @@ spec:
           kind: Hostname
           name: {{ .Values.apis.maas.host }}
           port: 443
+----
+
+*ServiceEntry* — Istio registers the external MaaS host for TLS origination (no in-cluster proxy Deployment):
+
+[source,yaml]
+----
+# charts/all/workshop-kuadrant-apis/templates/serviceentry.yaml
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: maas-external
+  namespace: hub-gateway-system
+spec:
+  hosts:
+    - maas-rhdp.apps.maas.redhatworkshops.io   # external RHDP LiteMaaS endpoint
+  location: MESH_EXTERNAL
+  ports:
+    - number: 443
+      name: https
+      protocol: HTTPS
+  resolution: DNS
 ----
 
 **Hands-on (~25 min):** Mint key for `%USER_NAME%` in Developer Hub Kuadrant UI, then:
@@ -279,9 +304,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
+. Explain why `%USER_NAME%` gets a Kuadrant API key instead of raw MaaS credentials — governance, not convenience.
 . Catalog → **workshop-ai-gateway** → inspect HTTPRoute in Topology.
-. Kuadrant UI: create API key; curl `/llm/v1/chat/completions` with Bearer token.
-. Show AuthPolicy + TokenRateLimitPolicy YAML paths in GitOps.
+. Kuadrant UI: create API key; `curl` `/llm/v1/chat/completions` with `Authorization: APIKEY`.
+. Show AuthPolicy + TokenRateLimitPolicy YAML in `charts/all/workshop-kuadrant-apis/`.
+. Trigger HTTP 429 by exceeding free-tier limits — demonstrate protection for shared MaaS.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open catalog **workshop-ai-gateway** and Kuadrant UI
@@ -294,13 +321,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| HTTPRoute + policies | `components/workshop-kuadrant-apis/` |
+| HTTPRoute + policies | `charts/all/workshop-kuadrant-apis/` |
 | Catalog | `catalog-ai-platform.yaml` → workshop-ai-gateway |
 |===
 

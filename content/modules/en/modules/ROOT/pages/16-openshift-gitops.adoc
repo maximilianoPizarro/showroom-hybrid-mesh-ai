@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::16-openshift-gitops.png[OpenShift GitOps — App-of-Apps with sync waves propagating to hub and spokes,960]
+image::16-openshift-gitops.png[OpenShift GitOps sync waves,960]
 
 .GitOps patterns in this repo
 [cols="1,1", options="header"]
@@ -12,13 +12,13 @@ image::16-openshift-gitops.png[OpenShift GitOps — App-of-Apps with sync waves 
 | Pattern | Where it lives
 
 | App-of-Apps root Application
-| `templates/component-applications.yaml`
+| `charts/region/hub/templates/component-applications.yaml`
 
 | Ordered rollout (operators → CRs → workloads)
 | `argocd.argoproj.io/sync-wave` on every component
 
 | Hub-only vs spoke placement
-| ACM Placement + ApplicationSet in `components/acm-hub-spoke/`
+| ACM Placement + ApplicationSet in `charts/all/acm-hub-spoke/`
 
 | Self-heal + prune
 | Argo CD `Application` spec in the same template
@@ -33,13 +33,13 @@ NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-OpenShift GitOps installs Argo CD as a managed operator and integrates with ACM ApplicationSets to propagate manifests hub-to-spoke. The **App-of-Apps** pattern in `templates/component-applications.yaml` is the single entry point: one Application per component, each with its own sync-wave, ignoreDifferences, and Helm valuesObject. Platform teams commit desired state to Git; controllers reconcile drift automatically.
+OpenShift GitOps installs Argo CD as a managed operator and integrates with ACM ApplicationSets to propagate manifests hub-to-spoke. The **App-of-Apps** pattern in `charts/region/hub/templates/component-applications.yaml` is the single entry point: one Application per component, each with its own sync-wave, ignoreDifferences, and Helm valuesObject. Platform teams commit desired state to Git; controllers reconcile drift automatically.
 
 *The App-of-Apps template* iterates `.Values.connectivityLink.apps` and generates one Application per component. Notice the key patterns:
 
 [source,yaml]
 ----
-# templates/component-applications.yaml (simplified)
+# charts/region/hub/templates/component-applications.yaml (simplified)
 {{- range .Values.connectivityLink.apps }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -57,7 +57,7 @@ spec:
   source:
     repoURL: {{ $.Values.gitops.repoUrl }}
     targetRevision: {{ $.Values.gitops.revision }}
-    path: components/{{ .path }}                               # each component in its own dir
+    path: charts/all/{{ .path }}                               # each component in its own dir
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .destinationNamespace }}
@@ -76,7 +76,7 @@ spec:
 
 [source,yaml]
 ----
-# templates/component-applications.yaml — ignoreDifferences (excerpt)
+# charts/region/hub/templates/component-applications.yaml — ignoreDifferences (excerpt)
 ignoreDifferences:
   - kind: Service
     jsonPointers: [/spec/clusterIP, /spec/clusterIPs]
@@ -102,7 +102,7 @@ ignoreDifferences:
 
 [source,yaml]
 ----
-# templates/component-applications.yaml — valuesObject for acm-hub-spoke
+# charts/region/hub/templates/component-applications.yaml — valuesObject for acm-hub-spoke
     helm:
       valuesObject:
         clusterDomain: {{ $domain }}
@@ -143,7 +143,7 @@ See link:https://docs.redhat.com/en/documentation/red_hat_openshift_gitops[OpenS
 === Key features
 
 * **Argo CD** on hub deploys hub and spoke components via ApplicationSet + Placements.
-* Sync waves order operators before workloads (see `templates/component-applications.yaml`).
+* Sync waves order operators before workloads (see `charts/region/hub/templates/component-applications.yaml`).
 * `%USER_NAME%` changes flow: Gitea PR → Argo sync → live cluster.
 
 === Business benefits
@@ -155,7 +155,7 @@ See link:https://docs.redhat.com/en/documentation/red_hat_openshift_gitops[OpenS
 
 [source,bash]
 ----
-aws codebuild create-project --name gitops-sync --source type=GITHUB,location=org/platform-hub-spoke-config
+aws codebuild create-project --name gitops-sync --source type=GITHUB,location=org/hybrid-mesh-platform
 aws codepipeline create-pipeline --cli-input-json file://gitops-pipeline.json
 # Lab: OpenShift GitOps pulls directly from Gitea/GitHub
 ----
@@ -164,7 +164,7 @@ aws codepipeline create-pipeline --cli-input-json file://gitops-pipeline.json
 
 [source,bash]
 ----
-az pipelines create --name gitops-sync --repository platform-hub-spoke-config   --repository-type tfsgit --branch main --yaml-path azure-pipelines.yml
+az pipelines create --name gitops-sync --repository hybrid-mesh-platform   --repository-type tfsgit --branch main --yaml-path azure-pipelines.yml
 ----
 
 
@@ -183,9 +183,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
+. GitOps is how `%USER_NAME%`'s scaffolded apps stay in sync — hub ApplicationSet pushes, spoke Argo CD pulls.
 . Argo CD UI: hub Application vs user spoke Application sources.
-. Highlight ApplicationSet generator for east/west matrix.
-. Show sync wave or health status for IE app.
+. Highlight ApplicationSet `fleet-spoke-push` generator for east/west matrix.
+. Show sync wave ordering: namespaces → operators → mesh → IE workloads.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Find your IE Application in Argo CD and note sync status
@@ -198,14 +199,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| Hub Applications | `templates/component-applications.yaml` |
-| ApplicationSet IE | `components/acm-hub-spoke/templates/applicationset.yaml` |
+| Hub Applications | `charts/region/hub/templates/component-applications.yaml` |
+| ApplicationSet IE | `charts/all/acm-hub-spoke/templates/applicationset.yaml` |
 |===
 
 Verify in the Showroom terminal:

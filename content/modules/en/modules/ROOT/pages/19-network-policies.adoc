@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::19-network-policies.png[OVN-Kubernetes NetworkPolicy — micro-segmentation for the IE dashboard,960]
+image::19-network-policies.png[NetworkPolicy micro-segmentation,960]
 
 .Policy demo in the lab
 [cols="1,1", options="header"]
@@ -18,7 +18,7 @@ image::19-network-policies.png[OVN-Kubernetes NetworkPolicy — micro-segmentati
 | OpenShift ingress namespace + `machine-sensor` pods only
 
 | GitOps source
-| `components/workshop-demos/templates/network-policy-demo.yaml`
+| `charts/all/workshop-demos/templates/network-policy-demo.yaml`
 |===
 
 NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
@@ -32,7 +32,7 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 Kubernetes NetworkPolicy on OpenShift OVN enforces micro-segmentation: only labeled pods and namespaces you explicitly allow can communicate — essential for zero-trust factory networks where compromised sensors must not lateral-move to MES backends. Red Hat OpenShift ships OVN-Kubernetes as the default CNI with policy-aware routing.
 
-This workshop applies a demo NetworkPolicy in `industrial-edge-tst-all` from `components/workshop-demos/templates/network-policy-demo.yaml`, allowing dashboard ingress while denying unexpected cross-namespace traffic. As `%USER_NAME%`, test allowed and denied paths using `oc exec` curl probes from the Showroom terminal.
+This workshop applies a demo NetworkPolicy in `industrial-edge-tst-all` from `charts/all/workshop-demos/templates/network-policy-demo.yaml`, allowing dashboard ingress while denying unexpected cross-namespace traffic. As `%USER_NAME%`, test allowed and denied paths using `oc exec` curl probes from the Showroom terminal.
 
 Compare to ROSA security groups plus Kubernetes NP: defense in depth at cloud VPC and pod layers. Pair this module with ACS (module 20) for runtime anomaly detection when policies are misconfigured or bypassed.
 
@@ -40,7 +40,7 @@ The configuration is declarative and minimal:
 
 [source,yaml]
 ----
-# components/workshop-demos/templates/network-policy-demo.yaml
+# charts/all/workshop-demos/templates/network-policy-demo.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -110,9 +110,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Apply or review demo NetworkPolicy in `industrial-edge-tst-all`.
-. Run allowed vs denied curl from Showroom terminal pods.
+. Governance protects `%USER_NAME%`'s namespace — NetworkPolicy demo in `industrial-edge-tst-all`.
+. Apply or review demo NetworkPolicy; run allowed vs denied curl from Showroom terminal.
 . Relate to ROSA security groups + NP defense in depth.
+. Preview ACS (module 20) and Kuadrant API keys as additional layers.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Review NetworkPolicy in `industrial-edge-tst-all`
@@ -125,13 +126,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| NP demo | `components/workshop-demos/templates/network-policy-demo.yaml` |
+| NP demo | `charts/all/workshop-demos/templates/network-policy-demo.yaml` |
 | IE namespace | `industrial-edge-tst-all` |
 |===
 

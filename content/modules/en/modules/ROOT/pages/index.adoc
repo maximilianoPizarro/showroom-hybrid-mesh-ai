@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture diagram,960]
+image::00-index-hybrid-mesh.png[Hybrid Mesh AI hub-spoke architecture,960]
 
 == Welcome
 
@@ -150,7 +150,7 @@ Any application that speaks the OpenAI REST API can consume MaaS without code ch
 
 == Connectivity Link — API management
 
-**Red Hat Connectivity Link (RHCL)** is an Application Foundation bundle (operator in `components/rhcl-operator/`) that includes **Kuadrant** controllers for Gateway API ingress and API management. Workshop policies live in `components/workshop-kuadrant-apis/`. Each workshop user gets an API key scoped to a plan:
+**Red Hat Connectivity Link (RHCL)** is an Application Foundation bundle (operator in `charts/all/rhcl-operator/`) that includes **Kuadrant** controllers for Gateway API ingress and API management. Workshop policies live in `charts/all/workshop-kuadrant-apis/`. Each workshop user gets an API key scoped to a plan:
 
 [source,yaml]
 ----
@@ -232,39 +232,159 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 | NeuroFace | link:https://neuroface.%HUB_DOMAIN%[NeuroFace] | Public (no login)
 |===
 
-== Red Hat product catalog in this workshop
+== Bill of Materials — Red Hat product catalog
+
+This workshop deploys the link:https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/bill-of-materials.md[Hybrid Mesh Platform Bill of Materials] — a Validated Patterns sandbox tier hub-spoke fleet. Every operator below is declared in Git under `charts/region/{hub,east,west}/values.yaml` and reconciled by Argo CD.
+
+[source,yaml]
+----
+# Bill of Materials — operator manifest (excerpt)
+# Source: https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/bill-of-materials.md
+platform:
+  openshift: "4.17+"          # tested 4.17–4.20
+  openshiftGitops: "1.20+"
+operators:
+  redhat:
+    - name: Advanced Cluster Management
+      channel: release-2.16
+      version: "2.16+"
+      gitPath: charts/all/acm-hub-spoke/
+      docs: https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/
+    - name: Advanced Cluster Security
+      channel: stable
+      version: "4.7+"
+      gitPath: charts/all/acs-secured-cluster/
+      docs: https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes/
+    - name: OpenShift AI (RHOAI)
+      channel: stable-2.25
+      version: "2.25+"
+      gitPath: charts/all/openshift-ai-hub/
+      docs: https://docs.redhat.com/en/documentation/red_hat_openshift_ai/
+    - name: Connectivity Link (RHCL)
+      channel: stable
+      version: "1.4+"
+      gitPath: charts/all/rhcl-operator/
+      docs: https://docs.redhat.com/en/documentation/red_hat_connectivity_link/
+    - name: Service Interconnect (Skupper)
+      channel: stable-2
+      version: "2.1+"
+      gitPath: charts/all/service-interconnect/
+      docs: https://docs.redhat.com/en/documentation/red_hat_service_interconnect/
+    - name: OpenShift Serverless
+      channel: stable
+      version: "1.35+"
+      gitPath: charts/all/operators/
+      docs: https://docs.redhat.com/en/documentation/openshift_serverless/
+    - name: AMQ Streams (Kafka)
+      channel: stable
+      version: "3.2+"
+      gitPath: charts/all/industrial-edge-*/
+      docs: https://docs.redhat.com/en/documentation/red_hat_amq/
+    - name: OpenTelemetry
+      channel: stable
+      version: "0.144+"
+      gitPath: charts/all/opentelemetry/
+      docs: https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/red_hat_build_of_opentelemetry/
+    - name: Tempo Operator
+      channel: stable
+      version: "0.20+"
+      gitPath: charts/all/tempo/
+      docs: https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/distributed_tracing/
+    - name: Developer Hub (RHDH)
+      channel: fast-1.9
+      version: "1.9+"
+      gitPath: charts/all/developer-hub/
+      docs: https://docs.redhat.com/en/documentation/red_hat_developer_hub/
+    - name: Quay
+      channel: stable-3.14
+      version: "3.14+"
+      gitPath: charts/all/quay-registry/
+      docs: https://docs.redhat.com/en/documentation/red_hat_quay/
+    - name: OpenShift Virtualization (CNV)
+      channel: stable
+      version: "4.20+"
+      gitPath: charts/all/cnv-example/
+      docs: https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/virtualization/
+    - name: Cluster Observability Operator
+      channel: stable
+      version: "1.0+"
+      gitPath: charts/all/cluster-observability-operator/
+      docs: https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/monitoring/
+    - name: Kiali
+      channel: stable
+      version: "2.22+"
+      gitPath: charts/all/kiali/
+      docs: https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/service_mesh/service-mesh-observability
+    - name: External Secrets
+      channel: stable-v1
+      version: "1.1+"
+      gitPath: charts/all/openshift-external-secrets/
+      docs: https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/security_and_compliance/external-secrets-operator-for-red-hat-openshift
+    - name: Dev Spaces
+      channel: stable
+      version: "3.19+"
+      gitPath: charts/all/devspaces/
+      docs: https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/
+  community:
+    - name: Grafana Operator
+      channel: v5
+      version: "5.24+"
+      gitPath: charts/all/grafana/
+    - name: Camel K
+      channel: stable-v2
+      version: "2.10+"
+      gitPath: charts/all/camel-k/
+      docs: https://camel.apache.org/camel-k/
+  external:
+    - name: clustergroup (VP framework)
+      version: "0.9.*"
+      source: charts.validatedpatterns.io
+    - name: Kafka Console
+      gitPath: charts/all/kafka-console/
+      docs: https://docs.redhat.com/en/documentation/red_hat_amq/
+    - name: Gitea
+      version: "12.5.0"
+      gitPath: charts/all/gitea/
+----
 
 === OpenShift Container Platform
-* **Advanced Cluster Management (ACM)** — fleet governance, policies, and GitOps-driven placement across hub and spokes.
-* **Red Hat Advanced Cluster Security (ACS)** — runtime threat detection and compliance (`stackrox`; outside ambient mesh).
-* **Quay** — container registry referenced by GitOps and template outputs.
-* **OpenShift GitOps** — Argo CD Applications and ApplicationSets sync workshop components from Git.
-* **Red Hat OpenShift Dev Spaces** — cloud IDE on the east spoke for Kaoto, Continue AI, and templates.
-* **OpenShift Pipelines** — Tekton pipelines in Industrial Edge and template workflows.
-* **OpenShift distributed tracing / cluster observability** — metrics, logging, and traces (Grafana, Kiali, OTEL).
-* **OpenShift Service Mesh 3** — ambient mesh with ztunnel and L7 policy for Industrial Edge apps.
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/[ACM 2.16+] — fleet governance, policies, GitOps placement (`charts/all/acm-hub-spoke/`)
+* link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes/[ACS 4.7+] — runtime threat detection (`stackrox`; outside ambient mesh)
+* link:https://docs.redhat.com/en/documentation/red_hat_quay/[Quay 3.14+] — container registry for GitOps and template outputs
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_gitops/[OpenShift GitOps 1.20+] — Argo CD Applications and ApplicationSets
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/[Dev Spaces 3.19+] — cloud IDE on east spoke (Kaoto, Continue AI)
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_pipelines/[OpenShift Pipelines] — Tekton CI in Industrial Edge
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/red_hat_build_of_opentelemetry/[OpenTelemetry] + link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/distributed_tracing/[Tempo] — distributed tracing
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/monitoring/[Cluster Observability Operator] — unified monitoring stack
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/service_mesh/[Service Mesh 3] — ambient mesh with ztunnel
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/service_mesh/service-mesh-observability[Kiali 2.22+] — mesh observability across hub and spokes
 
 === Red Hat Application Foundation
-* **Apache Camel on Kubernetes** — integrations and CDC pipelines in the Industrial Edge demo.
-* **Red Hat Connectivity Link (RHCL)** — Application Foundation bundle (`components/rhcl-operator/`) that delivers Gateway API ingress and **Kuadrant** API management at the hub: APIProduct catalog, AuthPolicy, PlanPolicy, and TokenRateLimitPolicy. Workshop routes and policies are in `components/workshop-kuadrant-apis/` and `components/hub-gateway/`.
+* link:https://camel.apache.org/camel-k/[Camel K 2.10+] — MQTT→Kafka integrations and CDC pipelines on spokes
+* link:https://docs.redhat.com/en/documentation/red_hat_connectivity_link/[RHCL 1.4+] — Gateway API ingress + **Kuadrant** API management (`charts/all/rhcl-operator/`, `charts/all/workshop-kuadrant-apis/`, `charts/all/hub-gateway/`)
+* link:https://docs.redhat.com/en/documentation/red_hat_service_interconnect/[Skupper 2.1+] — cross-cluster service interconnect (`charts/all/service-interconnect/`)
+* link:https://docs.redhat.com/en/documentation/red_hat_amq/[AMQ Streams 3.2+] — Kafka telemetry pipelines + link:https://docs.redhat.com/en/documentation/red_hat_amq/[Kafka Console] fleet UI on hub
 
 === Red Hat Advanced Developer Suite
-* **Developer Hub (Backstage)** — software catalog, scaffolder templates, and Topology for multicluster views.
-* **Software Templates** — golden paths for Industrial Edge, Camel, CNV, and OpenShift AI workspaces.
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/[Developer Hub 1.9+] — catalog, scaffolder, Topology, Lightspeed (`charts/all/developer-hub/`)
+* **Software Templates** — golden paths for Industrial Edge, Camel, CNV, OpenShift AI workspaces
 
 === OpenShift AI
-* **DataScienceCluster (DSC)** — unified operator for notebooks, serving, and model mesh on the hub.
-* **Model-as-a-Service (MaaS)** — shared LLM endpoint consumed by NeuroFace, Lightspeed, and DevSpaces.
-* **NeuroFace** — webcam object/face detection plus chat backed by MaaS.
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai/[OpenShift AI 2.25+] — DataScienceCluster, ModelMesh, KServe (`charts/all/openshift-ai-hub/`)
+* **MaaS** — shared LLM endpoint (`llama-scout-17b`, `deepseek-r1-distill-qwen-14b`, `codellama-7b-instruct`) consumed by NeuroFace, Lightspeed, DevSpaces
+* **NeuroFace** — webcam vision + MaaS chat (`charts/all/neuroface/`)
 
 === OpenShift Virtualization
-* **Container-native virtualization (CNV)** — VM workloads alongside containers via the workshop CNV demo template.
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/virtualization/[CNV 4.20+] — VM workloads via workshop CNV template (`charts/all/cnv-example/`)
+
+=== Security & secrets
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/security_and_compliance/external-secrets-operator-for-red-hat-openshift[External Secrets 1.1+] — MaaS keys and spoke tokens without Git commits
 
 === Community & third-party
-* **Kairos Community** — SmartScalingPolicy recommendations for Industrial Edge sensor workloads (community operator).
-* **Gitea** — per-user org `ws-%USER_NAME%` stores scaffolded Git repos for Argo CD.
-* **MinIO** — object storage for model artifacts and data lake patterns.
-* **Kubecost** — FinOps allocations on the hub cluster.
+* **Kairos Community** — SmartScalingPolicy for IE sensor workloads (`charts/all/kairos/`)
+* **Gitea** — per-user org `ws-%USER_NAME%` for scaffolded repos (`charts/all/gitea/`)
+* **MinIO** — object storage for model artifacts and data lake
+* **Kubecost** — FinOps allocations federated hub + spokes (`charts/all/kubecost/`)
 
 == Prerequisites
 
@@ -295,7 +415,48 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 | 25–28 | LLM, NeuroFace (OVMS), end-user apps
 |===
 
-NOTE: Modules 29–30 (verification & Agent Browser) are **facilitator/agent tasks** only — see `showroom-hybrid-mesh-ai/verification/`. Each Part B module supports **Overview-only** (~90 min) vs **Hands-on** (~4 h).
+NOTE: Facilitator verification lives in `showroom-hybrid-mesh-ai/verification/` and `29-full-verification.adoc` (not in learner nav). Each Part B module supports **Overview-only** (~90 min) vs **Hands-on** (~4 h).
+
+== Validated Patterns bootstrap
+
+The platform repo follows the link:https://validatedpatterns.io[Validated Patterns] framework. Key files:
+
+[source,yaml]
+----
+# pattern-metadata.yaml — VP registry entry (sandbox tier)
+metadata_version: "1.0"
+name: hybrid-mesh-platform
+display_name: Hybrid Mesh Platform
+tier: sandbox
+docs_url: https://maximilianopizarro.github.io/hybrid-mesh-platform/
+repo_url: https://github.com/maximilianoPizarro/hybrid-mesh-platform
+----
+
+[source,yaml]
+----
+# values-global.yaml — pattern-wide globals merged into every cluster role
+global:
+  pattern: hybrid-mesh-platform
+  singleArgoCD: true
+  argoNamespace: openshift-gitops
+main:
+  multiSourceConfig:
+    enabled: true
+    clusterGroupChartVersion: "0.9.*"
+    helmRepoUrl: https://charts.validatedpatterns.io
+----
+
+[source,bash]
+----
+# Bootstrap hub (RHDP injects deployer.domain per cluster)
+git clone https://github.com/maximilianoPizarro/hybrid-mesh-platform.git
+cd hybrid-mesh-platform
+cp values-secret.yaml.template values-secret.yaml
+./pattern.sh make install   # creates Application hybrid-mesh-platform-hub
+# Spokes: import via ACM → ApplicationSet fleet-spoke-push deploys east/west charts
+----
+
+Region paths: `charts/region/hub/`, `charts/region/east/`, `charts/region/west/` — shared workloads under `charts/all/`. See link:https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/validatedpatterns-docs/architecture.md[Architecture docs].
 
 == Registration & Plan B demos
 
@@ -339,9 +500,12 @@ Hands-on equivalents: ACM fleet (module 10), Kuadrant API gateway (module 20), O
 
 == Show and Tell
 
+. Open with the **Hybrid Mesh AI** value proposition: one hub governs fleet GitOps, mesh, security, and AI — spokes run factory workloads at the edge.
 . Walk the dual agenda: Part A strategy (01–05) then Part B hands-on (10–28).
-. Demo registration flow at `https://workshop-registration.%HUB_DOMAIN%` and Showroom redirect.
-. Point to Plan B shared demos in Developer Hub System `hybrid-mesh-shared-demos`.
+. Demo registration at link:https://workshop-registration.%HUB_DOMAIN%/?USER_NAME=%USER_NAME%[workshop registration] — audience receives `userN` and lands in Showroom with embedded `oc`.
+. Show the BOM YAML block above — every product is declarative Git, not manual install.
+. Point to Plan B shared demos: Developer Hub → System `hybrid-mesh-shared-demos`.
+. Tease the AI arc (modules 22–28): `%USER_NAME%` gets project `ai-%USER_NAME%`, governed MaaS, and NeuroFace on the same platform.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Skim hybrid cloud integration notes (AWS/Azure snippets)

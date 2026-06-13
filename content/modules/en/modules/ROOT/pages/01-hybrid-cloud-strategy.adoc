@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::01-hybrid-strategy.png[Hybrid Mesh AI platform — centralized hub, edge and cloud spokes,960]
+image::01-hybrid-strategy.png[Hybrid cloud strategy — hub and spokes,960]
 
 .This strategy maps to the lab like this
 [cols="1,1", options="header"]
@@ -108,14 +108,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| ACM fleet UI | `components/acm-hub-spoke/` |
-| Hub app-of-apps | `templates/component-applications.yaml` |
+| ACM fleet UI | `charts/all/acm-hub-spoke/` |
+| Hub app-of-apps | `charts/region/hub/templates/component-applications.yaml` |
 |===
 
 Verify in the Showroom terminal:

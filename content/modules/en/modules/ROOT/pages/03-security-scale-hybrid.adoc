@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::03-security-scale-hybrid.png[Defense in depth — Kuadrant, ambient mesh, ACS, and NetworkPolicy across hub and spokes,960]
+image::03-security-scale-hybrid.png[Security and scale in hybrid,960]
 
 .Four security layers in this lab
 [cols="1,1", options="header"]
@@ -36,7 +36,7 @@ Defense in depth in this lab spans four layers — each controlled by a single Y
 
 [source,yaml]
 ----
-# components/workshop-kuadrant-apis/templates/policies.yaml
+# charts/all/workshop-kuadrant-apis/templates/policies.yaml
 apiVersion: kuadrant.io/v1
 kind: AuthPolicy
 metadata:
@@ -67,7 +67,7 @@ spec:
 
 [source,yaml]
 ----
-# components/namespaces/templates/all.yaml — noMeshNamespaces
+# charts/all/namespaces/templates/all.yaml — noMeshNamespaces
 # These namespaces NEVER get istio.io/dataplane-mode=ambient:
 #   - stackrox        (ACS sensors would be disrupted by ztunnel interception)
 #   - gitea           (internal git traffic — no mesh overhead needed)
@@ -78,7 +78,7 @@ spec:
 
 [source,yaml]
 ----
-# components/acs-operator/templates/central.yaml
+# charts/all/acs-operator/templates/central.yaml
 apiVersion: platform.stackrox.io/v1alpha1
 kind: Central
 metadata:
@@ -107,7 +107,7 @@ spec:
 
 [source,yaml]
 ----
-# components/acs-secured-cluster/templates/secured-cluster.yaml
+# charts/all/acs-secured-cluster/templates/secured-cluster.yaml
 apiVersion: platform.stackrox.io/v1alpha1
 kind: SecuredCluster
 metadata:
@@ -133,7 +133,7 @@ spec:
 
 [source,yaml]
 ----
-# components/workshop-demos/templates/network-policy-demo.yaml
+# charts/all/workshop-demos/templates/network-policy-demo.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -246,13 +246,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| ACS operator | `components/acs-operator/` |
+| ACS operator | `charts/all/acs-operator/` |
 | ACS Central route | namespace `stackrox` |
 |===
 

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::15-observability.png[Multicluster observability — metrics, logs, traces, and IE Kafka dashboards,960]
+image::15-observability.png[Multicluster observability,960]
 
 .Observability stack in the lab
 [cols="1,1", options="header"]
@@ -15,7 +15,7 @@ image::15-observability.png[Multicluster observability — metrics, logs, traces
 | Hub Grafana — ACM federated dashboards
 
 | Application traces
-| OpenTelemetry (`components/opentelemetry/`) + Jaeger/Tempo
+| OpenTelemetry (`charts/all/opentelemetry/`) + Jaeger/Tempo
 
 | IE Kafka topics
 | Kafka Console on hub — `temperature`, `vibration`
@@ -35,7 +35,7 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 OpenShift observability spans cluster metrics, logs, traces, and custom dashboards federated across ACM-managed clusters. Red Hat builds on Prometheus, Loki or Elasticsearch patterns, Grafana, and OpenTelemetry Instrumentation CRs so application teams inherit platform-wide collectors without sidecar sprawl on every pod.
 
-This workshop deploys multicluster Grafana dashboards on the hub, OpenTelemetry collectors via `components/opentelemetry/`, and Kafka Console for IE topic inspection. As `%USER_NAME%`, filter dashboards to your namespace and correlate latency spikes with mesh traces in module 17.
+This workshop deploys multicluster Grafana dashboards on the hub, OpenTelemetry collectors via `charts/all/opentelemetry/`, and Kafka Console for IE topic inspection. As `%USER_NAME%`, filter dashboards to your namespace and correlate latency spikes with mesh traces in module 17.
 
 Executives should connect this module to module 21 (Kubecost): metrics prove SLO compliance while cost metrics prove efficiency — both required for hybrid FinOps. Use Showroom `oc` to list `GrafanaDashboard` CRs and confirm IE workloads emit scrape targets. Verify with: `oc get grafanadashboard -A`.
 
@@ -91,9 +91,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Open multicluster Grafana dashboard filtered to IE namespace.
-. Show Kafka Console and a sample OTEL trace (or metrics gap if trace pending).
-. Link metrics SLO story to upcoming Kubecost module.
+. `%USER_NAME%`'s workloads are now observable from the hub — multicluster Grafana, Kafka Console, OTEL traces.
+. Open multicluster Grafana dashboard filtered to IE namespace on east.
+. Show Kafka Console and sample OTEL trace (or metrics gap if trace pending).
+. Link metrics SLO story to upcoming Kubecost module 21.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open a multicluster Grafana dashboard for your IE namespace
@@ -106,14 +107,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| Grafana dashboards | `components/grafana-dashboards/` |
-| OTEL | `components/opentelemetry/` |
+| Grafana dashboards | `charts/all/grafana-dashboards/` |
+| OTEL | `charts/all/opentelemetry/` |
 |===
 
 Verify in the Showroom terminal:

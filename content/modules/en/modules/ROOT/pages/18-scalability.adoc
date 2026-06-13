@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::18-scalability.png[Three-tier scaling — Kairos nodes, HPA pods, Kafka buffering on IE workloads,960]
+image::18-scalability.png[HPA and Kafka scaling,960]
 
 .Scaling levers in the lab
 [cols="1,1", options="header"]
@@ -32,7 +32,7 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 Scalability on OpenShift spans horizontal pod autoscaling, Kafka partition scaling, and node-level recommendations from Kairos. HPA v2 watches CPU, memory, or custom metrics from Prometheus adapters; KafkaNodePool resources expand broker capacity when IE topics saturate consumer lag.
 
-In this lab, line-dashboard and related IE deployments include HPAs defined in workload manifests under `components/industrial-edge-tst/`. Trigger load via workshop scripts or simulated sensor rates, then watch pods scale in the Topology view as `%USER_NAME%`. Kafka scaling complements HPA by absorbing event bursts before pods reject traffic.
+In this lab, line-dashboard and related IE deployments include HPAs defined in workload manifests under `charts/all/industrial-edge-tst/`. Trigger load via workshop scripts or simulated sensor rates, then watch pods scale in the Topology view as `%USER_NAME%`. Kafka scaling complements HPA by absorbing event bursts before pods reject traffic.
 
 This module completes the capacity story started in module 14: Kairos proposes nodes, HPA adds pods, Kafka buffers events — together they mirror how a ROSA customer scales factory edge during production peaks without manual cluster admin intervention. Verify with: `oc get hpa -n industrial-edge-tst-all`.
 
@@ -87,9 +87,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Watch HPA scale line-dashboard pods under simulated load.
-. Show Kafka consumer lag recovering after buffer capacity.
-. Tie pod-scale (HPA) vs node-scale (Kairos) layering.
+. Under load, `%USER_NAME%`'s line-dashboard scales horizontally — HPA after Kairos rightsizing (module 14).
+. Watch HPA scale line-dashboard pods under simulated sensor load.
+. Show Kafka consumer lag recovering after buffer capacity absorbs burst.
+. Tie pod-scale (HPA) vs node-scale (Kairos) layering for factory edge.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Check HPA status for line-dashboard or related IE deployment
@@ -102,13 +103,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| IE workloads | `components/industrial-edge-tst/` |
+| IE workloads | `charts/all/industrial-edge-tst/` |
 | HPA / Kafka | spoke namespace `industrial-edge-tst-all` |
 |===
 

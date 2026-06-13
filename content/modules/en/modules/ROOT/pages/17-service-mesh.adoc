@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::17-service-mesh.png[OpenShift Service Mesh ambient — ztunnel mTLS without sidecars,960]
+image::17-service-mesh.png[Service Mesh ambient mode,960]
 
 .Ambient mesh in the lab
 [cols="1,1", options="header"]
@@ -12,7 +12,7 @@ image::17-service-mesh.png[OpenShift Service Mesh ambient — ztunnel mTLS witho
 | Piece | CRD / namespace
 
 | Control plane (ambient profile)
-| `Istio` CR in `istio-system` (`components/servicemeshoperator3/`)
+| `Istio` CR in `istio-system` (`charts/all/servicemeshoperator3/`)
 
 | ztunnel dataplane
 | DaemonSet — automatic mTLS between meshed pods
@@ -33,13 +33,13 @@ NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-OpenShift Service Mesh 3 uses ambient mode: a shared ztunnel layer handles mTLS and L4 telemetry without injecting sidecars. The entire mesh stack is defined in `components/servicemeshoperator3/templates/all.yaml` — three CRDs deploy the control plane, CNI, and ztunnel:
+OpenShift Service Mesh 3 uses ambient mode: a shared ztunnel layer handles mTLS and L4 telemetry without injecting sidecars. The entire mesh stack is defined in `charts/all/servicemeshoperator3/templates/all.yaml` — three CRDs deploy the control plane, CNI, and ztunnel:
 
 *Istio control plane (ambient profile):*
 
 [source,yaml]
 ----
-# components/servicemeshoperator3/templates/all.yaml
+# charts/all/servicemeshoperator3/templates/all.yaml
 apiVersion: sailoperator.io/v1
 kind: Istio
 metadata:
@@ -219,9 +219,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
+. Ambient mesh protects `%USER_NAME%`'s IE traffic with mTLS — no sidecar injection required.
 . Open Kiali graph for IE namespace — point out ambient ztunnel edges.
-. Note `stackrox` exclusion from ambient mesh.
-. Optional: show mTLS lock icon on service edges.
+. Note `stackrox` exclusion from ambient mesh (ACS runs outside mesh).
+. Optional: show mTLS lock icon on service edges in Kiali.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open Kiali and view traffic for your IE deployments
@@ -234,14 +235,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| OSSM3 subscription | `components/servicemeshoperator3/` |
-| Kiali | `components/kiali/` |
+| OSSM3 subscription | `charts/all/servicemeshoperator3/` |
+| Kiali | `charts/all/kiali/` |
 |===
 
 Verify in the Showroom terminal:

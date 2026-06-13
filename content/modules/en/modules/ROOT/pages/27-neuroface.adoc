@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::27-neuroface.png[NeuroFace — OVMS vision on-browser plus MaaS chat for factory operators,960]
+image::27-neuroface.png[NeuroFace — OVMS vision and MaaS chat,960]
 
 .NeuroFace architecture
 [cols="1,1", options="header"]
@@ -18,7 +18,7 @@ image::27-neuroface.png[NeuroFace — OVMS vision on-browser plus MaaS chat for 
 | MaaS `/v1/chat/completions` (module 23)
 
 | Deployment
-| `components/neuroface/` on hub
+| `charts/all/neuroface/` on hub
 
 | URL
 | `https://neuroface.%HUB_DOMAIN%`
@@ -35,7 +35,7 @@ Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and **Developer Hub → Cata
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-NeuroFace combines **OVMS local vision** (face/object detection via `components/neuroface/` with `ovms.enabled: true`) and **MaaS chat** at `/api/chat`. Hub **ModelMesh** serves platform models; NeuroFace OVMS handles low-latency webcam inference on the app namespace. See link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI documentation] for model serving patterns.
+NeuroFace combines **OVMS local vision** (face/object detection via `charts/all/neuroface/` with `ovms.enabled: true`) and **MaaS chat** at `/api/chat`. Hub **ModelMesh** serves platform models; NeuroFace OVMS handles low-latency webcam inference on the app namespace. See link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI documentation] for model serving patterns.
 
 **Overview-only (~10 min):** Developer Hub → **neuroface-workshop** → Topology; open UI without webcam.
 
@@ -43,11 +43,62 @@ NeuroFace combines **OVMS local vision** (face/object detection via `components/
 
 Catalog: System `hybrid-mesh-ai-platform` → Component **neuroface-workshop** (links UI + OpenShift AI dashboard).
 
+*Helm values* — NeuroFace chart configuration on hub:
+
+[source,yaml]
+----
+# charts/all/neuroface/values.yaml
+replicaCount: 1
+route:
+  enabled: true
+  hostname: neuroface.%HUB_DOMAIN%
+ovms:
+  enabled: true                        # local webcam inference — low latency
+  modelName: face-detection-0200
+  modelPath: /models/face-detection
+maas:
+  enabled: true
+  apiBase: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
+  model: llama-scout-17b
+  secretName: neuroface-maas-credentials  # from External Secrets, never Git
+chat:
+  endpoint: /api/chat                    # OpenAI-compatible proxy to MaaS
+----
+
+*OVMS InferenceService* — face detection model served locally in `neuroface` namespace:
+
+[source,yaml]
+----
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: neuroface-ovms
+  namespace: neuroface
+  annotations:
+    serving.kserve.io/deploymentMode: RawDeployment
+spec:
+  predictor:
+    model:
+      modelFormat:
+        name: openvino
+      runtime: ovms-1.x
+      storage:
+        key: minio
+        path: neuroface/face-detection-0200
+      resources:
+        requests:
+          cpu: "500m"
+          memory: 1Gi
+----
+
 === Learn more
 
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[OpenShift AI model serving]
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI overview]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.25/html/serving_models/[OpenShift AI model serving]
+* link:https://docs.openvino.ai/2024/openvino-workflow/model-server/ovms_docs_introduction.html[OpenVINO Model Server]
+* link:https://github.com/maximilianoPizarro/neuroface[NeuroFace upstream chart]
+* link:https://platform.openai.com/docs/api-reference/chat[OpenAI chat/completions API — MaaS compatible]
 * link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Run AI workloads on OpenShift AI]
+* link:https://www.redhat.com/en/blog/building-trusted-ai-platform-openshift[Trusted AI platform on OpenShift]
 
 
 == Features, benefits & cloud configuration
@@ -98,9 +149,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Open `https://neuroface.%HUB_DOMAIN%` — webcam object detection live.
+. Multimodal capstone for `%USER_NAME%`: OVMS vision at the edge, MaaS chat at the hub — split latency/cost optimally.
+. Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] — webcam object detection live.
 . Send chat question about detected object; show MaaS backend (not LibreChat).
-. Highlight OVMS local vision + centralized chat governance.
+. Developer Hub → **neuroface-workshop** → Topology shows OVMS + Route.
+. Highlight: same `llama-scout-17b` model as modules 22–26, governed via Kuadrant when external.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open `https://neuroface.%HUB_DOMAIN%` and test webcam detection
@@ -113,13 +166,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| NeuroFace chart | `components/neuroface/` |
+| NeuroFace chart | `charts/all/neuroface/` |
 | Route | `neuroface.%HUB_DOMAIN%` |
 |===
 

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~10 min</span>
 ++++
 
-image::04-aws-ai-integration.png[OpenShift AI inference architecture — portable alternative to Bedrock and SageMaker,960]
+image::04-aws-ai-integration.png[AWS and OpenShift AI integration,960]
 
 .AWS AI services vs this lab
 [cols="1,1", options="header"]
@@ -111,13 +111,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| OpenShift AI hub | `components/openshift-ai-hub/` |
+| OpenShift AI hub | `charts/all/openshift-ai-hub/` |
 | MaaS credentials | namespace `maas-workshop` |
 |===
 

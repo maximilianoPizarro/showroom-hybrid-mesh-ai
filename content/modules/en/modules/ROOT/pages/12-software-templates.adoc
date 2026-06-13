@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~18 min</span>
 ++++
 
-image::12-software-templates.png[Developer Hub software templates — golden paths from catalog to GitOps,960]
+image::12-software-templates.png[Developer Hub software templates,960]
 
 .Golden paths in this lab
 [cols="1,1", options="header"]
@@ -18,7 +18,7 @@ image::12-software-templates.png[Developer Hub software templates — golden pat
 | Pre-deployed IE, AI Gateway, MCP, NeuroFace without scaffold
 
 | Catalog source
-| `components/developer-hub/files/catalog/`
+| `charts/all/developer-hub/files/catalog/`
 
 | Post-scaffold verify
 | Developer Hub → Topology + OpenShift GitOps app sync
@@ -35,13 +35,13 @@ You will create (or browse) a workload from **Developer Hub → Create**. If you
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-Red Hat Developer Hub software templates encode golden paths: parameterized scaffolder actions create Git repos, register catalog entities, and trigger Argo CD Applications with guardrails already wired. The Developer Hub deployment is configured via `components/developer-hub/` with the App-of-Apps template injecting extensive plugin configuration.
+Red Hat Developer Hub software templates encode golden paths: parameterized scaffolder actions create Git repos, register catalog entities, and trigger Argo CD Applications with guardrails already wired. The Developer Hub deployment is configured via `charts/all/developer-hub/` with the App-of-Apps template injecting extensive plugin configuration.
 
 *Developer Hub valuesObject in the App-of-Apps* shows how the platform team configures every plugin declaratively — RBAC, Lightspeed AI, Kuadrant, TechDocs, notifications, and multicluster Kubernetes Topology:
 
 [source,yaml]
 ----
-# templates/component-applications.yaml — developer-hub valuesObject (excerpt)
+# charts/region/hub/templates/component-applications.yaml — developer-hub valuesObject (excerpt)
 helm:
   valuesObject:
     clusterDomain: {{ $domain }}
@@ -136,9 +136,10 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Live Developer Hub Create flow for Industrial Edge template.
-. Show catalog YAML source and generated Gitea repo URL pattern.
-. Demonstrate Plan B fallback entity in `hybrid-mesh-shared-demos`.
+. Golden path for `%USER_NAME%`: Developer Hub **Create** → Industrial Edge template → Gitea org `ws-%USER_NAME%`.
+. Live scaffolder flow: catalog YAML → generated repo → Argo CD Application on east/west.
+. Show catalog source at `charts/all/developer-hub/files/catalog/`.
+. Demonstrate Plan B fallback in System `hybrid-mesh-shared-demos` if scaffold fails.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Browse Developer Hub Create templates list
@@ -151,14 +152,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
 | Template catalog | `docs/assets/backstage/software-templates/` |
-| Plan B demos | `components/workshop-demos/files/catalog/hybrid-mesh-shared-demos.yaml` |
+| Plan B demos | `charts/all/workshop-demos/files/catalog/hybrid-mesh-shared-demos.yaml` |
 |===
 
 Verify in the Showroom terminal:

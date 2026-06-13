@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::29-full-verification.png[Full-stack verification — hub, spokes, mesh, GitOps, security, and AI checkpoints,960]
+image::29-full-verification.png[Full-stack verification,960]
 
 .Facilitator verification scope
 [cols="1,1", options="header"]

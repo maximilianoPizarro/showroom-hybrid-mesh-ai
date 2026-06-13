@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::22-openshift-ai.png[OpenShift AI — DataScienceCluster, KServe, and ModelMesh inference on the hub,960]
+image::22-openshift-ai.png[OpenShift AI — DSC, ModelMesh, and MaaS on hub,960]
 
 .OpenShift AI stack in the lab
 [cols="1,1", options="header"]
@@ -35,13 +35,13 @@ Open the **OpenShift AI dashboard** → project **ai-%USER_NAME%** → **Workben
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-OpenShift AI on the hub runs **ModelMesh + Serverless (Knative)** via `default-dsc`. Each user owns project **`ai-%USER_NAME%`** with pre-provisioned **Jupyter notebook** `workshop-notebook`, MaaS secret, and Developer Hub catalog entity. The configuration lives in `components/openshift-ai-hub/`.
+OpenShift AI on the hub runs **ModelMesh + Serverless (Knative)** via `default-dsc`. Each user owns project **`ai-%USER_NAME%`** with pre-provisioned **Jupyter notebook** `workshop-notebook`, MaaS secret, and Developer Hub catalog entity. The configuration lives in `charts/all/openshift-ai-hub/`.
 
 *App-of-Apps valuesObject for OpenShift AI* configures model serving modes, user projects, MCP integration, and available MaaS models — all declarative:
 
 [source,yaml]
 ----
-# templates/component-applications.yaml — openshift-ai-hub valuesObject
+# charts/region/hub/templates/component-applications.yaml — openshift-ai-hub valuesObject
 helm:
   valuesObject:
     clusterDomain: {{ $domain }}
@@ -71,6 +71,91 @@ helm:
           displayName: CodeLlama 7B Instruct
 ----
 
+*DataScienceCluster* — the operator reconciles all RHOAI components from one CR:
+
+[source,yaml]
+----
+# charts/all/openshift-ai-hub/templates/datasciencecluster.yaml
+apiVersion: datasciencecluster.opendatahub.io/v1
+kind: DataScienceCluster
+metadata:
+  name: default-dsc
+spec:
+  components:
+    dashboard:
+      managementState: Managed          # ODS dashboard UI
+    workbenches:
+      managementState: Managed          # Jupyter / VS Code workbenches
+    modelmeshserving:
+      managementState: Managed          # shared multi-model runtime
+    datasciencepipelines:
+      managementState: Managed          # Kubeflow-style pipelines
+    kserve:
+      managementState: Managed          # Knative-based single-model serving
+      serving:
+        managementState: Managed
+        defaultDeploymentMode: ModelMesh  # workshop default; MaaS proxies use RawDeployment
+----
+
+*InferenceService `workshop-sklearn`* — one sklearn model per user project via ModelMesh:
+
+[source,yaml]
+----
+# charts/all/openshift-ai-hub/templates/user-projects.yaml (per ai-userN)
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: workshop-sklearn
+  namespace: ai-%USER_NAME%
+  annotations:
+    serving.kserve.io/deploymentMode: ModelMesh   # shared runtime, not dedicated pod
+spec:
+  predictor:
+    model:
+      modelFormat:
+        name: sklearn
+      storage:
+        key: minio
+        path: anomaly-detection/model    # artifact in hub MinIO data lake
+      resources:
+        requests:
+          cpu: "100m"
+          memory: 512Mi
+----
+
+*MaaS proxy InferenceService* — external LLM routed through OpenShift AI (RawDeployment):
+
+[source,yaml]
+----
+# charts/all/openshift-ai-hub/templates/maas-proxies.yaml
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: maas-llama-scout-17b
+  namespace: maas-workshop
+  annotations:
+    serving.kserve.io/deploymentMode: RawDeployment  # dedicated pod for external API proxy
+spec:
+  predictor:
+    containers:
+      - name: kserve-container
+        image: quay.io/opendatahub/openvino_model_server:latest
+        env:
+          - name: OPENAI_API_BASE
+            valueFrom:
+              secretKeyRef:
+                name: openshift-ai-maas-credentials
+                key: OPENAI_API_BASE     # https://maas-rhdp.apps.maas.redhatworkshops.io/v1
+          - name: OPENAI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: openshift-ai-maas-credentials
+                key: OPENAI_API_KEY
+        args:
+          - --rest_port=8080
+          - --model_name=llama-scout-17b
+----
+
 **Overview-only (~10 min):** Catalog → **OpenShift AI — %USER_NAME%** → open dashboard; show Playground in `maas-workshop` (do not run notebook).
 
 **Hands-on (~30 min):** Launch **workshop-notebook**, run `maas-smoke-test.ipynb`, open **AI Assistants → MCP Servers** and add `ods-maas-mcp-server` URL from ConfigMap `ods-mcp-server-registration`. In **ai-%USER_NAME%** → **Models**, confirm **`workshop-sklearn`** InferenceService (ModelMesh) is Ready; test predict from dashboard or `curl` the internal predictor URL.
@@ -94,11 +179,14 @@ See link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-mana
 
 === Learn more
 
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI documentation]
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[Serving models — ModelMesh and KServe]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai/[OpenShift AI documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.25/html/serving_models/[Serving models — ModelMesh and KServe 2.25]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/working_with_connected_applications/index[Connected applications and notebooks]
+* link:https://ai-on-openshift.io/[AI on OpenShift — community recipes]
+* link:https://www.redhat.com/en/topics/ai/what-is-ai-model-serving[What is AI model serving — Red Hat]
+* link:https://huggingface.co/meta-llama[Meta Llama models — upstream source for llama-scout-17b]
+* link:https://developers.redhat.com/learn/openshift-ai[OpenShift AI learning paths]
 * link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Run AI workloads on OpenShift AI]
-* link:https://www.redhat.com/en/blog/tag/artificial-intelligence[Red Hat AI blog]
 
 
 == Features, benefits & cloud configuration
@@ -149,9 +237,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. `oc get dsc` — confirm Ready; open **workshop-notebook** in ai-%USER_NAME%.
-. Developer Hub → **OpenShift AI — %USER_NAME%** + **Playground** in maas-workshop.
-. Show MCP server deployment `ods-maas-mcp-server` in maas-workshop.
+. Frame the AI platform story: **AI is a platform service, not a team silo** — `%USER_NAME%` gets project `ai-%USER_NAME%` without standing up inference infrastructure.
+. `oc get dsc` — confirm `Ready`; open **workshop-notebook** in `ai-%USER_NAME%`.
+. Developer Hub → **OpenShift AI — %USER_NAME%** → show Topology linking to hub DSC.
+. Demo **Playground** in `maas-workshop` with `llama-scout-17b` — same backend modules 23–28 consume.
+. Show MCP server `ods-maas-mcp-server` — agents register models without raw API keys in chat.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Run `oc get dsc` and confirm DataScienceCluster Ready
@@ -166,13 +256,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| DSC + ModelMesh | `components/openshift-ai-hub/` |
+| DSC + ModelMesh | `charts/all/openshift-ai-hub/` |
 | Notebooks | `user-projects.yaml` → `workshop-notebook` |
 | ModelMesh ISVC | `workshop-sklearn` per `ai-userN` |
 | MCP + Playground | `ods-mcp-server.yaml`, `dashboard-config.yaml` |

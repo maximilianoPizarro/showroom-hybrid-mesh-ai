@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~20 min</span>
 ++++
 
-image::25-llm-rag.png[LLM + RAG — factory runbooks retrieved and answered via governed MaaS,960]
+image::25-llm-rag.png[LLM and RAG via governed MaaS,960]
 
 .RAG flow in the lab
 [cols="1,1", options="header"]
@@ -35,16 +35,89 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 Large language models and retrieval-augmented generation (RAG) on OpenShift combine centralized inference with domain-specific context from factory docs, runbooks, and sensor logs — without exporting proprietary data to public SaaS. Red Hat Developer Hub Lightspeed assists developers in-catalog; Kairos Console agents answer scaling questions; Continue AI in DevSpaces suggests code inline using the same MaaS backend.
 
-RAG architecture in hybrid manufacturing typically indexes PDFs and SOPs into a vector store (customer choice) while the LLM runs on link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI] ModelMesh or external MaaS. In this lab, you configure Lightspeed deployment in `components/developer-hub/templates/lightspeed.yaml` and test prompts against the shared MaaS endpoint — observe latency and token usage suitable for shop-floor Wi-Fi constraints.
+RAG architecture in hybrid manufacturing typically indexes PDFs and SOPs into a vector store (customer choice) while the LLM runs on link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI] ModelMesh or external MaaS. In this lab, you configure Lightspeed deployment in `charts/all/developer-hub/templates/lightspeed.yaml` and test prompts against the shared MaaS endpoint — observe latency and token usage suitable for shop-floor Wi-Fi constraints.
 
-As `%USER_NAME%`, open Developer Hub, trigger Lightspeed on a catalog Component, and compare responses with Continue AI in a DevSpaces workspace. Module 25 extends the same MaaS path to multimodal NeuroFace chat — proving one governance model serves dev, ops, and end-user AI surfaces.
+As `%USER_NAME%`, open Developer Hub, trigger Lightspeed on a catalog Component, and compare responses with Continue AI in a DevSpaces workspace. Module 27 extends the same MaaS path to multimodal NeuroFace chat — proving one governance model serves dev, ops, and end-user AI surfaces.
+
+*Lightspeed sidecar deployment* — Llama Stack + LCS containers in the Developer Hub pod:
+
+[source,yaml]
+----
+# charts/all/developer-hub/templates/lightspeed.yaml (excerpt)
+apiVersion: backstage.io/v1alpha1
+kind: Backstage
+metadata:
+  name: developer-hub
+spec:
+  application:
+    extraContainers:
+      - name: llama-stack
+        image: quay.io/rh-lightspeed/llama-stack:latest
+        env:
+          - name: LLAMA_STACK_CONFIG
+            value: /etc/lightspeed/llama-stack-run.yaml
+          - name: OPENAI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: developer-hub-oidc-auth
+                key: LIGHTSPEED_API_KEY
+        volumeMounts:
+          - name: lightspeed-config
+            mountPath: /etc/lightspeed
+      - name: lcs
+        image: quay.io/rh-lightspeed/lcs:latest
+        args: ["--model", "granite-3.1-8b-instruct"]
+----
+
+*Continue AI in DevSpaces* — inline code suggestions using the same MaaS backend on east spoke:
+
+[source,yaml]
+----
+# charts/all/devspaces/templates/continue-ai-sync.yaml (excerpt)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: continue-ai-config
+  namespace: devspaces
+stringData:
+  config.json: |
+    {
+      "models": [{
+        "title": "Workshop MaaS",
+        "provider": "openai",
+        "model": "llama-scout-17b",
+        "apiBase": "https://maas-rhdp.apps.maas.redhatworkshops.io/v1",
+        "apiKey": "<from-openshift-external-secrets>"
+      }]
+    }
+----
+
+*RAG index pattern* — customer choice for vector store; LLM stays on OpenShift AI / MaaS:
+
+[source,yaml]
+----
+# Example notebook cell — embed factory SOPs (run in ai-%USER_NAME% workshop-notebook)
+# 1. Chunk TechDocs / PDF runbooks from Developer Hub entity repos
+# 2. Store embeddings in customer vector DB (pgvector, Milvus, OpenSearch)
+# 3. Retrieve top-k chunks → inject into MaaS chat/completions prompt
+rag_query:
+  question: "What is the safe shutdown procedure for machine-sensor-1?"
+  context_docs: 5                    # top-k retrieved chunks
+  model: llama-scout-17b
+  endpoint: https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions
+  auth: APIKEY                       # Kuadrant key from module 23
+----
 
 === Learn more
 
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai/[OpenShift AI documentation]
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-lightspeed-plugin[Developer Hub Lightspeed plugin]
-* link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[AI workloads on OpenShift AI]
 * link:https://www.redhat.com/en/topics/ai/what-is-retrieval-augmented-generation[What is RAG — Red Hat]
+* link:https://python.langchain.com/docs/tutorials/rag/[LangChain RAG tutorial]
+* link:https://ai-on-openshift.io/odh-rag/[RAG on OpenShift AI — community guide]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/[Dev Spaces — Continue AI integration]
+* link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[AI workloads on OpenShift AI]
+* link:https://www.redhat.com/en/blog/building-trusted-ai-platform-openshift[Building a trusted AI platform on OpenShift]
 
 
 == Features, benefits & cloud configuration
@@ -92,9 +165,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Trigger Developer Hub Lightspeed on a catalog Component live.
-. Optional DevSpaces Continue AI inline suggestion using MaaS.
-. Discuss RAG index placement (customer choice) vs LLM on OpenShift AI.
+. Every operator tool consumes the **same governed AI** — Lightspeed, Continue AI, and NeuroFace share MaaS.
+. Trigger Developer Hub Lightspeed on a catalog Component as `%USER_NAME%`.
+. Optional: DevSpaces Continue AI inline suggestion on east spoke using MaaS.
+. Walk the RAG YAML pattern: index in customer DB, infer via Kuadrant gateway.
+. Discuss latency on shop-floor Wi-Fi — why edge vision (NeuroFace OVMS) + hub LLM is optimal.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Trigger Lightspeed in Developer Hub on a catalog entity
@@ -107,13 +182,13 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| Developer Hub Lightspeed | `components/developer-hub/` |
+| Developer Hub Lightspeed | `charts/all/developer-hub/` |
 | MaaS endpoint | hub `maas-workshop` |
 |===
 

@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::11-hybrid-mesh.png[Hybrid mesh — Gateway API on hub, Skupper tunnels to spoke services,960]
+image::11-hybrid-mesh.png[Hybrid mesh architecture,960]
 
 .Traffic path through the lab
 [cols="1,1", options="header"]
@@ -12,13 +12,13 @@ image::11-hybrid-mesh.png[Hybrid mesh — Gateway API on hub, Skupper tunnels to
 | Hop | Component in Git
 
 | External client → hub
-| OpenShift Route + `hub-gateway` Gateway (`components/hub-gateway/`)
+| OpenShift Route + `hub-gateway` Gateway (`charts/all/hub-gateway/`)
 
 | Hub ingress routing
 | HTTPRoute in `hub-gateway-system`
 
 | Cross-cluster link
-| Skupper VAN / Connectivity Link (`components/skupper/`)
+| Skupper VAN / Connectivity Link (`charts/all/service-interconnect/`)
 
 | Spoke workload
 | Industrial Edge line-dashboard on `east`
@@ -35,13 +35,13 @@ You will trace how external traffic reaches Industrial Edge on a spoke: hub Gate
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-Hybrid mesh architecture connects application networks across clusters without flattening VPCs or exposing kube-apiserver endpoints publicly. The hub runs a single **Istio Gateway** that terminates all external traffic; Skupper tunnels carry requests to spoke services. The configuration lives in `components/hub-gateway/`.
+Hybrid mesh architecture connects application networks across clusters without flattening VPCs or exposing kube-apiserver endpoints publicly. The hub runs a single **Istio Gateway** that terminates all external traffic; Skupper tunnels carry requests to spoke services. The configuration lives in `charts/all/hub-gateway/`.
 
 *Hub Gateway — the single entry point:* One Istio-class Gateway with a ClusterIP service (no LoadBalancer — OpenShift Routes handle TLS termination upstream):
 
 [source,yaml]
 ----
-# components/hub-gateway/templates/gateway.yaml
+# charts/all/hub-gateway/templates/gateway.yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -65,7 +65,7 @@ spec:
 
 [source,yaml]
 ----
-# components/workshop-kuadrant-apis/templates/routes.yaml (pattern)
+# charts/all/workshop-kuadrant-apis/templates/routes.yaml (pattern)
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -93,7 +93,7 @@ spec:
           port: 443
 ----
 
-*Skupper Sites and Connectors* in `components/service-interconnect/` bridge the hub-gateway-system to spoke namespaces, carrying traffic for IE frontends, Kafka Console, and cross-cluster observability — all encrypted over the Skupper tunnel without VPC peering.
+*Skupper Sites and Connectors* in `charts/all/service-interconnect/` bridge the hub-gateway-system to spoke namespaces, carrying traffic for IE frontends, Kafka Console, and cross-cluster observability — all encrypted over the Skupper tunnel without VPC peering.
 
 Verify from the Showroom terminal:
 
@@ -165,9 +165,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. Trace external URL → hub HTTPRoute → Skupper → spoke IE frontend.
-. Display Skupper site/connector status in console.
-. Relate to ROSA ALB + private link narrative from Part A.
+. `%USER_NAME%`'s factory apps will reach the hub through one Gateway — no VPC peering between plants and cloud.
+. Trace external URL → hub HTTPRoute → Skupper VAN → spoke IE frontend.
+. Display Skupper `sitesInNetwork: 3` in console observer.
+. Show Validated Patterns region layout: `charts/region/hub`, `charts/region/east`, `charts/region/west`.
+. Relate to ROSA ALB + private link narrative from Part A module 02.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Inspect hub HTTPRoute and Skupper resources in console
@@ -178,16 +180,43 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * Showroom integrated `oc` terminal — use hub context unless module says east/west.
 
+== Validated Patterns region layout
+
+The mesh architecture maps to the VP single-branch region strategy:
+
+[source,yaml]
+----
+# values-global.yaml — pattern-wide globals
+global:
+  pattern: hybrid-mesh-platform
+  singleArgoCD: true
+main:
+  multiSourceConfig:
+    clusterGroupChartVersion: "0.9.*"
+    helmRepoUrl: https://charts.validatedpatterns.io
+----
+
+[source,bash]
+----
+# Region bootstrap paths (single branch: main)
+charts/region/hub/    # ACM, Developer Hub, ACS Central, hub-gateway, OpenShift AI
+charts/region/east/   # Industrial Edge, Skupper connector, DevSpaces
+charts/region/west/   # IE replica, Skupper connector
+charts/all/           # 50+ shared Helm charts synced by Argo CD
+----
+
+See link:https://validatedpatterns.io[Validated Patterns] and link:https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/validatedpatterns-docs/architecture.md[Architecture docs].
+
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| Hub gateway | `components/hub-gateway/` |
-| Skupper | `components/service-interconnect/` |
+| Hub gateway | `charts/all/hub-gateway/` |
+| Skupper | `charts/all/service-interconnect/` |
 |===
 
 Verify in the Showroom terminal:

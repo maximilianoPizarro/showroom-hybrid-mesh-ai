@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::28-ai-end-user-apps.png[AI embedded in factory operator apps — line dashboard, alerts, and MaaS insights,960]
+image::28-ai-end-user-apps.png[AI in factory operator apps,960]
 
 .End-user touchpoints
 [cols="1,1", options="header"]
@@ -46,11 +46,93 @@ This module integrates modules 13–25: verify line-dashboard displays live IE d
 
 Platform teams win when AI is invisible infrastructure: OpenShift AI, MaaS, and NeuroFace become services catalog entries — app squads bind them through link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub] dependencies without rebuilding ML pipelines per plant.
 
+=== End-to-end AI trace (modules 22–28)
+
+[source,yaml]
+----
+# Capstone flow for user %USER_NAME%
+trace:
+  - step: "Sensor publishes temperature"
+    cluster: east
+    component: machine-sensor-1
+  - step: "MQTT → Kafka via Camel K"
+    cluster: east
+    component: mqtt-to-kafka
+  - step: "Prometheus scrapes lag metric"
+    cluster: east
+    component: thanos-querier
+  - step: "ie-anomaly-alerter fires threshold"
+    cluster: east
+    component: ie-anomaly-alerter
+  - step: "MaaS generates shift summary"
+    cluster: hub
+    component: workshop-apis/llm
+  - step: "Operator sees alert + AI help"
+    cluster: hub
+    component: line-dashboard + neuroface
+----
+
+*Camel K Integration* — anomaly events routed to notification channels:
+
+[source,yaml]
+----
+# charts/all/industrial-edge-tst/templates/camel-integration.yaml (pattern)
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: anomaly-event-router
+  namespace: industrial-edge-tst-all
+spec:
+  flows:
+    - from:
+        uri: kafka:dev-cluster?brokers=dev-cluster-kafka-bootstrap:9092
+        steps:
+          - filter:
+              simple: "${body} contains 'ANOMALY'"
+          - to:
+              uri: http:mailpit.industrial-edge.svc:8025/api/v1/send
+          - to:
+              uri: log:anomaly-routed?level=INFO
+  traits:
+    camel.kamelets.enabled: true
+----
+
+*Developer Hub catalog entity* — IE component with multicluster Topology binding:
+
+[source,yaml]
+----
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: line-dashboard-%USER_NAME%
+  annotations:
+    backstage.io/kubernetes-namespace: industrial-edge-tst-all
+    backstage.io/kubernetes-id: line-dashboard
+    backstage.io/kubernetes-cluster: east          # required for spoke Topology
+    janus-idp.io/tekton: industrial-edge-ci
+  links:
+    - url: https://industrial-edge.%HUB_DOMAIN%
+      title: Operator dashboard
+    - url: https://neuroface.%HUB_DOMAIN%
+      title: AI assist (NeuroFace)
+spec:
+  type: service
+  lifecycle: production
+  owner: %USER_NAME%
+  system: industrial-edge
+  dependsOn:
+    - component:default/ai-%USER_NAME%             # OpenShift AI dependency
+    - component:default/workshop-ai-gateway       # governed MaaS API
+----
+
 === Learn more
 
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub — golden paths for apps]
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI — production patterns]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai/[OpenShift AI — production patterns]
+* link:https://camel.apache.org/camel-k/[Camel K operator documentation]
 * link:https://www.redhat.com/en/technologies/cloud-computing/openshift/industrial-edge[Industrial Edge on OpenShift]
+* link:https://validatedpatterns.io/patterns/industrial-edge/[Industrial Edge Validated Pattern]
+* link:https://ai-on-openshift.io/[AI on OpenShift — community patterns]
 
 
 == Features, benefits & cloud configuration
@@ -117,9 +199,11 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Show and Tell
 
-. line-dashboard live data + anomaly overlay or alert badge.
-. Optional Camel integration status in Topology.
-. Story: operator sees telemetry, prediction, and AI help in one UX.
+. Capstone for `%USER_NAME%`: every operator tool consumes the same governed AI stack (modules 22–27).
+. line-dashboard live data on link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge] + anomaly overlay.
+. Developer Hub catalog → show `dependsOn` linking IE → OpenShift AI → AI Gateway.
+. Optional Camel integration status in Topology; NeuroFace iframe for operator assist.
+. Story: operator sees telemetry, prediction, and AI help in one UX — no notebook required.
 == Your TODO (user %USER_NAME%)
 
 * [ ] Verify line-dashboard shows live IE telemetry
@@ -132,14 +216,14 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo `platform-hub-spoke-config` deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
 | Line dashboard | `industrial-edge-tst-all` |
-| Developer Hub IE catalog | `components/developer-hub/files/catalog/industrial-edge-system.yaml` |
+| Developer Hub IE catalog | `charts/all/developer-hub/files/catalog/industrial-edge-system.yaml` |
 |===
 
 Verify in the Showroom terminal:

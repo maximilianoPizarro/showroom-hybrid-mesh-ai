@@ -18,44 +18,143 @@ image::20-acs-kuadrant.png[ACS and Kuadrant gateway,960]
 | SecuredCluster on `east` / `west`
 
 | API key auth + rate limits
-| RHCL Kuadrant — modules 20/23, keys via Developer Hub
+| RHCL Kuadrant — `workshop-apis` + `ai-gateway` hosts
 
-| Published factory APIs
-| APIProduct `demo-ie-api-product` via Connectivity Link on hub gateway
+| Published API catalog
+| Developer Hub → `/kuadrant` + System **workshop-kuadrant-apis**
 |===
 
 NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 
-You will use **ACS Central** on this cluster (`central-stackrox` route) for runtime security context and **Developer Hub → Kuadrant** to request an API key for `workshop-apis`. Test with `curl` and your key — not a generic Red Hat marketing URL.
+As `%USER_NAME%` you will:
+
+. Open **ACS Central** for fleet security context (optional if time is short).
+. Request a Kuadrant API key in **Developer Hub → Kuadrant** for APIProduct **Workshop httpbin**.
+. Prove the gateway works: **401 without key**, **200 with key** via Showroom terminal `curl`.
+. Optionally explore the same API in **Developer Hub catalog → Swagger** (OpenAPI spec from APIProduct).
+
+*Prerequisite for module 23:* keep your API key — you will reuse it (or request a separate key) for **AI Gateway — MaaS LLM** on `ai-gateway.%HUB_DOMAIN%`.
 
 == Overview
 
-
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-Red Hat Advanced Cluster Security provides vulnerability scanning, compliance benchmarks, and runtime threat detection across ACM-managed clusters. SecuredCluster agents on spokes report to ACS Central on the hub; init bundles sync via GitOps jobs in `charts/all/acs-init-bundle-sync/`. See link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes[ACS documentation] for runtime policies and link:https://docs.redhat.com/en/documentation/red_hat_connectivity_link/[Connectivity Link documentation] for the RHCL bundle (Kuadrant API management CRDs).
+**Red Hat Advanced Cluster Security (ACS)** scans images and enforces runtime policies across ACM-managed clusters. SecuredCluster agents on spokes report to ACS Central on the hub (`charts/all/acs-init-bundle-sync/`).
 
-**Red Hat Connectivity Link (RHCL)** is a separate Application Foundation bundle — Kuadrant is included, not a standalone product beside it. RHCL extends the hub gateway with APIProduct catalog, AuthPolicy, PlanPolicy, and TokenRateLimitPolicy (`charts/all/workshop-kuadrant-apis/`). Demo `demo-ie-api-product` in Plan B catalog exposes the same resources without scaffolding.
+**Red Hat Connectivity Link (RHCL)** includes **Kuadrant** controllers for Gateway API ingress and API management — not a separate product beside RHCL. Chart `charts/all/workshop-kuadrant-apis/` deploys **two dedicated gateways**:
 
-As `%USER_NAME%`, verify ACS sees your spoke workloads and test APIProduct routes through the hub gateway. Remember ACS runs outside ambient mesh — this coexistence pattern is deliberate and matches production ROSA + ACS deployments.
+[cols="2,2,3", options="header"]
+|===
+| Gateway | Namespace | Routes (path prefix)
+
+| `workshop-apis.%HUB_DOMAIN%`
+| `workshop-kuadrant-apis`
+| `/httpbin`, `/countries`, `/mcp`
+
+| `ai-gateway.%HUB_DOMAIN%`
+| `ai-gateway-system`
+| `/v1` → MaaS LLM (xref:23-ai-gateway.adoc[module 23])
+|===
+
+Each route binds **AuthPolicy**, **PlanPolicy**, and (for LLM) **TokenRateLimitPolicy** to its `HTTPRoute`. **APIProduct** CRs (`devportal.kuadrant.io/v1alpha1`) publish OpenAPI/Swagger links into Developer Hub.
+
+=== APIProduct and plans (workshop-apis)
+
+[source,yaml]
+----
+# charts/all/workshop-kuadrant-apis/templates/apiproducts.yaml
+apiVersion: devportal.kuadrant.io/v1alpha1
+kind: APIProduct
+metadata:
+  name: workshop-httpbin
+  namespace: workshop-kuadrant-apis
+spec:
+  displayName: Workshop httpbin (httpbin.org)
+  publishStatus: Published
+  approvalMode: automatic              # key request auto-approved in lab
+  documentation:
+    openAPISpecURL: https://httpbin.org/spec.json
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: workshop-httpbin
+----
+
+Plan tiers on workshop-apis routes: **bronze** (5 req/min), **silver** (15), **gold** (60) — see `charts/all/workshop-kuadrant-apis/values.yaml`.
 
 === Learn more
 
 * link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes[ACS documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_connectivity_link/[Connectivity Link documentation]
 * link:https://www.kuadrant.io/docs/[Kuadrant documentation]
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-kuadrant-plugin[Developer Hub Kuadrant plugin]
-* link:https://developers.redhat.com/articles/2024/08/22/api-management-kubernetes-kuadrant[Developer article — API management with Kuadrant]
+* link:https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/validatedpatterns-docs/products/connectivity-link.md[Platform — Connectivity Link product page]
 
+== Activity path — where to click
+
+Follow this sequence as `%USER_NAME%`:
+
+[cols="1,3,2", options="header"]
+|===
+| Step | Where to go | What you do
+
+| 1
+| link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant]
+| Sign in → **API Products** → select **Workshop httpbin** → **Request API key** → copy key
+
+| 2
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → System workshop-kuadrant-apis]
+| Open **API** entity for httpbin → **View API definition** / Swagger → try **GET /get** (paste APIKEY in Authorize)
+
+| 3
+| Showroom → **Terminal** (hub context)
+| Run `curl` probes below — expect **401** then **200**
+
+| 4 (optional)
+| link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/workshop-kuadrant-apis/gateway.networking.k8s.io~v1~HTTPRoute[OpenShift Console → HTTPRoutes]
+| Inspect `workshop-httpbin`, `workshop-restcountries` in namespace `workshop-kuadrant-apis`
+
+| 5 (optional)
+| link:https://central-stackrox.%HUB_DOMAIN%[ACS Central]
+| Confirm east/west spokes appear under **Infrastructure → Clusters**
+|===
+
+== Hands-on — terminal and curl
+
+Use the embedded Showroom terminal (hub). Replace `<KEY>` with the value from step 1.
+
+[source,bash]
+----
+# 1. Gateway is up — unauthenticated call must fail (401)
+curl -sk -o /dev/null -w 'httpbin without key: %{http_code}\n' \
+  https://workshop-apis.%HUB_DOMAIN%/httpbin/get
+
+export KEY="<paste-kuadrant-api-key>"
+
+# 2. Authenticated httpbin — expect 200 + JSON echo
+curl -sk -H "Authorization: APIKEY $KEY" \
+  https://workshop-apis.%HUB_DOMAIN%/httpbin/get
+
+# 3. REST Countries via same gateway host
+curl -sk -H "Authorization: APIKEY $KEY" \
+  https://workshop-apis.%HUB_DOMAIN%/countries/name/chile | head -c 400
+
+# 4. Confirm HTTPRoute and APIProduct exist
+oc get httproute -n workshop-kuadrant-apis
+oc get apiproducts -n workshop-kuadrant-apis
+----
+
+TIP: Wrong header format (`Bearer` instead of `APIKEY`) returns **401** even with a valid key.
 
 == Features, benefits & cloud configuration
 
 === Key features
 
 * **ACS Central** — vulnerability and runtime policy for containers across fleet.
-* **Connectivity Link (RHCL)** — Kuadrant APIProduct, AuthPolicy, PlanPolicy, TokenRateLimitPolicy on `workshop-apis` routes.
-* Developer Hub Kuadrant plugin for self-service key minting (RHCL-backed).
+* **Connectivity Link (RHCL)** — Kuadrant APIProduct, AuthPolicy, PlanPolicy on dedicated gateways.
+* Developer Hub Kuadrant plugin — self-service key minting + Swagger for published APIs.
 
 === Business benefits
 
@@ -78,7 +177,6 @@ az keyvault secret set --vault-name hybrid-kv --name kuadrant-user1 --value <api
 az network front-door waf-policy create --resource-group rg-workshop --name api-waf --sku Premium_AzureFrontDoor
 ----
 
-
 == Lab access — URLs & credentials
 
 NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
@@ -88,21 +186,27 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 | Service | URL | Credentials
 
 | ACS Central | link:https://central-stackrox.%HUB_DOMAIN%[ACS Central] | OpenShift OAuth
-| Kuadrant — API keys | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant — API keys] | Workshop user → key for %USER_NAME%
-| Workshop APIs (httpbin, REST, LLM) | link:https://workshop-apis.%HUB_DOMAIN%[Workshop APIs (httpbin, REST, LLM)] | `Authorization: Bearer <API_KEY>`
-| Developer Hub — API catalog | link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub — API catalog] | Workshop user
+| Kuadrant — request API key | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] | Workshop user
+| API catalog (Swagger) | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[workshop-kuadrant-apis system] | Workshop user
+| Workshop APIs gateway | link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[workshop-apis /httpbin/get] | `Authorization: APIKEY <key>`
+| AI Gateway (module 23) | link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[ai-gateway LLM] | `Authorization: APIKEY <key>`
+| OpenShift HTTPRoutes | link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/workshop-kuadrant-apis/gateway.networking.k8s.io~v1~HTTPRoute[HTTPRoutes in workshop-kuadrant-apis] | Workshop user
 |===
 
 == Show and Tell
 
-. Security stack for `%USER_NAME%`: ACS scans runtime threats; Kuadrant governs API access including future AI routes.
-. ACS Central overview — violations and deployments on east/west spokes.
-. Demo APIProduct route via hub gateway with AuthPolicy (preview module 23 AI Gateway).
-. Remind ACS `stackrox` namespace stays outside ambient mesh.
+. Security stack for `%USER_NAME%`: ACS for runtime; Kuadrant for north-south API auth before traffic hits backends.
+. Developer Hub → **Kuadrant** → request key live; show **401 → 200** curl transition on `/httpbin/get`.
+. Catalog → **workshop-kuadrant-apis** → Swagger on httpbin OpenAPI spec.
+. Point to dedicated namespaces `workshop-kuadrant-apis` vs `ai-gateway-system` — LLM is module 23.
+. ACS Central: spokes visible; remind `stackrox` stays outside ambient mesh.
+
 == Your TODO (user %USER_NAME%)
 
-* [ ] Verify ACS shows your spoke workloads in Central UI
-* [ ] Test APIProduct route through hub gateway (or Plan B demo)
+* [ ] Request API key for **Workshop httpbin** in Developer Hub → Kuadrant
+* [ ] Run curl without key (401) and with `Authorization: APIKEY` (200) on `/httpbin/get`
+* [ ] Optional: open Swagger for httpbin in catalog and execute one GET
+* [ ] Optional: verify ACS shows east/west spokes
 * [ ] Save progress at the end of this module
 
 == Live lab
@@ -117,15 +221,18 @@ NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/
 |===
 | UI / capability | Source in GitOps repo
 
-| Workshop APIs | `charts/all/workshop-kuadrant-apis/` |
-| Hub gateway | `charts/all/hub-gateway/` |
+| Workshop APIs gateway | `charts/all/workshop-kuadrant-apis/` (`routes.yaml`, `policies.yaml`, `apiproducts.yaml`)
+| AI Gateway (LLM) | `charts/all/workshop-kuadrant-apis/templates/ai-routes.yaml`
+| RHCL operator | `charts/all/rhcl-operator/`
+| Day-2 apply script | `scripts/apply-workshop-kuadrant-apis.sh`
 |===
 
 Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get httproute,serviceentry -n hub-gateway-system 2>/dev/null | grep -i workshop | head -5
+oc get httproute,apiproducts -n workshop-kuadrant-apis 2>/dev/null
+oc get httproute,apiproducts -n ai-gateway-system 2>/dev/null
 ----
 
 == Verify
@@ -134,6 +241,8 @@ oc get httproute,serviceentry -n hub-gateway-system 2>/dev/null | grep -i worksh
 |===
 | Check | Action | Expected
 
+| Unauthenticated | `curl` `/httpbin/get` without header | HTTP **401**
+| Authenticated | `curl` with `Authorization: APIKEY $KEY` | HTTP **200** + JSON
 | Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
@@ -147,7 +256,7 @@ oc get httproute,serviceentry -n hub-gateway-system 2>/dev/null | grep -i worksh
 ++++
 
 
-TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if key request fails.
 
 
 ++++
@@ -155,4 +264,3 @@ TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demo
   <a href="21-finops-kubecost.html">Next → 21 finops kubecost</a>
 </div>
 ++++
-

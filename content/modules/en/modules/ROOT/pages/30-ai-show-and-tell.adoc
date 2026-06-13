@@ -32,7 +32,40 @@ image::30-ai-show-and-tell.png[AI show and tell — MaaS models across the platf
 | `llama-scout-17b`
 |===
 
-NOTE: MaaS API keys are injected **post-install** (RHDP `litemaas`, Vault + External Secrets, or `oc create secret`) — never committed to Git. Allow 5 minutes after key rotation before demos.
+NOTE: MaaS API keys are injected **post-install** via `bash scripts/apply-maas-secrets.sh` (export `MAAS_KEY_LLAMA`, optional `MAAS_KEY_GRANITE` / `MAAS_KEY_DEEPSEEK`) — never committed to Git. Allow 5 minutes after key rotation before demos.
+
+== HashiCorp Vault (facilitator)
+
+Vault runs on the hub (`charts/all/hashicorp-vault` VP). Workshop users get **view** on namespace `vault`.
+
+. OpenShift Console → **Platform Hub-Spoke** → **Vault**
+. URL: `https://vault-vault.%HUB_DOMAIN%/ui/` (root `/` returns HTTP 307)
+. Init/unseal tokens live in facilitator-local `values-secret.yaml` (gitignored)
+
+Future path: External Secrets Operator reads MaaS keys from Vault paths. Today: `scripts/apply-maas-secrets.sh`.
+
+== Kuadrant workshop APIs (optional demo)
+
+Two gateway hosts — same Kuadrant stack, different namespaces:
+
+[cols="2,3", options="header"]
+|===
+| Host | Use in demo
+
+| `workshop-apis.%HUB_DOMAIN%`
+| `/httpbin/get`, `/countries/name/chile` — module 20
+
+| `ai-gateway.%HUB_DOMAIN%`
+| `POST /v1/chat/completions` — module 23
+|===
+
+.Activity path (live in the room)
+. link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant] → **Workshop httpbin** → request key.
+. link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis] → httpbin **API** → Swagger **Authorize** → **GET /get**.
+. Showroom terminal: `curl` without key → **401**; with `Authorization: APIKEY $KEY` → **200**.
+. Optional LLM: same key flow for **AI Gateway — MaaS LLM** → `curl` POST to `ai-gateway.%HUB_DOMAIN%/v1/chat/completions`.
+
+Catalog: System **workshop-kuadrant-apis** — Components + OpenAPI **API** entities. Day-2: `bash scripts/apply-workshop-kuadrant-apis.sh`.
 
 == What you will demo
 
@@ -160,6 +193,9 @@ WARNING: Use **separate MaaS keys per model** when RHDP provides them. Keys live
 | DevSpaces (east) | link:https://devspaces.%EAST_DOMAIN%[DevSpaces] | Workshop user
 | Kairos | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos] | OpenShift OAuth
 | Skupper observer | link:https://skupper-network-observer-service-interconnect.%HUB_DOMAIN%[Skupper] | OpenShift OAuth
+| Kuadrant + Swagger | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] | Workshop user
+| Workshop APIs | link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[workshop-apis] | `Authorization: APIKEY`
+| AI Gateway (LLM) | link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[ai-gateway] | `Authorization: APIKEY`
 |===
 
 == Show and Tell checklist
@@ -167,11 +203,15 @@ WARNING: Use **separate MaaS keys per model** when RHDP provides them. Keys live
 Facilitator checklist before the room enters:
 
 * [ ] `oc get managedclusters` — east/west **Available**
-* [ ] MaaS keys applied post-install (Lightspeed, NeuroFace, Continue secrets present)
+* [ ] `export MAAS_KEY_LLAMA=…` → `bash scripts/apply-maas-secrets.sh` (or RHDP `litemaas.apiKey`)
+* [ ] `oc get secret neuroface-maas-api-key -n neuroface` — not `CHANGEME-inject-via-RHDP`
 * [ ] `curl -sk -o /dev/null -w '%{http_code}' https://developer-hub.%HUB_DOMAIN%/lightspeed` → 2xx
-* [ ] `curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/` → 2xx
+* [ ] NeuroFace chat POST → **200** (not **401**)
+* [ ] `curl -sk -o /dev/null -w '%{http_code}' https://workshop-apis.%HUB_DOMAIN%/httpbin/get` → **401** (protected route)
+* [ ] `curl -sk -o /dev/null -w '%{http_code}' https://vault-vault.%HUB_DOMAIN%/ui/` → **200**
 * [ ] Registration tested with a fresh `userN`
 * [ ] Webcam permission tested for NeuroFace (HTTPS required)
+* [ ] Day-2 applied: `bash scripts/apply-post-install-day2.sh` (or individual apply-* scripts)
 
 == Where this lab is defined
 
@@ -183,6 +223,9 @@ Facilitator checklist before the room enters:
 | Lightspeed | `charts/all/developer-hub/templates/lightspeed.yaml` |
 | MCP Gateway | `charts/all/mcp-gateway/` |
 | NeuroFace | `charts/all/neuroface/` |
+| Kuadrant workshop APIs | `charts/all/workshop-kuadrant-apis/` |
+| MaaS secrets script | `scripts/apply-maas-secrets.sh` |
+| Vault | `hashicorp-vault` VP + ConsoleLink `/ui/` |
 | DevSpaces Continue sync | `charts/all/devspaces/templates/continue-ai-sync.yaml` |
 | Kairos | `charts/all/kairos/` |
 | Architecture docs | link:https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/validatedpatterns-docs/architecture.md[architecture.md]

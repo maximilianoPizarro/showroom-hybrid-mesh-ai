@@ -104,7 +104,7 @@ rag_query:
   question: "What is the safe shutdown procedure for machine-sensor-1?"
   context_docs: 5                    # top-k retrieved chunks
   model: llama-scout-17b
-  endpoint: https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions
+  endpoint: https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions
   auth: APIKEY                       # Kuadrant key from module 23
 ----
 
@@ -159,7 +159,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 | Service | URL | Credentials
 
 | Developer Hub — Lightspeed | link:https://developer-hub.%HUB_DOMAIN%[Developer Hub — Lightspeed] (catalog → Ask) | Workshop user
-| Workshop APIs — LLM route | link:https://workshop-apis.%HUB_DOMAIN%/llm[Workshop APIs — LLM route] | Kuadrant API key (module 20)
+| AI Gateway — LLM | link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[AI Gateway — LLM] | Kuadrant API key (module 23)
 | MaaS (optional) | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1[MaaS (optional)] | Facilitator token
 |===
 

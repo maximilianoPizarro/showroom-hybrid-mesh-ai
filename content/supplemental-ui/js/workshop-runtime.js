@@ -191,7 +191,10 @@
       'footer-link-skupper':
         'https://skupper-network-observer-service-interconnect.' +
         hubDomain,
-      'footer-link-apis': 'https://workshop-apis.' + hubDomain,
+      'footer-link-apis':
+        'https://workshop-apis.' + hubDomain + '/httpbin/get',
+      'footer-link-ai-gateway':
+        'https://ai-gateway.' + hubDomain + '/v1/chat/completions',
       'footer-link-neuroface': 'https://neuroface.' + hubDomain,
       'footer-link-planb':
         'https://developer-hub.' +

@@ -4,18 +4,18 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::27-neuroface.png[NeuroFace — OVMS vision and MaaS chat,960]
+image::27-neuroface.png[NeuroFace — OVMS PPE Safety vision and MaaS chat,960]
 
 .NeuroFace architecture
 [cols="1,1", options="header"]
 |===
 | Capability | Backend
 
-| Face / object detection
-| OVMS in-browser (local webcam inference)
+| PPE Safety / face detection
+| OVMS **`face-detection-retail-0005`** (webcam inference)
 
 | Operator chat
-| MaaS `/v1/chat/completions` (module 23)
+| MaaS `/v1/chat/completions` (`llama-scout-17b`)
 
 | Deployment
 | `charts/all/neuroface/` on hub
@@ -28,136 +28,99 @@ NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[
 
 == What you will do
 
-Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and **Developer Hub → Catalog → neuroface-workshop** for Topology. OVMS is enabled for local vision; chat uses MaaS. Allow webcam and test detection + `/api/chat`.
+Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and **Developer Hub → Catalog → neuroface-workshop**. Enable webcam for **PPE Safety** detection; chat uses MaaS at `/api/chat`. Facilitator must inject MaaS key via `scripts/apply-maas-secrets.sh` (secret **`neuroface-maas-api-key`**).
 
 == Overview
 
-
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-NeuroFace combines **OVMS local vision** (face/object detection via `charts/all/neuroface/` with `ovms.enabled: true`) and **MaaS chat** at `/api/chat`. Hub **ModelMesh** serves platform models; NeuroFace OVMS handles low-latency webcam inference on the app namespace. See link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI documentation] for model serving patterns.
+NeuroFace combines **OVMS local vision** (`ovms.enabled: true`, model **`face-detection-retail-0005`** for retail/PPE face detection) and **MaaS chat** at `/api/chat`. The MaaS API key is stored in secret **`neuroface-maas-api-key`** (never committed to Git).
 
 **Overview-only (~10 min):** Developer Hub → **neuroface-workshop** → Topology; open UI without webcam.
 
-**Hands-on (~30 min):** Register as `%USER_NAME%`, test webcam + chat, inspect OVMS Service/route in namespace `neuroface`.
+**Hands-on (~30 min):** Test webcam PPE Safety + chat; verify secret and deployment in namespace `neuroface`.
 
-Catalog: System `hybrid-mesh-ai-platform` → Component **neuroface-workshop** (links UI + OpenShift AI dashboard).
-
-*Helm values* — NeuroFace chart configuration on hub:
+*Helm values* — NeuroFace chart on hub:
 
 [source,yaml]
 ----
 # charts/all/neuroface/values.yaml
-replicaCount: 1
+ovms:
+  enabled: true
+  modelName: face-detection-retail-0005   # PPE Safety / retail face detection
+chat:
+  enabled: true
+  modelEndpoint: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
+  modelName: llama-scout-17b
 route:
   enabled: true
-  hostname: neuroface.%HUB_DOMAIN%
-ovms:
-  enabled: true                        # local webcam inference — low latency
-  modelName: face-detection-0200
-  modelPath: /models/face-detection
-maas:
-  enabled: true
-  apiBase: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
-  model: llama-scout-17b
-  secretName: neuroface-maas-credentials  # from External Secrets, never Git
-chat:
-  endpoint: /api/chat                    # OpenAI-compatible proxy to MaaS
+  host: neuroface.%HUB_DOMAIN%
 ----
 
-*OVMS InferenceService* — face detection model served locally in `neuroface` namespace:
+*MaaS secret* — injected post-install:
 
 [source,yaml]
 ----
-apiVersion: serving.kserve.io/v1beta1
-kind: InferenceService
+# charts/all/neuroface/templates/secret-neuroface-maas-api-key.yaml
+apiVersion: v1
+kind: Secret
 metadata:
-  name: neuroface-ovms
+  name: neuroface-maas-api-key
   namespace: neuroface
-  annotations:
-    serving.kserve.io/deploymentMode: RawDeployment
-spec:
-  predictor:
-    model:
-      modelFormat:
-        name: openvino
-      runtime: ovms-1.x
-      storage:
-        key: minio
-        path: neuroface/face-detection-0200
-      resources:
-        requests:
-          cpu: "500m"
-          memory: 1Gi
+stringData:
+  api-key: <from RHDP litemaas or apply-maas-secrets.sh>
+----
+
+Facilitator:
+
+[source,bash]
+----
+export MAAS_KEY_LLAMA='sk-...'
+bash scripts/apply-maas-secrets.sh
+oc rollout restart deployment/neuroface -n neuroface
 ----
 
 === Learn more
 
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.25/html/serving_models/[OpenShift AI model serving]
 * link:https://docs.openvino.ai/2024/openvino-workflow/model-server/ovms_docs_introduction.html[OpenVINO Model Server]
 * link:https://github.com/maximilianoPizarro/neuroface[NeuroFace upstream chart]
-* link:https://platform.openai.com/docs/api-reference/chat[OpenAI chat/completions API — MaaS compatible]
-* link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Run AI workloads on OpenShift AI]
-* link:https://www.redhat.com/en/blog/building-trusted-ai-platform-openshift[Trusted AI platform on OpenShift]
-
 
 == Features, benefits & cloud configuration
 
 === Key features
 
-* **OVMS** local vision inference for webcam latency-sensitive detection.
+* **OVMS** **`face-detection-retail-0005`** for low-latency webcam PPE Safety demo.
 * **MaaS chat** at `/api/chat` for operator Q&A.
-* Catalog entity **neuroface-workshop** links UI, routes, and OpenShift AI.
+* Catalog entity **neuroface-workshop** links UI, routes, and OpenShift AI workbench **`neuroface-ml-lab`**.
 
 === Business benefits
 
-* Vision at edge; generative answers from governed hub MaaS — split latency/cost optimally.
-* Demo of multimodal AI in factory safety and training scenarios.
-
-=== AWS — Rekognition + Bedrock combo
-
-[source,bash]
-----
-aws rekognition create-collection --collection-id factory-faces
-aws rekognition index-faces --collection-id factory-faces --image '{"S3Object":{"Bucket":"photos","Name":"worker.jpg"}}'
-
-aws bedrock-runtime invoke-model --model-id anthropic.claude-3-haiku-20240307-v1:0   --body file://chat.json --cli-binary-format raw-in-base64-out chat-out.json
-# Lab: OVMS + MaaS on OpenShift instead
-----
-
-=== Azure — Vision + OpenAI
-
-[source,bash]
-----
-az cognitiveservices account create --name factory-vision --kind ComputerVision --resource-group rg-workshop --sku S1
-az cognitiveservices account create --name factory-openai --kind OpenAI --resource-group rg-workshop --sku S0
-----
-
+* Vision at the app edge; generative answers from governed hub MaaS.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!`
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
 | NeuroFace app | link:https://neuroface.%HUB_DOMAIN%[NeuroFace app] | Public (no login)
-| API chat | link:https://neuroface.%HUB_DOMAIN%/api/chat[API chat] | Public (no login)
+| API chat | link:https://neuroface.%HUB_DOMAIN%/api/chat[API chat] | Public (needs MaaS key on server)
 | OpenShift Console — deploy | ACM → `hub` → namespace `neuroface` | Workshop user
 |===
 
 == Show and Tell
 
-. Multimodal capstone for `%USER_NAME%`: OVMS vision at the edge, MaaS chat at the hub — split latency/cost optimally.
-. Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] — webcam object detection live.
-. Send chat question about detected object; show MaaS backend (not LibreChat).
-. Developer Hub → **neuroface-workshop** → Topology shows OVMS + Route.
-. Highlight: same `llama-scout-17b` model as modules 22–26, governed via Kuadrant when external.
+. Multimodal capstone: OVMS vision + hub LLM (MaaS).
+. Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] — PPE Safety webcam live.
+. Ask chat: _"What PPE is missing for this worker?"_
+. Cross-link OpenShift AI → **ai-%USER_NAME%** → **neuroface-ml-lab** notebook.
+
 == Your TODO (user %USER_NAME%)
 
-* [ ] Open `https://neuroface.%HUB_DOMAIN%` and test webcam detection
-* [ ] Ask `/api/chat` one question about a detected object
+* [ ] Open `https://neuroface.%HUB_DOMAIN%` and test PPE Safety webcam
+* [ ] Ask `/api/chat` one question (expect **200**, not **401**)
 * [ ] Save progress at the end of this module
 
 == Live lab
@@ -166,21 +129,23 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
-
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
 | NeuroFace chart | `charts/all/neuroface/` |
-| Route | `neuroface.%HUB_DOMAIN%` |
+| MaaS secret | `neuroface-maas-api-key` — `scripts/apply-maas-secrets.sh` |
 |===
 
 Verify in the Showroom terminal:
 
 [source,bash]
 ----
-curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/
+curl -sk -o /dev/null -w '%{http_code}\n' https://neuroface.%HUB_DOMAIN%/
+curl -sk -X POST https://neuroface.%HUB_DOMAIN%/api/chat \
+  -H 'Content-Type: application/json' \
+  -d '{"messages":[{"role":"user","content":"Hello"}]}' | head -c 200
+# Expect HTTP 200 body (401 = facilitator has not applied MAAS_KEY_LLAMA)
 ----
 
 == Verify
@@ -192,7 +157,6 @@ curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/
 | Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
-
 ++++
 <div class="workshop-progress" data-module="27-neuroface">
   <label><input type="checkbox" data-completed> I completed this module</label>
@@ -201,13 +165,8 @@ curl -sk -o /dev/null -w '%{http_code}' https://neuroface.%HUB_DOMAIN%/
 </div>
 ++++
 
-
-TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
-
-
 ++++
 <div class="workshop-next-nav">
   <a href="28-ai-end-user-apps.html">Next → 28 ai end user apps</a>
 </div>
 ++++
-

@@ -82,7 +82,7 @@ spec:
 
 [source,yaml]
 ----
-# POST https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions
+# POST https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions
 model: llama-scout-17b
 messages:
   - role: system

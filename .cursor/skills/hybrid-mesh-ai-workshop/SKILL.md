@@ -72,6 +72,26 @@ Always reference the **hybrid-mesh-platform** repo structure:
 | `components/skupper/` | `charts/all/service-interconnect/` |
 | `platform-hub-spoke-config` | `hybrid-mesh-platform` |
 | `templates/component-applications.yaml` | `charts/region/hub/templates/component-applications.yaml` |
+| Single `hub-gateway-system` / `workshop-apis/llm` | Dual gateways: `workshop-kuadrant-apis` + `ai-gateway-system` |
+| `Authorization: Bearer` (Kuadrant clients) | `Authorization: APIKEY <key>` |
+| `kuadrant.io/v1alpha1` APIProduct | `devportal.kuadrant.io/v1alpha1` APIProduct |
+
+## Connectivity Link — dual gateway pattern
+
+Workshop API management lives in `charts/all/workshop-kuadrant-apis/`:
+
+| Gateway | Host | Namespace | Module |
+|---------|------|-----------|--------|
+| workshop-apis | `https://workshop-apis.%HUB_DOMAIN%` | `workshop-kuadrant-apis` | 20 |
+| ai-gateway | `https://ai-gateway.%HUB_DOMAIN%` | `ai-gateway-system` | 23 |
+
+User activity flow (document in modules 20/23 and index):
+
+1. Developer Hub → `/kuadrant` → API Products → request key
+2. Catalog → System `workshop-kuadrant-apis` → API entity → Swagger → Authorize `APIKEY`
+3. Showroom terminal → `curl` 401 without key, 200 with `Authorization: APIKEY $KEY`
+
+GitOps templates: `routes.yaml`, `ai-routes.yaml`, `policies.yaml`, `apiproducts.yaml`
 
 Region bootstrap: `charts/region/{hub,east,west}/values.yaml`
 Shared charts: `charts/all/*` (50+ Helm charts)

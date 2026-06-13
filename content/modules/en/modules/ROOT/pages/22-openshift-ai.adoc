@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::22-openshift-ai.png[OpenShift AI — DSC, ModelMesh, and MaaS on hub,960]
+image::22-openshift-ai.png[OpenShift AI — DSC, MaaS proxies, and per-user workbenches on hub,960]
 
 .OpenShift AI stack in the lab
 [cols="1,1", options="header"]
@@ -14,11 +14,11 @@ image::22-openshift-ai.png[OpenShift AI — DSC, ModelMesh, and MaaS on hub,960]
 | Platform operator
 | DataScienceCluster in `redhat-ods-applications`
 
-| Model serving
-| KServe InferenceService + ModelMesh
+| Model serving (shared)
+| KServe **RawDeployment** MaaS proxies in `maas-workshop`
 
 | Developer workspace
-| `workshop-notebook` in project `ai-%USER_NAME%`
+| **`neuroface-ml-lab`** in project **`ai-%USER_NAME%`**
 
 | Downstream consumers
 | Modules 23–27 — MaaS, NeuroFace, Lightspeed
@@ -28,102 +28,62 @@ NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[
 
 == What you will do
 
-Open the **OpenShift AI dashboard** → project **ai-%USER_NAME%** → **Workbenches → workshop-notebook** and run the MaaS smoke-test notebook. Catalog entity **OpenShift AI — %USER_NAME%** links Topology and dashboard.
+Open the **OpenShift AI dashboard** → project **ai-%USER_NAME%** → **Workbenches → neuroface-ml-lab** and run the MaaS microp learning notebook. Catalog entity **OpenShift AI — %USER_NAME%** links the dashboard and Developer Hub.
 
 == Overview
 
-
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-OpenShift AI on the hub runs **ModelMesh + Serverless (Knative)** via `default-dsc`. Each user owns project **`ai-%USER_NAME%`** with pre-provisioned **Jupyter notebook** `workshop-notebook`, MaaS secret, and Developer Hub catalog entity. The configuration lives in `charts/all/openshift-ai-hub/`.
+OpenShift AI on the hub runs **dashboard + workbenches** via `default-dsc`. Each user owns project **`ai-%USER_NAME%`** with pre-provisioned workbench **`neuroface-ml-lab`**, MaaS secret `maas-connection`, and Developer Hub catalog entity. Shared LLM access lives in **`maas-workshop`** (playground + MaaS InferenceService proxies). Configuration: `charts/all/openshift-ai-hub/`.
 
-*App-of-Apps valuesObject for OpenShift AI* configures model serving modes, user projects, MCP integration, and available MaaS models — all declarative:
-
-[source,yaml]
-----
-# charts/region/hub/templates/component-applications.yaml — openshift-ai-hub valuesObject
-helm:
-  valuesObject:
-    clusterDomain: {{ $domain }}
-    userCount: {{ $.Values.userCount | default 50 }}
-    userProjects:
-      enabled: true               # creates ai-user1..ai-userN projects
-      notebook:
-        enabled: true             # pre-provisions workshop-notebook per user
-    dashboardExtensions:
-      enabled: true
-    modelServing:
-      modelMeshEnabled: true      # shared multi-model serving
-      serverlessEnabled: true     # KServe for dedicated single-model
-      defaultDeploymentMode: ModelMesh
-    mcp:
-      enabled: true
-      deployServer: true          # deploys ods-maas-mcp-server in maas-workshop
-    maas:
-      endpoint: {{ $.Values.litemaas.apiUrl }}
-      apiKey: {{ $.Values.litemaas.apiKey }}
-      models:
-        - id: llama-scout-17b
-          displayName: Llama Scout 17B (workshop default)
-        - id: deepseek-r1-distill-qwen-14b
-          displayName: DeepSeek R1 Distill Qwen 14B
-        - id: codellama-7b-instruct
-          displayName: CodeLlama 7B Instruct
-----
-
-*DataScienceCluster* — the operator reconciles all RHOAI components from one CR:
+*Chart values (workshop hub track)* — RawDeployment for MaaS proxies; per-user projects from `userProjects`:
 
 [source,yaml]
 ----
-# charts/all/openshift-ai-hub/templates/datasciencecluster.yaml
-apiVersion: datasciencecluster.opendatahub.io/v1
-kind: DataScienceCluster
-metadata:
-  name: default-dsc
-spec:
-  components:
-    dashboard:
-      managementState: Managed          # ODS dashboard UI
-    workbenches:
-      managementState: Managed          # Jupyter / VS Code workbenches
-    modelmeshserving:
-      managementState: Managed          # shared multi-model runtime
-    datasciencepipelines:
-      managementState: Managed          # Kubeflow-style pipelines
-    kserve:
-      managementState: Managed          # Knative-based single-model serving
-      serving:
-        managementState: Managed
-        defaultDeploymentMode: ModelMesh  # workshop default; MaaS proxies use RawDeployment
+# charts/all/openshift-ai-hub/values.yaml (excerpt)
+userCount: 50
+userProjects:
+  enabled: true
+  notebook:
+    enabled: true
+modelServing:
+  modelMeshEnabled: false      # workshop hub: simpler RawDeployment MaaS proxies
+  serverlessEnabled: false
+  defaultDeploymentMode: RawDeployment
+maas:
+  endpoint: https://maas-rhdp.apps.maas.redhatworkshops.io
+  models:
+    - id: llama-scout-17b
+    - id: granite-3-2-8b-instruct
+    - id: deepseek-r1-distill-qwen-14b
 ----
 
-*InferenceService `workshop-sklearn`* — one sklearn model per user project via ModelMesh:
+*Per-user namespace* — GitOps creates `ai-userN`, RBAC, MaaS secret, and Notebook:
 
 [source,yaml]
 ----
 # charts/all/openshift-ai-hub/templates/user-projects.yaml (per ai-userN)
-apiVersion: serving.kserve.io/v1beta1
-kind: InferenceService
+apiVersion: kubeflow.org/v1
+kind: Notebook
 metadata:
-  name: workshop-sklearn
+  name: neuroface-ml-lab
   namespace: ai-%USER_NAME%
-  annotations:
-    serving.kserve.io/deploymentMode: ModelMesh   # shared runtime, not dedicated pod
 spec:
-  predictor:
-    model:
-      modelFormat:
-        name: sklearn
-      storage:
-        key: minio
-        path: anomaly-detection/model    # artifact in hub MinIO data lake
-      resources:
-        requests:
-          cpu: "100m"
-          memory: 512Mi
+  template:
+    spec:
+      containers:
+        - name: neuroface-ml-lab
+          env:
+            - name: OPENAI_API_BASE
+              value: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: maas-connection
+                  key: api-key
 ----
 
-*MaaS proxy InferenceService* — external LLM routed through OpenShift AI (RawDeployment):
+*MaaS proxy InferenceService* — external LLM routed through OpenShift AI (RawDeployment in `maas-workshop`):
 
 [source,yaml]
 ----
@@ -134,45 +94,40 @@ metadata:
   name: maas-llama-scout-17b
   namespace: maas-workshop
   annotations:
-    serving.kserve.io/deploymentMode: RawDeployment  # dedicated pod for external API proxy
+    serving.kserve.io/deploymentMode: RawDeployment
 spec:
   predictor:
     containers:
       - name: kserve-container
-        image: quay.io/opendatahub/openvino_model_server:latest
         env:
           - name: OPENAI_API_BASE
             valueFrom:
               secretKeyRef:
                 name: openshift-ai-maas-credentials
-                key: OPENAI_API_BASE     # https://maas-rhdp.apps.maas.redhatworkshops.io/v1
+                key: OPENAI_API_BASE
           - name: OPENAI_API_KEY
             valueFrom:
               secretKeyRef:
                 name: openshift-ai-maas-credentials
-                key: OPENAI_API_KEY
-        args:
-          - --rest_port=8080
-          - --model_name=llama-scout-17b
+                key: api-key
 ----
 
 **Overview-only (~10 min):** Catalog → **OpenShift AI — %USER_NAME%** → open dashboard; show Playground in `maas-workshop` (do not run notebook).
 
-**Hands-on (~30 min):** Launch **workshop-notebook**, run `maas-smoke-test.ipynb`, open **AI Assistants → MCP Servers** and add `ods-maas-mcp-server` URL from ConfigMap `ods-mcp-server-registration`. In **ai-%USER_NAME%** → **Models**, confirm **`workshop-sklearn`** InferenceService (ModelMesh) is Ready; test predict from dashboard or `curl` the internal predictor URL.
+**Hands-on (~30 min):** Launch **`neuroface-ml-lab`**, run the embedded MaaS cell, open **NeuroFace** for OVMS PPE Safety webcam demo. In **maas-workshop** → **Models**, confirm MaaS proxy InferenceServices are Ready.
+
+TIP: Facilitator must run `bash scripts/apply-maas-secrets.sh` after RHDP deploy (keys never in Git).
 
 [source,bash]
 ----
 # Confirm DataScienceCluster is Ready
-oc get dsc default-dsc -o jsonpath='{.status.phase}'
+oc get dsc default-dsc -o jsonpath='{.status.phase}{"\n"}'
 
-# Check your user project and notebook
-oc get notebook,inferenceservice -n ai-%USER_NAME%
+# Check your user project and workbench
+oc get notebook -n ai-%USER_NAME%
 
-# List available MaaS models
-oc get configmap ods-mcp-server-registration -n maas-workshop -o yaml
-
-# MCP server deployment
-oc get pods -n maas-workshop -l app=ods-maas-mcp-server
+# List MaaS models / MCP registration
+oc get configmap ods-mcp-server-registration -n maas-workshop -o yaml 2>/dev/null | head -20
 ----
 
 See link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed[OpenShift AI documentation] for DSC and model serving guides.
@@ -180,50 +135,25 @@ See link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-mana
 === Learn more
 
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai/[OpenShift AI documentation]
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.25/html/serving_models/[Serving models — ModelMesh and KServe 2.25]
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/working_with_connected_applications/index[Connected applications and notebooks]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.25/html/serving_models/[Serving models — KServe 2.25]
 * link:https://ai-on-openshift.io/[AI on OpenShift — community recipes]
-* link:https://www.redhat.com/en/topics/ai/what-is-ai-model-serving[What is AI model serving — Red Hat]
-* link:https://huggingface.co/meta-llama[Meta Llama models — upstream source for llama-scout-17b]
-* link:https://developers.redhat.com/learn/openshift-ai[OpenShift AI learning paths]
-* link:https://developers.redhat.com/articles/2024/05/07/run-ai-workloads-openshift-ai[Run AI workloads on OpenShift AI]
-
 
 == Features, benefits & cloud configuration
 
 === Key features
 
-* **DataScienceCluster** (`default-dsc`) — ModelMesh, KServe, dashboard, notebooks.
-* Per-user project **`ai-%USER_NAME%`** with `workshop-notebook` and InferenceService `workshop-sklearn`.
+* **DataScienceCluster** (`default-dsc`) — dashboard, workbenches, KServe RawDeployment MaaS proxies.
+* Per-user project **`ai-%USER_NAME%`** with **`neuroface-ml-lab`** workbench.
 * MaaS playground in `maas-workshop` — shared LLM for all AI modules.
 
 === Business benefits
 
 * Data scientists and developers share one governed inference layer.
-* Notebooks and pipelines stay on-cluster — no export of factory data to public SaaS.
-
-=== AWS — SageMaker vs OpenShift AI
-
-[source,bash]
-----
-# SageMaker endpoint (cloud alternative — lab uses OpenShift AI instead)
-aws sagemaker create-model --model-name sklearn-factory --primary-container   Image=246618743249.dkr.ecr.us-east-1.amazonaws.com/sagemaker-scikit-learn:1.2-1-cpu-py3,ModelDataUrl=s3://models/sklearn.tar.gz
-aws sagemaker create-endpoint-config --endpoint-config-name sklearn-cfg   --production-variants VariantName=AllTraffic,ModelName=sklearn-factory,InitialInstanceCount=1,InstanceType=ml.m5.large
-aws sagemaker create-endpoint --endpoint-name sklearn-factory --endpoint-config-name sklearn-cfg
-----
-
-=== Azure — ML workspace
-
-[source,bash]
-----
-az ml workspace create --resource-group rg-workshop --name factory-ml
-az ml online-deployment create --name sklearn-deploy --model sklearn:1 --workspace-name factory-ml
-----
-
+* Notebooks stay on-cluster — no export of factory data to public SaaS.
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer Hub; htpasswd for OpenShift Console on hub, east, and west; DevSpaces on east spoke). OAuth products use the same OpenShift identity.
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!`
 
 [cols="2,3,2"]
 |===
@@ -231,23 +161,24 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 | OpenShift AI dashboard | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[OpenShift AI dashboard] | OpenShift OAuth
 | Your DS project | OpenShift AI → Projects → **ai-%USER_NAME%** | Workshop user (project admin)
+| Workbench | OpenShift AI → **ai-%USER_NAME%** → Workbenches → **neuroface-ml-lab** | Workshop user
 | Developer Hub — your AI entity | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/ai-%USER_NAME%[Developer Hub — your AI entity] | Workshop user
-| Shared MaaS playground | OpenShift AI → **maas-workshop** (Plan B) | OpenShift OAuth
+| Shared MaaS playground | OpenShift AI → **maas-workshop** | OpenShift OAuth
 |===
 
 == Show and Tell
 
-. Frame the AI platform story: **AI is a platform service, not a team silo** — `%USER_NAME%` gets project `ai-%USER_NAME%` without standing up inference infrastructure.
-. `oc get dsc` — confirm `Ready`; open **workshop-notebook** in `ai-%USER_NAME%`.
-. Developer Hub → **OpenShift AI — %USER_NAME%** → show Topology linking to hub DSC.
+. Frame the AI platform story: **AI is a platform service** — `%USER_NAME%` gets project `ai-%USER_NAME%` without standing up inference infrastructure.
+. `oc get dsc` — confirm `Ready`; open **`neuroface-ml-lab`** in `ai-%USER_NAME%`.
+. Developer Hub → **OpenShift AI — %USER_NAME%** → show links to dashboard and project.
 . Demo **Playground** in `maas-workshop` with `llama-scout-17b` — same backend modules 23–28 consume.
-. Show MCP server `ods-maas-mcp-server` — agents register models without raw API keys in chat.
+
 == Your TODO (user %USER_NAME%)
 
 * [ ] Run `oc get dsc` and confirm DataScienceCluster Ready
-* [ ] Launch **workshop-notebook** in project `ai-%USER_NAME%` and run MaaS smoke test
+* [ ] Launch **neuroface-ml-lab** in project `ai-%USER_NAME%` and run MaaS cell
 * [ ] Open Developer Hub catalog Component **ai-%USER_NAME%**
-* [ ] Enable OpenShift AI **Playground** / **MCP Server** extension (maas-workshop)
+* [ ] Open **NeuroFace** for OVMS PPE demo (module 27)
 * [ ] Save progress at the end of this module
 
 == Live lab
@@ -256,23 +187,22 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 == Where this lab is defined
 
-NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster. Do not copy-paste fragments as standalone manifests — use the console links above and verify with `oc`.
+NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/hybrid-mesh-platform[`hybrid-mesh-platform`] deployed on **this** cluster.
 
 [cols="2,3"]
 |===
 | UI / capability | Source in GitOps repo
 
-| DSC + ModelMesh | `charts/all/openshift-ai-hub/` |
-| Notebooks | `user-projects.yaml` → `workshop-notebook` |
-| ModelMesh ISVC | `workshop-sklearn` per `ai-userN` |
-| MCP + Playground | `ods-mcp-server.yaml`, `dashboard-config.yaml` |
+| DSC + MaaS proxies | `charts/all/openshift-ai-hub/` |
+| Per-user projects | `templates/user-projects.yaml` → `neuroface-ml-lab` |
+| MaaS secrets (facilitator) | `scripts/apply-maas-secrets.sh` |
 |===
 
 Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get dsc; oc get notebook,inferenceservice -n ai-%USER_NAME% 2>/dev/null
+oc get dsc; oc get notebook -n ai-%USER_NAME% 2>/dev/null
 ----
 
 == Verify
@@ -284,7 +214,6 @@ oc get dsc; oc get notebook,inferenceservice -n ai-%USER_NAME% 2>/dev/null
 | Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
-
 ++++
 <div class="workshop-progress" data-module="22-openshift-ai">
   <label><input type="checkbox" data-completed> I completed this module</label>
@@ -293,13 +222,8 @@ oc get dsc; oc get notebook,inferenceservice -n ai-%USER_NAME% 2>/dev/null
 </div>
 ++++
 
-
-TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
-
-
 ++++
 <div class="workshop-next-nav">
   <a href="23-ai-gateway.html">Next → 23 ai gateway</a>
 </div>
 ++++
-

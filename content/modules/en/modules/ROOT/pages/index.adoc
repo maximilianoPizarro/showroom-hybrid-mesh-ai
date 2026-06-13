@@ -152,48 +152,104 @@ Any application that speaks the OpenAI REST API can consume MaaS without code ch
 
 == Connectivity Link — API management
 
-**Red Hat Connectivity Link (RHCL)** is an Application Foundation bundle (operator in `charts/all/rhcl-operator/`) that includes **Kuadrant** controllers for Gateway API ingress and API management. Workshop policies live in `charts/all/workshop-kuadrant-apis/`. Each workshop user gets an API key scoped to a plan:
+**Red Hat Connectivity Link (RHCL)** bundles Gateway API ingress with **Kuadrant** API management (`charts/all/rhcl-operator/`, `charts/all/workshop-kuadrant-apis/`). The platform exposes **two dedicated gateways** — not a single `hub-gateway-system` host:
+
+.Workshop API gateways (current platform layout)
+[cols="2,2,3", options="header"]
+|===
+| Gateway | Host | APIs protected by Kuadrant
+
+| **workshop-apis**
+| `https://workshop-apis.%HUB_DOMAIN%`
+| `/httpbin/*`, `/countries/*`, `/mcp` (httpbin, REST Countries, MCP)
+
+| **ai-gateway**
+| `https://ai-gateway.%HUB_DOMAIN%`
+| `/v1/chat/completions` (MaaS LLM — module 23)
+|===
+
+Each route has an **APIProduct** (`devportal.kuadrant.io/v1alpha1`) published in Developer Hub. Request an API key at link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant] — approval is automatic in the lab.
 
 [source,yaml]
 ----
-# APIProduct — exposes the workshop AI endpoints under a single managed product
-apiVersion: kuadrant.io/v1alpha1
+# charts/all/workshop-kuadrant-apis/templates/apiproducts.yaml (excerpt)
+apiVersion: devportal.kuadrant.io/v1alpha1
 kind: APIProduct
 metadata:
-  name: workshop-ai-api
-  namespace: kuadrant-system
+  name: workshop-httpbin
+  namespace: workshop-kuadrant-apis    # dedicated gateway namespace
 spec:
-  hosts:
-    - workshop-apis.%HUB_DOMAIN%
-  APIs:
-    - name: maas-inference-route
-      namespace: hybrid-mesh-gateway
-----
-
-[source,yaml]
-----
-# TokenRateLimitPolicy — limits per API key to 100 req/min for workshop users
-apiVersion: kuadrant.io/v1alpha1
-kind: TokenRateLimitPolicy
-metadata:
-  name: workshop-rate-limit
-  namespace: kuadrant-system
-spec:
+  displayName: Workshop httpbin (httpbin.org)
+  publishStatus: Published
+  approvalMode: automatic
+  documentation:
+    openAPISpecURL: https://httpbin.org/spec.json   # Swagger / OpenAPI in Dev Hub
   targetRef:
     group: gateway.networking.k8s.io
     kind: HTTPRoute
-    name: maas-inference-route
-  limits:
-    per-user:
-      rates:
-        - limit: 100
-          duration: 1
-          unit: minute
-      counters:
-        - auth.identity.username
+    name: workshop-httpbin
 ----
 
-== Lab access — URLs & credentials
+[source,yaml]
+----
+# AI Gateway — separate host and namespace (ai-gateway-system)
+apiVersion: devportal.kuadrant.io/v1alpha1
+kind: APIProduct
+metadata:
+  name: workshop-llm-tokens
+  namespace: ai-gateway-system
+spec:
+  displayName: AI Gateway — MaaS LLM (TokenRateLimit)
+  documentation:
+    openAPISpecURL: https://raw.githubusercontent.com/openai/openai-openapi/master/openapi.yaml
+  targetRef:
+    kind: HTTPRoute
+    name: ai-maas
+----
+
+Authentication uses header `Authorization: APIKEY <key>` (not Bearer). Plan tiers: **bronze / silver / gold** on workshop-apis; **free / gold** on ai-gateway LLM routes.
+
+=== Activity path — request key, Swagger, and curl
+
+As `%USER_NAME%`, follow this sequence (hands-on detail in xref:20-acs-kuadrant.adoc[module 20] and xref:23-ai-gateway.adoc[module 23]):
+
+[cols="1,3,2", options="header"]
+|===
+| Step | Where to go | What you do
+
+| 1
+| link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant]
+| **API Products** → **Workshop httpbin** (or **AI Gateway — MaaS LLM**) → **Request API key** → copy key
+
+| 2
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis]
+| Open **API** entity → **View API definition** (Swagger) → **Authorize** with `APIKEY` → try a GET or POST
+
+| 3
+| Showroom → **Terminal** (footer or panel)
+| Run `curl` below — expect **401** without key, **200** with key
+
+| 4
+| link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[workshop-apis] or link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[ai-gateway]
+| Direct browser/curl to the live gateway hosts (after step 1)
+|===
+
+[source,bash]
+----
+# Showroom terminal — replace <KEY> after Kuadrant UI step 1
+curl -sk -o /dev/null -w 'httpbin no key: %{http_code}\n' \
+  https://workshop-apis.%HUB_DOMAIN%/httpbin/get
+
+export KEY="<paste-kuadrant-api-key>"
+curl -sk -H "Authorization: APIKEY $KEY" \
+  https://workshop-apis.%HUB_DOMAIN%/httpbin/get
+
+# LLM (module 23) — same header format, different host
+curl -sk "https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions" \
+  -H "Authorization: APIKEY $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"llama-scout-17b","messages":[{"role":"user","content":"Hello"}],"max_tokens":20}'
+----
 
 NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; htpasswd OpenShift hub/east/west; DevSpaces east). OAuth products use the same OpenShift identity.
 
@@ -224,7 +280,8 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 | Kairos Console | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos] | OpenShift OAuth
 | ACS Central | link:https://central-stackrox.%HUB_DOMAIN%[ACS Central] | OpenShift OAuth
 | Kuadrant API keys | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] | Workshop user
-| Workshop APIs | link:https://workshop-apis.%HUB_DOMAIN%[Workshop APIs] | Kuadrant API key (module 20)
+| Workshop APIs | link:https://workshop-apis.%HUB_DOMAIN%[Workshop APIs] | `Authorization: APIKEY` (module 20)
+| AI Gateway (MaaS LLM) | link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[AI Gateway] | `Authorization: APIKEY` (module 23)
 | Kafka Console | link:https://kafka-console.%HUB_DOMAIN%[Kafka Console] | OpenShift OAuth
 | Kubecost | link:https://kubecost.%HUB_DOMAIN%[Kubecost] | OpenShift OAuth
 | Quay | link:https://quay-registry.%HUB_DOMAIN%[Quay] | OpenShift OAuth
@@ -474,7 +531,7 @@ Region paths: `charts/region/hub/`, `charts/region/east/`, `charts/region/west/`
 * OpenShift Console: **Hybrid Mesh AI Workshop** (ApplicationMenu)
 * Developer Hub → System `hybrid-mesh-shared-demos` (Plan B without scaffolder)
 * NeuroFace: link:https://neuroface.%HUB_DOMAIN%[NeuroFace]
-* Kuadrant: link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] + link:https://workshop-apis.%HUB_DOMAIN%[Workshop APIs]
+* Kuadrant: link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] → request API key; then link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[workshop-apis /httpbin] or link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[ai-gateway LLM] with `Authorization: APIKEY`
 
 [[#hybrid-integration]]
 == Hybrid cloud integration notes

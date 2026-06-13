@@ -6,277 +6,232 @@
 
 image::23-ai-gateway.png[AI Gateway — Kuadrant-governed MaaS endpoint,960]
 
-.MaaS gateway in the lab
+.MaaS gateway in the lab (dedicated ai-gateway host)
 [cols="1,1", options="header"]
 |===
 | Piece | Location
 
-| HTTPRoute + Gateway
-| `hub-gateway-system` — `workshop-maas`
+| Gateway + HTTPRoute
+| `ai-gateway-system` — Gateway `ai-gateway`, route `ai-maas`
 
-| Auth + rate limits
-| RHCL Kuadrant AuthPolicy + TokenRateLimitPolicy (`workshop-kuadrant-apis/`)
+| Auth + token limits
+| Kuadrant AuthPolicy + TokenRateLimitPolicy on `/v1/chat/completions`
 
 | Inference backend
-| OpenShift AI ModelMesh on hub
+| External RHDP MaaS (upstream Bearer injected by gateway)
 
 | Client access
-| API key from Developer Hub → `curl` chat/completions
+| `https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions` + `Authorization: APIKEY`
 |===
 
 NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: Module **20** covers **workshop-apis** (`/httpbin`, `/countries`). This module uses the separate **ai-gateway** host for LLM.
 
 == What you will do
 
-In this module you expose **Model-as-a-Service (MaaS)** LLM inference through a governed **AI Gateway** — not by sharing raw OpenShift AI routes. You will:
+Govern **Model-as-a-Service (MaaS)** LLM inference through the dedicated **AI Gateway** — not raw MaaS URLs or OpenShift AI routes. As `%USER_NAME%`:
 
-. Open **Developer Hub → Catalog → workshop-ai-gateway** and follow links to Topology, TechDocs, and the Kuadrant API portal.
-. Trace GitOps in `charts/all/workshop-kuadrant-apis/` — `HTTPRoute` on the hub Gateway API, Istio `Gateway`, and Kuadrant `AuthPolicy` + `TokenRateLimitPolicy`.
-. Mint an API key for `%USER_NAME%` in the Kuadrant UI and call `https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions` with a Bearer token.
-. Compare latency, headers, and error responses against direct MaaS from the OpenShift AI notebook (module 22) — the gateway adds auth, rate limits, and a stable external hostname for factory apps.
+. Open link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant] → API Product **AI Gateway — MaaS LLM** → request API key (or reuse key from xref:20-acs-kuadrant.adoc[module 20] if scoped to LLM).
+. Open link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis] → **API** entity for LLM → **Swagger** (OpenAI-compatible spec) → authorize with `APIKEY`.
+. Call `https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions` from the Showroom terminal with `curl`.
+. Compare with OpenShift AI Playground in `maas-workshop` (module 22) — gateway adds per-user auth, plan tiers, and token rate limits.
 
-*Prerequisite:* module **22 OpenShift AI** — you need a running `maas-workshop` playground and familiarity with chat-completions JSON.
+*Prerequisite:* module **22 OpenShift AI** — familiarity with chat-completions JSON and model `llama-scout-17b`.
 
 == Overview
 
-
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-The **AI Gateway** pattern centralizes how factory, edge, and partner applications consume large language models on OpenShift. Instead of every team embedding cluster-internal URLs and shared credentials, traffic enters through **`workshop-apis.%HUB_DOMAIN%`**, backed by **link:https://gateway-api.sigs.k8s.io/[Gateway API]** `HTTPRoute` resources on the hub, the Istio ingress gateway, and **link:https://www.kuadrant.io/docs/[Kuadrant]** policies for authentication, authorization, plan tiers, and token-based rate limiting.
+The **AI Gateway** host (`ai-gateway.%HUB_DOMAIN%`) is separate from **workshop-apis** — both ship in `charts/all/workshop-kuadrant-apis/` but use different Gateway API namespaces and routes. LLM traffic matches path prefix **`/v1`** and proxies to RHDP LiteMaaS; Kuadrant injects the upstream **Bearer** token so workshop users only hold **APIKEY** credentials.
 
 === Why govern AI inference with an API gateway?
 
-Without a gateway, every factory app, OT script, and partner integration needs the raw MaaS URL and a shared API key — no per-user audit trail, no rate limits, and no plan tiers. The AI Gateway gives `%USER_NAME%` a Kuadrant API key scoped to `free` or `gold` plans: auth at the edge, token counters per user, and a stable external hostname that survives backend model changes.
+Without a gateway, every factory app needs the raw MaaS URL and shared credentials — no audit trail, no rate limits, no plan tiers. The AI Gateway gives `%USER_NAME%` a Kuadrant key scoped to **free** or **gold** plans: auth at the edge, **TokenRateLimitPolicy** on completion tokens, stable hostname for OT integrations.
 
-Three Kuadrant CRDs in `charts/all/workshop-kuadrant-apis/templates/policies.yaml` govern the MaaS LLM endpoint — all attached to the same `HTTPRoute`:
+=== Activity path — where to click
 
-*1. AuthPolicy — API key authentication + OPA authorization:*
+[cols="1,3,2", options="header"]
+|===
+| Step | Where to go | What you do
+
+| 1
+| link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI]
+| **API Products** → **AI Gateway — MaaS LLM (TokenRateLimit)** → **Request API key**
+
+| 2
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis]
+| Open LLM **API** → **View API definition** (OpenAI OpenAPI) → Authorize with `APIKEY` → try **POST /v1/chat/completions**
+
+| 3
+| Showroom **Terminal**
+| Run `curl` below against `ai-gateway.%HUB_DOMAIN%`
+
+| 4
+| link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/ai-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute[Console → HTTPRoute ai-maas]
+| Inspect route, parent Gateway `ai-gateway`, Kuadrant policies
+|===
+
+*HTTPRoute* — dedicated ai-gateway host (not workshop-apis):
 
 [source,yaml]
 ----
-# charts/all/workshop-kuadrant-apis/templates/policies.yaml
+# charts/all/workshop-kuadrant-apis/templates/ai-routes.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: ai-maas
+  namespace: ai-gateway-system          # dedicated LLM gateway namespace
+  labels:
+    app: workshop-maas
+    kuadrant.io/exposed: "true"
+spec:
+  parentRefs:
+    - name: ai-gateway
+      namespace: ai-gateway-system
+  hostnames:
+    - ai-gateway.%HUB_DOMAIN%          # NOT workshop-apis — separate Route/host
+  rules:
+    - matches:
+        - path: { type: PathPrefix, value: /v1 }
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: maas-rhdp.apps.maas.redhatworkshops.io
+            path: { type: ReplacePrefixMatch, replacePrefixMatch: /v1 }
+      backendRefs:
+        - group: networking.istio.io
+          kind: Hostname
+          name: maas-rhdp.apps.maas.redhatworkshops.io
+          port: 443
+----
+
+*AuthPolicy* — workshop user presents APIKEY; gateway adds upstream MaaS Bearer:
+
+[source,yaml]
+----
+# charts/all/workshop-kuadrant-apis/templates/policies.yaml (ai-maas excerpt)
 apiVersion: kuadrant.io/v1
 kind: AuthPolicy
 metadata:
-  name: workshop-maas-auth
-  namespace: hub-gateway-system
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
+  name: ai-maas-auth
+  namespace: ai-gateway-system
 spec:
   targetRef:
-    group: gateway.networking.k8s.io
     kind: HTTPRoute
-    name: workshop-maas
+    name: ai-maas
   rules:
     authentication:
       api-key-users:
-        apiKey:
-          allNamespaces: true      # keys can live in any namespace
-          selector:
-            matchLabels:
-              app: workshop-maas
         credentials:
           authorizationHeader:
-            prefix: APIKEY
+            prefix: APIKEY              # client header: Authorization: APIKEY <key>
     response:
       success:
         filters:
-          identity:
-            json:
-              properties:
-                userid:            # extract user ID for per-user rate limiting
-                  selector: auth.identity.metadata.annotations.secret\.kuadrant\.io/user-id
-    authorization:
-      allow-groups:
-        opa:
-          rego: |
-            # Only "free" or "gold" plan users are authorized
-            plan := object.get(input.auth.identity.metadata.annotations,
-                               "secret.kuadrant.io/plan-id", "")
-            allow { plan == "free" }
-            allow { plan == "gold" }
+          headers:
+            authorization:
+              plain:
+                value: "Bearer <maas-upstream-token>"   # injected — not in Git
 ----
 
-*2. PlanPolicy — tier-based request limits via CEL predicates:*
-
-[source,yaml]
-----
-apiVersion: extensions.kuadrant.io/v1alpha1
-kind: PlanPolicy
-metadata:
-  name: workshop-maas-plans
-  namespace: hub-gateway-system
-spec:
-  targetRef:
-    group: gateway.networking.k8s.io
-    kind: HTTPRoute
-    name: workshop-maas
-  plans:
-    - tier: free
-      predicate: |
-        has(auth.identity) && auth.identity.metadata.annotations["secret.kuadrant.io/plan-id"] == "free"
-      limits:
-        custom:
-          - limit: 100
-            window: 1h
-    - tier: gold
-      predicate: |
-        has(auth.identity) && auth.identity.metadata.annotations["secret.kuadrant.io/plan-id"] == "gold"
-      limits:
-        custom:
-          - limit: 500
-            window: 1h
-----
-
-*3. TokenRateLimitPolicy — per-user token counters with CEL:*
+*TokenRateLimitPolicy* — counts tokens on `/v1/chat/completions`:
 
 [source,yaml]
 ----
 apiVersion: kuadrant.io/v1alpha1
 kind: TokenRateLimitPolicy
 metadata:
-  name: workshop-maas-token-limits
-  namespace: hub-gateway-system
+  name: ai-maas-token-limits
+  namespace: ai-gateway-system
 spec:
   targetRef:
-    group: gateway.networking.k8s.io
     kind: HTTPRoute
-    name: workshop-maas
+    name: ai-maas
   limits:
     free:
       rates:
-        - limit: {{ .Values.tokenRateLimit.free.limit }}
-          window: {{ .Values.tokenRateLimit.free.window }}
+        - limit: 50
+          window: 1m
       when:
-        - predicate: request.path == "/llm/v1/chat/completions"
-        - predicate: |
-            auth.identity.metadata.annotations["secret.kuadrant.io/plan-id"] == "free" ||
-            auth.identity.groups.split(",").exists(g, g == "free")
-      counters:
-        - expression: auth.identity.userid     # per-user counter, not global
-    gold:
-      rates:
-        - limit: {{ .Values.tokenRateLimit.gold.limit }}
-          window: {{ .Values.tokenRateLimit.gold.window }}
-      when:
-        - predicate: request.path == "/llm/v1/chat/completions"
-        - predicate: |
-            auth.identity.metadata.annotations["secret.kuadrant.io/plan-id"] == "gold"
+        - predicate: request.path == "/v1/chat/completions"
       counters:
         - expression: auth.identity.userid
 ----
 
-*The HTTPRoute + external backend pattern:* Routes use Istio `Hostname` backendRefs to reach external MaaS without in-cluster proxy images:
+*APIProduct* — publishes Swagger link in Developer Hub:
 
 [source,yaml]
 ----
-# charts/all/workshop-kuadrant-apis/templates/routes.yaml
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
+apiVersion: devportal.kuadrant.io/v1alpha1
+kind: APIProduct
 metadata:
-  name: workshop-maas
-  namespace: hub-gateway-system
-  labels:
-    kuadrant.io/exposed: "true"
+  name: workshop-llm-tokens
+  namespace: ai-gateway-system
 spec:
-  parentRefs:
-    - name: hub-gateway
-      namespace: hub-gateway-system
-  hostnames: ["workshop-apis.{{ .Values.clusterDomain }}"]
-  rules:
-    - matches:
-        - path: { type: PathPrefix, value: /llm }
-      filters:
-        - type: URLRewrite
-          urlRewrite:
-            hostname: {{ .Values.apis.maas.host }}
-      backendRefs:
-        - group: networking.istio.io
-          kind: Hostname
-          name: {{ .Values.apis.maas.host }}
-          port: 443
+  displayName: AI Gateway — MaaS LLM (TokenRateLimit)
+  documentation:
+    openAPISpecURL: https://raw.githubusercontent.com/openai/openai-openapi/master/openapi.yaml
+  targetRef:
+    kind: HTTPRoute
+    name: ai-maas
 ----
 
-*ServiceEntry* — Istio registers the external MaaS host for TLS origination (no in-cluster proxy Deployment):
-
-[source,yaml]
-----
-# charts/all/workshop-kuadrant-apis/templates/serviceentry.yaml
-apiVersion: networking.istio.io/v1
-kind: ServiceEntry
-metadata:
-  name: maas-external
-  namespace: hub-gateway-system
-spec:
-  hosts:
-    - maas-rhdp.apps.maas.redhatworkshops.io   # external RHDP LiteMaaS endpoint
-  location: MESH_EXTERNAL
-  ports:
-    - number: 443
-      name: https
-      protocol: HTTPS
-  resolution: DNS
-----
-
-**Hands-on (~25 min):** Mint key for `%USER_NAME%` in Developer Hub Kuadrant UI, then:
+== Hands-on — terminal and curl
 
 [source,bash]
 ----
-export KEY="<your-kuadrant-api-key>"
-curl -sk "https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions" \
+export KEY="<your-kuadrant-api-key-from-developer-hub>"
+
+# Unauthenticated — expect 401
+curl -sk -o /dev/null -w 'LLM without key: %{http_code}\n' \
+  https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions
+
+# Chat completion — OpenAI-compatible JSON
+curl -sk "https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions" \
   -H "Authorization: APIKEY $KEY" \
   -H "Content-Type: application/json" \
   -d '{"model":"llama-scout-17b","messages":[{"role":"user","content":"Summarize hybrid mesh in one sentence."}],"max_tokens":50}'
+
+# List models (if exposed on same route prefix)
+curl -sk -H "Authorization: APIKEY $KEY" \
+  https://ai-gateway.%HUB_DOMAIN%/v1/models | head -c 500
+
+# Verify policies on ai-gateway namespace
+oc get authpolicy,planpolicy,tokenratelimitpolicy -n ai-gateway-system
+oc get apiproducts -n ai-gateway-system
 ----
 
-Compare response time and HTTP 429 behavior (when token limits are exceeded) to a direct call from the **workshop-notebook** in project `ai-%USER_NAME%`.
-
-[source,bash]
-----
-# Verify Kuadrant policies are applied
-oc get authpolicy,planpolicy,tokenratelimitpolicy -n hub-gateway-system
-
-# Check APIProduct catalog
-oc get apiproducts -n hub-gateway-system
-----
-
-See link:https://www.kuadrant.io/docs/[Kuadrant docs] and link:https://gateway-api.sigs.k8s.io/[Gateway API specification].
+Compare latency and HTTP **429** (token limit exceeded) with a direct call from **workshop-notebook** in `ai-%USER_NAME%` (module 22).
 
 === Learn more
 
 * link:https://www.kuadrant.io/docs/[Kuadrant — API management for Kubernetes]
 * link:https://www.kuadrant.io/docs/3.2/authorino/overview/[Authorino — authentication and authorization]
-* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/2.16/html-single/serving_models/index[OpenShift AI — model serving]
-* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/service_mesh/gateway-api-for-service-mesh[Gateway API on OpenShift Service Mesh]
+* link:https://docs.redhat.com/en/documentation/red_hat_connectivity_link/[Connectivity Link documentation]
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai/[OpenShift AI documentation]
 * link:https://gateway-api.sigs.k8s.io/[Kubernetes Gateway API specification]
-* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-kuadrant-plugin[Developer Hub Kuadrant plugin — API keys]
-* link:https://developers.redhat.com/articles/2024/08/22/api-management-kubernetes-kuadrant[API management on Kubernetes with Kuadrant]
-* link:https://www.redhat.com/en/blog/building-trusted-ai-platform-openshift[Building a trusted AI platform on OpenShift]
-
+* link:https://docs.redhat.com/en/documentation/red_hat_developer_hub/html-single/plug-ins_for_red_hat_developer_hub/index#con-kuadrant-plugin[Developer Hub Kuadrant plugin]
+* link:https://github.com/maximilianoPizarro/hybrid-mesh-platform/blob/main/docs/validatedpatterns-docs/products/connectivity-link.md[Platform Connectivity Link docs]
 
 == Features, benefits & cloud configuration
 
 === Key features
 
-* **Gateway API HTTPRoute** on hub with Istio ingress.
-* **Kuadrant AuthPolicy** + **TokenRateLimitPolicy** — API keys per workshop user.
-* Public hostname **`workshop-apis.%HUB_DOMAIN%`** routing `/llm` to MaaS backend.
+* Dedicated Gateway **`ai-gateway.%HUB_DOMAIN%`** — LLM isolated from demo APIs on workshop-apis.
+* **Kuadrant AuthPolicy** + **TokenRateLimitPolicy** — APIKEY per user, token buckets on completions.
+* **Swagger** in Developer Hub via APIProduct OpenAPI URL.
 
 === Business benefits
 
-* Factory apps get stable external API with auth — no shared cluster-internal URLs.
-* Rate limits protect MaaS from runaway OT scripts or misconfigured loops.
+* Factory apps get stable external API with auth — no shared MaaS credentials in OT scripts.
+* Rate limits protect shared MaaS from runaway loops on the shop floor.
 
 === AWS — API Gateway + ROSA analogy
 
 [source,bash]
 ----
 aws apigateway create-rest-api --name factory-llm-gateway
-# Map to private integration (NLB → OpenShift route) — lab uses Kuadrant instead
-aws apigateway create-deployment --rest-api-id abc123 --stage-name prod
-
-# WAF rate limit (compare Kuadrant TokenRateLimitPolicy)
-aws wafv2 create-web-acl --name llm-rate-limit --scope REGIONAL   --default-action Allow={} --rules file://rate-limit-rules.json
+aws wafv2 create-web-acl --name llm-rate-limit --scope REGIONAL --default-action Allow={} --rules file://rate-limit-rules.json
 ----
 
 === Azure — API Management
@@ -284,10 +239,8 @@ aws wafv2 create-web-acl --name llm-rate-limit --scope REGIONAL   --default-acti
 [source,bash]
 ----
 az apim create --resource-group rg-workshop --name factory-apim --publisher-name Hybrid --publisher-email admin@example.com
-az apim api create --resource-group rg-workshop --service-name factory-apim   --api-id maas-llm --path llm --display-name "MaaS LLM"
-az apim product create --resource-group rg-workshop --service-name factory-apim   --product-id plant-tier --product-name "Plant API tier" --subscription-required true
+az apim api create --resource-group rg-workshop --service-name factory-apim --api-id maas-llm --path v1 --display-name "MaaS LLM"
 ----
-
 
 == Lab access — URLs & credentials
 
@@ -297,22 +250,26 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| AI Gateway (MaaS LLM) | link:https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions[AI Gateway (MaaS LLM)] | Kuadrant API key
-| Kuadrant UI | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] | Workshop user
-| Catalog entity | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/workshop-ai-gateway[Catalog entity] | Workshop user
+| AI Gateway — chat | link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[POST /v1/chat/completions] | `Authorization: APIKEY <key>`
+| Kuadrant — request key | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] | Workshop user
+| Swagger (OpenAI spec) | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → LLM API] | Workshop user + APIKEY
+| Catalog component | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/workshop-ai-gateway[workshop-ai-gateway] | Workshop user
+| Workshop APIs (module 20) | link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[workshop-apis /httpbin] | `Authorization: APIKEY <key>`
 |===
 
 == Show and Tell
 
-. Explain why `%USER_NAME%` gets a Kuadrant API key instead of raw MaaS credentials — governance, not convenience.
-. Catalog → **workshop-ai-gateway** → inspect HTTPRoute in Topology.
-. Kuadrant UI: create API key; `curl` `/llm/v1/chat/completions` with `Authorization: APIKEY`.
-. Show AuthPolicy + TokenRateLimitPolicy YAML in `charts/all/workshop-kuadrant-apis/`.
-. Trigger HTTP 429 by exceeding free-tier limits — demonstrate protection for shared MaaS.
+. Clarify two hosts: **workshop-apis** (demos) vs **ai-gateway** (LLM) — same RHCL/Kuadrant stack, different namespaces.
+. Developer Hub → Kuadrant → request LLM key; Swagger POST `/v1/chat/completions` live.
+. Terminal `curl` with `Authorization: APIKEY` — show JSON response from `llama-scout-17b`.
+. `oc get tokenratelimitpolicy -n ai-gateway-system` — token governance for `%USER_NAME%`.
+. Trigger or describe HTTP **429** when free-tier token limit is hit.
+
 == Your TODO (user %USER_NAME%)
 
-* [ ] Open catalog **workshop-ai-gateway** and Kuadrant UI
-* [ ] Create API key and call `https://workshop-apis.%HUB_DOMAIN%/llm/v1/chat/completions`
+* [ ] Request API key for **AI Gateway — MaaS LLM** in Developer Hub → Kuadrant
+* [ ] Test **Swagger** POST `/v1/chat/completions` OR equivalent `curl` from terminal
+* [ ] Confirm response uses model `llama-scout-17b`
 * [ ] Save progress at the end of this module
 
 == Live lab
@@ -327,15 +284,18 @@ NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/
 |===
 | UI / capability | Source in GitOps repo
 
-| HTTPRoute + policies | `charts/all/workshop-kuadrant-apis/` |
-| Catalog | `catalog-ai-platform.yaml` → workshop-ai-gateway |
+| AI HTTPRoute + Gateway | `charts/all/workshop-kuadrant-apis/templates/ai-routes.yaml`
+| LLM policies | `charts/all/workshop-kuadrant-apis/templates/policies.yaml` (ai-maas-*)
+| APIProduct + Swagger | `charts/all/workshop-kuadrant-apis/templates/apiproducts.yaml`
+| Catalog | `charts/all/developer-hub/` → System `workshop-kuadrant-apis`
 |===
 
 Verify in the Showroom terminal:
 
 [source,bash]
 ----
-oc get httproute -n hub-gateway-system 2>/dev/null | grep workshop
+oc get httproute ai-maas -n ai-gateway-system 2>/dev/null
+oc get gateway ai-gateway -n ai-gateway-system 2>/dev/null
 ----
 
 == Verify
@@ -344,6 +304,8 @@ oc get httproute -n hub-gateway-system 2>/dev/null | grep workshop
 |===
 | Check | Action | Expected
 
+| Unauthenticated LLM | `curl` ai-gateway `/v1/chat/completions` without header | HTTP **401**
+| Chat completion | `curl` with APIKEY + JSON body | HTTP **200**, assistant message in JSON
 | Progress | Save checkboxes below | `POST /api/progress` returns OK
 |===
 
@@ -357,7 +319,7 @@ oc get httproute -n hub-gateway-system 2>/dev/null | grep workshop
 ++++
 
 
-TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if scaffolder fails.
+TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demos` if key request fails.
 
 
 ++++
@@ -365,4 +327,3 @@ TIP: Plan B — shared demo in Developer Hub → System `hybrid-mesh-shared-demo
   <a href="24-mcp-gateway.html">Next → 24 mcp gateway</a>
 </div>
 ++++
-

@@ -18,6 +18,7 @@
 * xref:17-service-mesh.adoc[17. OpenShift Service Mesh]
 * xref:18-scalability.adoc[18. Scalability HPA Kafka]
 * xref:19-network-policies.adoc[19. Network Policies]
+* xref:19-openshift-virtualization.adoc[OpenShift Virtualization (CNV)]
 * xref:20-acs-kuadrant.adoc[20. ACS & Connectivity Link]
 * xref:21-finops-kubecost.adoc[21. FinOps with Kubecost]
 * xref:22-openshift-ai.adoc[22. OpenShift AI Workshop]

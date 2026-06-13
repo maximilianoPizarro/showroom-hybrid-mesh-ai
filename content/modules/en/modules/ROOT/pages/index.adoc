@@ -477,7 +477,7 @@ Facilitators run xref:30-ai-show-and-tell.adoc[Module 30] as an executive demo a
 |===
 | 10–14 | Foundation — ACM, mesh, templates, IE, Kairos
 | 15–18 | Operations — observability, GitOps, mesh, scale
-| 19–21 | Security & FinOps — NP, ACS/Kuadrant, Kubecost
+| 19–21 | Security & FinOps — NP, CNV, ACS/Kuadrant, Kubecost
 | 22–24 | OpenShift AI — projects, AI Gateway, MCP Gateway
 | 25–28 | LLM, NeuroFace (OVMS), end-user apps
 |===

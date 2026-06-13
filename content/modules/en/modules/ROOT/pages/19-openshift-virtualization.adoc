@@ -1,0 +1,126 @@
+= OpenShift Virtualization (CNV)
+
+++++
+<span class="workshop-time-badge">~15 min</span>
+++++
+
+image::12-software-templates.png[OpenShift Virtualization — CNV workshop VM and Developer Hub template,960]
+
+.CNV in the lab
+[cols="1,1", options="header"]
+|===
+| Piece | Location
+
+| Operator
+| `openshift-cnv` — KubeVirt / HyperConverged
+
+| Demo VM
+| `workshop-cnv-demo` in namespace `cnv-workshop`
+
+| Software template
+| Developer Hub → **CNV VM Workshop** → Gitea org `ws-%USER_NAME%`
+
+| GitOps chart
+| `charts/all/cnv-example/` on hub
+|===
+
+NOTE: Nested virtualization must be available on hub workers. On some RHDP cloud flavors the CNV CSV stays **Pending** or VMs never start — use **Plan B** (Developer Hub catalog **demo-cnv-vm** + console read-only tour).
+
+== What you will do
+
+As `%USER_NAME%`:
+
+. Open **OpenShift Console → Workloads → Virtualization** (or **Administrator → Virtualization**).
+. Confirm CNV operator and VM `workshop-cnv-demo` in `cnv-workshop`.
+. Open link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub Catalog] → search **CNV** → run **CNV VM Workshop** template (or open Plan B **demo-cnv-vm**).
+. From the Showroom terminal: `oc get vm,vmi -n cnv-workshop` and optional `virtctl console workshop-cnv-demo -n cnv-workshop`.
+
+*Prerequisite:* modules **12 Software Templates** and **16 OpenShift GitOps** — GitOps delivery of the example chart.
+
+== Overview
+
+NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
+
+**OpenShift Virtualization** (KubeVirt) runs VMs on the same OpenShift cluster as containers — shared RBAC, networking, and GitOps. Factory teams lift-and-shift legacy SCADA HMIs or Windows tooling without a separate VMware estate.
+
+This workshop ships:
+
+* Hub subscription `kubevirt-hyperconverged` (clustergroup app `cnv-example`)
+* Cirros-based **`workshop-cnv-demo`** with cloud-init user `cirros`
+* Developer Hub template publishing VM YAML to your Gitea org
+
+Workshop IdP users get **view** on `cnv-workshop` via `platform-users` RoleBindings.
+
+=== Activity path — where to click
+
+[cols="1,3,2", options="header"]
+|===
+| Step | Where to go | What you do
+
+| 1
+| link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/cnv-workshop/kubevirt.io~v1~VirtualMachine[Console → cnv-workshop → VirtualMachines]
+| Check VM **workshop-cnv-demo** status
+
+| 2
+| link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub → Create]
+| Template **CNV VM Workshop** → scaffold to Gitea
+
+| 3
+| Showroom terminal
+| `hub-login` then verify operator + VM (commands below)
+
+| 4 (Plan B)
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/demo-cnv-vm[Catalog → demo-cnv-vm]
+| Read-only Topology + docs if nested virt unavailable
+|===
+
+== Hands-on
+
+=== Verify CNV operator
+
+[source,bash]
+----
+hub-login
+oc get csv -n openshift-cnv | grep -E 'NAME|kubevirt'
+oc get kubevirt,kubevirt.kubevirt.io -n openshift-cnv 2>/dev/null || oc get hyperconverged -n openshift-cnv
+oc get vm,vmi -n cnv-workshop
+----
+
+Expected: HyperConverged **Available**; VM **Running** or **Starting** when nested virt is enabled.
+
+=== Console login to demo VM (optional)
+
+[source,bash]
+----
+# Requires virtctl plugin in terminal image; otherwise use Console → VirtualMachines → Console
+virtctl console workshop-cnv-demo -n cnv-workshop
+----
+
+Cloud-init default user: **cirros** (passwordless console on Cirros image).
+
+=== Developer Hub template
+
+. **Create** → **CNV VM Workshop**
+. Owner: your user; target namespace `cnv-workshop` or personal test NS if policy allows
+. Review generated `VirtualMachine` / `DataVolume` in Gitea → sync or `oc apply`
+
+=== Plan B — nested virt unavailable
+
+If `oc get csv -n openshift-cnv` shows **Failed** or VM stays **Provisioning**:
+
+* Use catalog Component **demo-cnv-vm** for URLs and documentation
+* Facilitator demo: Console → Virtualization overview only
+* See platform doc: link:https://maximilianopizarro.github.io/hybrid-mesh-platform/validatedpatterns-docs/products/cnv.html[CNV product page]
+
+== Verify
+
+[source,bash]
+----
+oc get vm workshop-cnv-demo -n cnv-workshop -o jsonpath='{.status.printableStatus}{"\n"}'
+oc get pods -n cnv-workshop -l kubevirt.io=virt-launcher
+----
+
+== Next steps
+
+* xref:20-acs-kuadrant.adoc[20. ACS & Connectivity Link] — secure API ingress alongside VMs
+* xref:22-openshift-ai.adoc[22. OpenShift AI Workshop] — GPU workloads vs VM lift-and-shift trade-offs

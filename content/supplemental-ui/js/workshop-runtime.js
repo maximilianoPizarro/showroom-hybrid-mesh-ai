@@ -226,19 +226,68 @@
     if (!toggle || !panel || !frame) return;
 
     var terminalUrl = terminalBasePath();
+    var TERMINAL_OPEN_KEY = 'workshop-terminal-open';
     var loaded = false;
 
-    function setOpen(open) {
+    function blankFrame() {
+      if (!frame || !loaded) return;
+      try {
+        frame.src = 'about:blank';
+      } catch (e) {}
+      loaded = false;
+    }
+
+    function setOpen(open, opts) {
+      opts = opts || {};
       panel.classList.toggle('is-open', open);
       panel.setAttribute('aria-hidden', open ? 'false' : 'true');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       toggle.classList.toggle('is-active', open);
       document.body.classList.toggle('workshop-terminal-open', open);
-      if (open && !loaded) {
-        frame.src = terminalUrl;
-        loaded = true;
+      if (open) {
+        sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
+        if (!loaded || opts.forceReload) {
+          frame.src = terminalUrl;
+          loaded = true;
+        }
+      } else {
+        sessionStorage.removeItem(TERMINAL_OPEN_KEY);
+        blankFrame();
       }
     }
+
+    if (sessionStorage.getItem(TERMINAL_OPEN_KEY) === '1') {
+      setOpen(true);
+    }
+
+    document.addEventListener(
+      'click',
+      function (e) {
+        if (!panel.classList.contains('is-open')) return;
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        var href = a.getAttribute('href') || '';
+        if (!href || href.charAt(0) === '#' || /^javascript:/i.test(href)) return;
+        if (a.target === '_blank' || a.hasAttribute('download')) return;
+        try {
+          var url = new URL(a.href, window.location.href);
+          if (url.origin === window.location.origin) {
+            sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
+            blankFrame();
+          }
+        } catch (err) {}
+      },
+      true
+    );
+
+    window.addEventListener('pageshow', function () {
+      if (
+        sessionStorage.getItem(TERMINAL_OPEN_KEY) === '1' &&
+        !panel.classList.contains('is-open')
+      ) {
+        setOpen(true, { forceReload: true });
+      }
+    });
 
     toggle.onclick = function () {
       setOpen(!panel.classList.contains('is-open'));

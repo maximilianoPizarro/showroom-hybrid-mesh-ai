@@ -4,7 +4,7 @@
 <span class="workshop-time-badge">~15 min</span>
 ++++
 
-image::12-software-templates.png[OpenShift Virtualization — CNV workshop VM and Developer Hub template,960]
+image::19-openshift-virtualization.png[OpenShift Virtualization — CNV workshop VM and Developer Hub template,960]
 
 .CNV in the lab
 [cols="1,1", options="header"]

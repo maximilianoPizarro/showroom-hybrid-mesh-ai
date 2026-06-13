@@ -176,6 +176,16 @@ Prefer these when expanding AI modules:
 5. Reference `charts/all/` paths from hybrid-mesh-platform
 6. Include at least one annotated YAML block and 5+ official links for AI-related topics
 
+## Screenshot sources (live cluster only)
+
+Hero PNGs are captured from the hub cluster UI (`apps.cluster-22jv2.dynamic2.redhatworkshops.io`), not Gemini/diagram art.
+
+- **Canonical manifest:** `hybrid-mesh-platform/scripts/workshop-screenshot-manifest.yaml` — URL, viewport, `wait_for`, `preserve` per file
+- **Batch capture:** `node scripts/capture-workshop-screenshots.mjs` (Playwright; skips `preserve: true` entries)
+- **Sync to showroom:** `SHOWROOM_DIR=../showroom-hybrid-mesh-ai bash scripts/sync-showroom-content.sh`
+- **Preserve ACS heroes:** `03-security-scale-hybrid.png` and `20-acs-kuadrant.png` — do not overwrite; ACS Central Clusters / registration secret UI
+- **CNV fallback:** if KubeVirt CRD missing, use Developer Hub Self-service → “OpenShift Virtualization: Workshop VM” (`19-openshift-virtualization.png`)
+
 ## Verification
 
 After content changes:

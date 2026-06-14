@@ -44,6 +44,8 @@ NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overvie
 
 The **AI Gateway** host (`ai-gateway.%HUB_DOMAIN%`) is separate from **workshop-apis** — both ship in `charts/all/workshop-kuadrant-apis/` but use different Gateway API namespaces and routes. LLM traffic matches path prefix **`/v1`** and proxies to RHDP LiteMaaS; Kuadrant injects the upstream **Bearer** token so workshop users only hold **APIKEY** credentials.
 
+NOTE: The upstream MaaS Bearer belongs in Vault (`secret/workshop/maas`) and should reach the gateway via **ExternalSecret** — see xref:20-vault-external-secrets.adoc[Vault & External Secrets]. RHDP facilitators may use `scripts/apply-maas-secrets.sh` until ESO is wired.
+
 === Why govern AI inference with an API gateway?
 
 Without a gateway, every factory app needs the raw MaaS URL and shared credentials — no audit trail, no rate limits, no plan tiers. The AI Gateway gives `%USER_NAME%` a Kuadrant key scoped to **free** or **gold** plans: auth at the edge, **TokenRateLimitPolicy** on completion tokens, stable hostname for OT integrations.

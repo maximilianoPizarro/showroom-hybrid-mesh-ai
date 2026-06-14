@@ -36,13 +36,14 @@ NOTE: MaaS API keys are injected **post-install** via `bash scripts/apply-maas-s
 
 == HashiCorp Vault (facilitator)
 
-Vault runs on the hub (`charts/all/hashicorp-vault` VP). Workshop users get **view** on namespace `vault`.
+Full narrative: xref:20-vault-external-secrets.adoc[Vault & External Secrets]. Summary:
 
-. OpenShift Console → **Platform Hub-Spoke** → **Vault**
-. URL: `https://vault-vault.%HUB_DOMAIN%/ui/` (root `/` returns HTTP 307)
-. Init/unseal tokens live in facilitator-local `values-secret.yaml` (gitignored)
+. OpenShift Console → **Platform Hub-Spoke** → **Vault** → `https://vault-vault.%HUB_DOMAIN%/ui/`
+. Demo login: **userpass** → `admin` / `Welcome123!` (or `user1` read-only)
+. MaaS upstream path: `secret/workshop/maas` — target sync via **ExternalSecret** to `ai-maas-upstream-credentials`
+. RHDP day-2 fallback: `bash scripts/apply-maas-secrets.sh` (never commit keys)
 
-Future path: External Secrets Operator reads MaaS keys from Vault paths. Today: `scripts/apply-maas-secrets.sh`.
+Platform docs: link:https://maximilianopizarro.github.io/hybrid-mesh-platform/validatedpatterns-docs/products/vault.html[GitHub Pages — Vault & External Secrets]
 
 == Kuadrant workshop APIs (optional demo)
 

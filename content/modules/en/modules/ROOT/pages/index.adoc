@@ -384,6 +384,13 @@ operators:
       version: "3.19+"
       gitPath: charts/all/devspaces/
       docs: https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/
+  external:
+    - name: HashiCorp Vault
+      version: "0.1.*"
+      gitPath: charts/all/hashicorp-vault/
+      docs: https://developer.hashicorp.com/vault/docs
+    - name: vault-demo-auth
+      gitPath: charts/all/vault-demo-auth/
   community:
     - name: Grafana Operator
       channel: v5
@@ -437,7 +444,8 @@ operators:
 * link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/virtualization/[CNV 4.20+] — VM workloads via workshop CNV template (`charts/all/cnv-example/`)
 
 === Security & secrets
-* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/security_and_compliance/external-secrets-operator-for-red-hat-openshift[External Secrets 1.1+] — MaaS keys and spoke tokens without Git commits
+* link:https://maximilianopizarro.github.io/hybrid-mesh-platform/validatedpatterns-docs/products/vault.html[HashiCorp Vault + External Secrets] — central MaaS/API credentials; xref:20-vault-external-secrets.adoc[Showroom module]
+* link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/security_and_compliance/external-secrets-operator-for-red-hat-openshift[External Secrets 1.1+] — sync Vault KV to Kubernetes without Git commits
 
 === Community & third-party
 * **Kairos Community** — SmartScalingPolicy for IE sensor workloads (`charts/all/kairos/`)
@@ -477,7 +485,7 @@ Facilitators run xref:30-ai-show-and-tell.adoc[Module 30] as an executive demo a
 |===
 | 10–14 | Foundation — ACM, mesh, templates, IE, Kairos
 | 15–18 | Operations — observability, GitOps, mesh, scale
-| 19–21 | Security & FinOps — NP, CNV, ACS/Kuadrant, Kubecost
+| 19–21 | Security & FinOps — NP, CNV, ACS/Kuadrant, Vault/ESO, Kubecost
 | 22–24 | OpenShift AI — projects, AI Gateway, MCP Gateway
 | 25–28 | LLM, NeuroFace (OVMS), end-user apps
 |===

@@ -20,6 +20,7 @@
 * xref:19-network-policies.adoc[19. Network Policies]
 * xref:19-openshift-virtualization.adoc[OpenShift Virtualization (CNV)]
 * xref:20-acs-kuadrant.adoc[20. ACS & Connectivity Link]
+* xref:20-vault-external-secrets.adoc[Vault & External Secrets]
 * xref:21-finops-kubecost.adoc[21. FinOps with Kubecost]
 * xref:22-openshift-ai.adoc[22. OpenShift AI Workshop]
 * xref:23-ai-gateway.adoc[23. AI Gateway — MaaS + Kuadrant]

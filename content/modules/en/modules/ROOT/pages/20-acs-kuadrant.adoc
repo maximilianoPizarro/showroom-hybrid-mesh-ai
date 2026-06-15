@@ -100,17 +100,21 @@ Follow this sequence as `%USER_NAME%`:
 |===
 | Step | Where to go | What you do
 
-| 1
+| 1a
 | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant]
-| Sign in → **API Products** → select **Workshop httpbin** → **Request API key** → copy key
+| **API Products** → click **Workshop httpbin** (product name, not pencil) → **Request API key** → copy key
+
+| 1b (alternate)
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/api/workshop-httpbin-openapi[Catalog → API workshop-httpbin-openapi]
+| Open the **API** entity → **Kuadrant** tab → **Request API key** → copy key
 
 | 2
 | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → System workshop-kuadrant-apis]
-| Open **API** entity for httpbin → **View API definition** / Swagger → try **GET /get** (paste APIKEY in Authorize)
+| Same **API** entity → **Definition** tab (Swagger) → **Authorize** with `APIKEY` → try **GET /get**
 
 | 3
 | Showroom → **Terminal** (hub context)
-| Run `curl` probes below — expect **401** then **200**
+| `kuadrant-set-key <paste-key>` then `kuadrant-test-httpbin` — or run the `curl` block below
 
 | 4 (optional)
 | link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/workshop-kuadrant-apis/gateway.networking.k8s.io~v1~HTTPRoute[OpenShift Console → HTTPRoutes]
@@ -123,25 +127,29 @@ Follow this sequence as `%USER_NAME%`:
 
 == Hands-on — terminal and curl
 
-Use the embedded Showroom terminal (hub). Replace `<KEY>` with the value from step 1.
+Use the embedded Showroom terminal (hub). Works for `%USER_NAME%` and `platformadmin`.
+
+. Request key in Developer Hub (step 1a or 1b above).
+. In the terminal:
 
 [source,bash]
 ----
-# 1. Gateway is up — unauthenticated call must fail (401)
+# Quick helpers (defined in Showroom terminal .bashrc)
+kuadrant-set-key "<paste-kuadrant-api-key>"
+kuadrant-test-httpbin    # 401 without key, then 200 + JSON with key
+
+# Or manual curl:
 curl -sk -o /dev/null -w 'httpbin without key: %{http_code}\n' \
   https://workshop-apis.%HUB_DOMAIN%/httpbin/get
 
-export KEY="<paste-kuadrant-api-key>"
+export KEY="$KUADRANT_API_KEY"
 
-# 2. Authenticated httpbin — expect 200 + JSON echo
 curl -sk -H "Authorization: APIKEY $KEY" \
   https://workshop-apis.%HUB_DOMAIN%/httpbin/get
 
-# 3. REST Countries via same gateway host
 curl -sk -H "Authorization: APIKEY $KEY" \
   https://workshop-apis.%HUB_DOMAIN%/countries/name/chile | head -c 400
 
-# 4. Confirm HTTPRoute and APIProduct exist
 oc get httproute -n workshop-kuadrant-apis
 oc get apiproducts -n workshop-kuadrant-apis
 ----
@@ -225,6 +233,7 @@ NOTE: Paths refer to the GitOps repo link:https://github.com/maximilianoPizarro/
 | AI Gateway (LLM) | `charts/all/workshop-kuadrant-apis/templates/ai-routes.yaml`
 | RHCL operator | `charts/all/rhcl-operator/`
 | Day-2 apply script | `scripts/apply-workshop-kuadrant-apis.sh`
+| Curl verify script | `scripts/verify-workshop-kuadrant-curl.sh` (hub, with optional `KUADRANT_API_KEY`)
 |===
 
 Verify in the Showroom terminal:

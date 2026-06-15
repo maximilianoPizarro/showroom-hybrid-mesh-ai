@@ -145,15 +145,19 @@ As `%USER_NAME%`, follow this sequence (hands-on detail in xref:20-acs-kuadrant.
 
 | 1
 | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant]
-| **API Products** → **Workshop httpbin** (or **AI Gateway — MaaS LLM**) → **Request API key** → copy key
+| **API Products** → click product **name** → **Request API key** → copy key (`userN` or `platformadmin`)
+
+| 1b
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis]
+| Open any **API** entity → **Kuadrant** tab → **Request API key**
 
 | 2
-| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis]
-| Open **API** entity → **View API definition** (Swagger) → **Authorize** with `APIKEY` → try a GET or POST
+| Same **API** entity
+| **Definition** tab (Swagger) → **Authorize** with `APIKEY` → try a GET or POST
 
 | 3
-| Showroom → **Terminal** (footer or panel)
-| Run `curl` below — expect **401** without key, **200** with key
+| Showroom → **Terminal**
+| `kuadrant-set-key <key>` → `kuadrant-test-httpbin` — expect **401** then **200**
 
 | 4
 | link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[workshop-apis] or link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[ai-gateway]
@@ -162,19 +166,19 @@ As `%USER_NAME%`, follow this sequence (hands-on detail in xref:20-acs-kuadrant.
 
 [source,bash]
 ----
-# Showroom terminal — replace <KEY> after Kuadrant UI step 1
+# Showroom terminal — after Kuadrant key request
+kuadrant-set-key "<paste-kuadrant-api-key>"
+kuadrant-test-httpbin
+
+# LLM (module 23) — same key, different host
+export MAAS_MODEL="${MAAS_MODEL:-granite-3-2-8b-instruct}"
+kuadrant-test-ai
+
+# Manual curl (optional)
 curl -sk -o /dev/null -w 'httpbin no key: %{http_code}\n' \
   https://workshop-apis.%HUB_DOMAIN%/httpbin/get
-
-export KEY="<paste-kuadrant-api-key>"
-curl -sk -H "Authorization: APIKEY $KEY" \
+curl -sk -H "Authorization: APIKEY $KUADRANT_API_KEY" \
   https://workshop-apis.%HUB_DOMAIN%/httpbin/get
-
-# LLM (module 23) — same header format, different host
-curl -sk "https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions" \
-  -H "Authorization: APIKEY $KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"llama-scout-17b","messages":[{"role":"user","content":"Hello"}],"max_tokens":20}'
 ----
 
 NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; htpasswd OpenShift hub/east/west; DevSpaces east). OAuth products use the same OpenShift identity.

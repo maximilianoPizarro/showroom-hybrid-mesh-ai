@@ -31,12 +31,12 @@ NOTE: Module **20** covers **workshop-apis** (`/httpbin`, `/countries`). This mo
 
 Govern **Model-as-a-Service (MaaS)** LLM inference through the dedicated **AI Gateway** — not raw MaaS URLs or OpenShift AI routes. As `%USER_NAME%`:
 
-. Open link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant] → API Product **AI Gateway — MaaS LLM** → request API key (or reuse key from xref:20-acs-kuadrant.adoc[module 20] if scoped to LLM).
-. Open link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis] → **API** entity for LLM → **Swagger** (OpenAI-compatible spec) → authorize with `APIKEY`.
-. Call `https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions` from the Showroom terminal with `curl`.
+. Open link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Developer Hub → Kuadrant] → click **AI Gateway — MaaS LLM** → **Request API key** (or Catalog API → **Kuadrant** tab).
+. Open link:https://developer-hub.%HUB_DOMAIN%/catalog/default/api/workshop-maas-openapi[Catalog → workshop-maas-openapi] → **Definition** (Swagger) or **Kuadrant** tab.
+. Call `https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions` from Showroom terminal: `kuadrant-set-key` + `kuadrant-test-ai`.
 . Compare with OpenShift AI Playground in `maas-workshop` (module 22) — gateway adds per-user auth, plan tiers, and token rate limits.
 
-*Prerequisite:* module **22 OpenShift AI** — familiarity with chat-completions JSON and model `llama-scout-17b`.
+*Prerequisite:* module **22 OpenShift AI** — familiarity with chat-completions JSON and model `granite-3-2-8b-instruct` (Lightspeed default on MaaS RHDP).
 
 == Overview
 
@@ -58,15 +58,19 @@ Without a gateway, every factory app needs the raw MaaS URL and shared credentia
 
 | 1
 | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI]
-| **API Products** → **AI Gateway — MaaS LLM (TokenRateLimit)** → **Request API key**
+| **API Products** → **AI Gateway — MaaS LLM** → click product name → **Request API key**
+
+| 1b
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/api/workshop-maas-openapi[Catalog → workshop-maas-openapi]
+| **Kuadrant** tab → **Request API key**
 
 | 2
-| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → workshop-kuadrant-apis]
-| Open LLM **API** → **View API definition** (OpenAI OpenAPI) → Authorize with `APIKEY` → try **POST /v1/chat/completions**
+| link:https://developer-hub.%HUB_DOMAIN%/catalog/default/api/workshop-maas-openapi[Catalog → LLM API]
+| **Definition** tab → Authorize `APIKEY` → **POST /v1/chat/completions**
 
 | 3
 | Showroom **Terminal**
-| Run `curl` below against `ai-gateway.%HUB_DOMAIN%`
+| `kuadrant-set-key <key>` → `kuadrant-test-ai` (or `curl` below)
 
 | 4
 | link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/ai-gateway-system/gateway.networking.k8s.io~v1~HTTPRoute[Console → HTTPRoute ai-maas]
@@ -182,23 +186,23 @@ spec:
 
 [source,bash]
 ----
-export KEY="<your-kuadrant-api-key-from-developer-hub>"
+kuadrant-set-key "<your-kuadrant-api-key-from-developer-hub>"
+kuadrant-test-ai
 
-# Unauthenticated — expect 401
+# Or manual curl (model granite-3-2-8b-instruct — same as Developer Hub Lightspeed):
+export KEY="$KUADRANT_API_KEY"
+export MAAS_MODEL="${MAAS_MODEL:-granite-3-2-8b-instruct}"
+
 curl -sk -o /dev/null -w 'LLM without key: %{http_code}\n' \
-  https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions
+  -H "Content-Type: application/json" \
+  -X POST "https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions" \
+  -d "{\"model\":\"${MAAS_MODEL}\",\"messages\":[{\"role\":\"user\",\"content\":\"ping\"}],\"max_tokens\":5}"
 
-# Chat completion — OpenAI-compatible JSON
 curl -sk "https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions" \
   -H "Authorization: APIKEY $KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"llama-scout-17b","messages":[{"role":"user","content":"Summarize hybrid mesh in one sentence."}],"max_tokens":50}'
+  -d "{\"model\":\"${MAAS_MODEL}\",\"messages\":[{\"role\":\"user\",\"content\":\"Summarize hybrid mesh in one sentence.\"}],\"max_tokens\":50}"
 
-# List models (if exposed on same route prefix)
-curl -sk -H "Authorization: APIKEY $KEY" \
-  https://ai-gateway.%HUB_DOMAIN%/v1/models | head -c 500
-
-# Verify policies on ai-gateway namespace
 oc get authpolicy,planpolicy,tokenratelimitpolicy -n ai-gateway-system
 oc get apiproducts -n ai-gateway-system
 ----
@@ -255,7 +259,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 | AI Gateway — chat | link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[POST /v1/chat/completions] | `Authorization: APIKEY <key>`
 | Kuadrant — request key | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] | Workshop user
 | Swagger (OpenAI spec) | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/workshop-kuadrant-apis[Catalog → LLM API] | Workshop user + APIKEY
-| Catalog component | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/workshop-ai-gateway[workshop-ai-gateway] | Workshop user
+| Catalog component | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/component/ai-gateway-maas[ai-gateway-maas] | Workshop user
 | Workshop APIs (module 20) | link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[workshop-apis /httpbin] | `Authorization: APIKEY <key>`
 |===
 
@@ -263,7 +267,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 . Clarify two hosts: **workshop-apis** (demos) vs **ai-gateway** (LLM) — same RHCL/Kuadrant stack, different namespaces.
 . Developer Hub → Kuadrant → request LLM key; Swagger POST `/v1/chat/completions` live.
-. Terminal `curl` with `Authorization: APIKEY` — show JSON response from `llama-scout-17b`.
+. Terminal `curl` or `kuadrant-test-ai` with `Authorization: APIKEY` — show JSON from `granite-3-2-8b-instruct`.
 . `oc get tokenratelimitpolicy -n ai-gateway-system` — token governance for `%USER_NAME%`.
 . Trigger or describe HTTP **429** when free-tier token limit is hit.
 
@@ -271,7 +275,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 * [ ] Request API key for **AI Gateway — MaaS LLM** in Developer Hub → Kuadrant
 * [ ] Test **Swagger** POST `/v1/chat/completions` OR equivalent `curl` from terminal
-* [ ] Confirm response uses model `llama-scout-17b`
+* [ ] Confirm response uses model `granite-3-2-8b-instruct` (or `MAAS_MODEL` from RHDP)
 * [ ] Save progress at the end of this module
 
 == Live lab

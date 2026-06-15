@@ -134,9 +134,17 @@ Use the embedded Showroom terminal (hub). Works for `%USER_NAME%` and `platforma
 
 [source,bash]
 ----
-# Quick helpers (defined in Showroom terminal .bashrc)
+# Read-only oc via Showroom ServiceAccount (HTTPRoutes, APIProducts, policies)
+sa-login
+kuadrant-verify-oc
+
+# Or as workshop user (same lab-reader permissions after hub-login)
+hub-login user1
+kuadrant-verify-oc
+
+# Quick curl helpers
 kuadrant-set-key "<paste-kuadrant-api-key>"
-kuadrant-test-httpbin    # 401 without key, then 200 + JSON with key
+kuadrant-test-httpbin
 
 # Or manual curl:
 curl -sk -o /dev/null -w 'httpbin without key: %{http_code}\n' \

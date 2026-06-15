@@ -4,7 +4,7 @@
 * xref:01-hybrid-cloud-strategy.adoc[01. Hybrid Cloud Strategy]
 * xref:02-rosa-architecture.adoc[02. ROSA Architecture & Benefits]
 * xref:03-security-scale-hybrid.adoc[03. Security & Scale in Hybrid]
-* xref:04-aws-ai-integration.adoc[04. AWS Services & AI Integration]
+* xref:04-aws-ai-integration.adoc[04. Cloud Services & AI (AWS/GCP/Azure)]
 * xref:05-cases-roadmap.adoc[05. Real Cases & Roadmap]
 
 .Part B — Hands-on

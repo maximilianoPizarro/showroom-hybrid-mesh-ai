@@ -1,43 +1,68 @@
-= AWS Services & AI Integration
+= Cloud Services & AI Integration (AWS / GCP / Azure)
 
 ++++
-<span class="workshop-time-badge">~10 min</span>
+<span class="workshop-time-badge">~12 min</span>
 ++++
 
-image::04-aws-ai-integration.png[AWS and OpenShift AI integration,960]
+image::04-aws-ai-integration.png[Cloud AI services and OpenShift AI integration,960]
 
-.AWS AI services vs this lab
-[cols="1,1", options="header"]
+.Cloud AI services vs this lab
+[cols="1,1,1", options="header"]
 |===
-| In AWS (production) | In this lab (RHDP hub-spoke)
+| AWS | Google Cloud | This lab (RHDP hub-spoke)
 
-| Amazon Bedrock — managed LLM API
+| Amazon Bedrock
+| Vertex AI endpoints
 | MaaS on hub — OpenAI-compatible `/v1/chat/completions`
 
-| SageMaker — training and hosting
+| SageMaker
+| Vertex AI Training + Model Garden
 | `DataScienceCluster` + KServe/ModelMesh (module 22)
 
-| IAM OIDC — pod identity to AWS
-| `openshift-ai-maas-credentials` secret + Kuadrant API keys
+| IAM OIDC
+| Workload Identity Federation
+| `openshift-ai-maas-credentials` + Kuadrant API keys
 
-| Bedrock per-app API keys
-| Shared MaaS endpoint — NeuroFace, Lightspeed, DevSpaces consume one URL
+| EKS + Outposts
+| GKE Autopilot + Anthos
+| ROSA + ACM hub-spoke fleet (modules 10–11)
 
-| SageMaker endpoints in VPC
-| `InferenceService` pods on hub; consumers on spokes via Skupper
+| App Mesh / Istio on EKS
+| Anthos Service Mesh
+| OpenShift Service Mesh 3 ambient (module 17)
+
+| Secrets Manager
+| Secret Manager
+| HashiCorp Vault + External Secrets (Vault module)
+
+| API Gateway + WAF
+| Cloud Armor + API Gateway
+| Kuadrant AuthPolicy + RateLimitPolicy (modules 20/23)
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+NOTE: For AWS/GCP/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes]. The Showroom terminal includes `gcloud`, `aws`, and `az` CLIs pre-installed.
 
 
 
 == Overview
 
-AWS customers often pair ROSA with native AI services — Amazon Bedrock for foundation models, SageMaker for training pipelines, and IAM OIDC for secure workload identity. Red Hat's hybrid approach keeps inference and data pipelines on OpenShift AI while still allowing optional AWS service integration via credentials and external endpoints where policy permits.
+Cloud customers (AWS, GCP, Azure) pair managed Kubernetes with native AI services — Amazon Bedrock, Google Vertex AI, Azure OpenAI. Red Hat's hybrid approach keeps inference and data pipelines on OpenShift AI while allowing optional cloud service integration where policy permits.
 
-This workshop intentionally substitutes OpenShift AI plus Model-as-a-Service (MaaS) for Bedrock/SageMaker so you experience a portable pattern: a `DataScienceCluster` on the hub, shared LLM endpoint, and consumer apps (NeuroFace, Developer Hub Lightspeed) on spokes. The secret `openshift-ai-maas-credentials` and MaaS base URL mirror how production teams centralize model access instead of embedding API keys in every deployment.
+This workshop substitutes OpenShift AI plus Model-as-a-Service (MaaS) for Bedrock/Vertex AI/Azure OpenAI so you experience a **portable pattern**: a `DataScienceCluster` on the hub, shared LLM endpoint, and consumer apps on spokes. The same app code runs identically on ROSA (AWS), ARO (Azure), or GKE-hosted OpenShift — the Kubernetes-native serving layer moves with the cluster.
 
-Module 22 onward activates this stack hands-on. Executives should recognize that OpenShift AI on ROSA or on-prem avoids rewriting applications when cloud AI pricing or residency rules change — the Kubernetes-native serving layer moves with the cluster.
+Module 22 onward activates this stack hands-on. Executives should recognize that OpenShift AI avoids rewriting applications when cloud AI pricing or residency rules change.
+
+=== Multi-cloud CLI in Showroom terminal
+
+The workshop terminal includes all three major cloud CLIs pre-installed:
+
+[source,bash]
+----
+# Verify available CLIs
+gcloud version 2>/dev/null | head -1
+aws --version
+az version --query '"azure-cli"' -o tsv
+----
 
 === Learn more
 
@@ -74,6 +99,81 @@ aws iam attach-role-policy --role-name rosa-ai-invoke-bedrock   --policy-arn arn
 # Invoke (compare with lab MaaS curl in module 23)
 aws bedrock-runtime invoke-model   --model-id anthropic.claude-3-sonnet-20240229-v1:0   --body file://prompt.json --cli-binary-format raw-in-base64-out out.json
 ----
+
+=== Google Cloud — Vertex AI + GKE comparison
+
+[source,bash]
+----
+# Vertex AI — managed LLM endpoint (compare with OpenShift AI MaaS in module 22)
+gcloud ai endpoints create --display-name=workshop-llm --region=us-central1
+gcloud ai models upload --display-name=llama-scout --region=us-central1 \
+  --container-image-uri=us-docker.pkg.dev/vertex-ai/prediction/text-bison:latest
+
+# Invoke (compare with lab curl in module 23: ai-gateway + Kuadrant APIKEY)
+gcloud ai endpoints predict ENDPOINT_ID --region=us-central1 \
+  --json-request='{"instances":[{"prompt":"Explain hybrid mesh"}]}'
+
+# GKE Autopilot cluster (compare with ROSA hub-spoke managed by ACM)
+gcloud container clusters create-auto workshop-hub --region=us-central1
+gcloud container clusters get-credentials workshop-hub --region=us-central1
+
+# Secret Manager (compare with Vault + External Secrets in this lab)
+gcloud secrets create maas-api-key --data-file=key.txt
+gcloud secrets add-iam-policy-binding maas-api-key \
+  --member="serviceAccount:workshop-sa@PROJECT.iam.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+
+# Anthos Service Mesh (compare with OpenShift Service Mesh 3 ambient mode)
+gcloud container fleet mesh enable --project=PROJECT_ID
+gcloud container fleet memberships register east-spoke \
+  --gke-cluster=us-east1/east-cluster --enable-workload-identity
+
+# Anthos Config Management — fleet GitOps (compare with ACM + Argo CD)
+gcloud beta container fleet config-management apply \
+  --membership=east-spoke --config=acm-config.yaml
+----
+
+.Google Cloud equivalences with this lab
+[cols="1,1", options="header"]
+|===
+| Google Cloud service | OpenShift equivalent in this lab
+
+| Vertex AI endpoints
+| OpenShift AI `DataScienceCluster` + MaaS (module 22)
+
+| Vertex AI Model Garden
+| MaaS model catalog (`llama-scout-17b`, `granite-3-2-8b`) on hub
+
+| GKE Autopilot + Anthos fleet
+| ROSA + ACM hub-spoke (modules 10–11)
+
+| Anthos Service Mesh (Istio)
+| OpenShift Service Mesh 3 ambient (module 17)
+
+| Anthos Config Management
+| OpenShift GitOps (Argo CD) + ACM policies (module 16)
+
+| Secret Manager + Workload Identity
+| HashiCorp Vault + External Secrets Operator (Vault module)
+
+| Cloud Armor / API Gateway
+| Kuadrant AuthPolicy + TokenRateLimitPolicy (module 20/23)
+
+| Pub/Sub
+| AMQ Streams (Kafka) on spokes (module 13/18)
+
+| Cloud Monitoring + Trace
+| Cluster Observability + OpenTelemetry + Grafana (module 15)
+
+| Artifact Registry
+| Quay Registry on hub (module scaffolding)
+
+| Cloud Build
+| OpenShift Pipelines (Tekton) on spokes
+
+| Cloud Workstations
+| Red Hat Dev Spaces on east spoke (module 12)
+|===
 
 === Azure — OpenAI alternative
 

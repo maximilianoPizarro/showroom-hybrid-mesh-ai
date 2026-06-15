@@ -56,6 +56,16 @@
     if (idx !== -1) {
       return host.slice(idx + 1);
     }
+    var idx2 = host.indexOf('showroom-showroom.');
+    if (idx2 === 0) {
+      return host.slice('showroom-showroom.'.length);
+    }
+    if (host.indexOf('.') !== -1 && host.indexOf('github.io') === -1 && host.indexOf('localhost') === -1) {
+      var parts = host.split('.');
+      if (parts.length >= 3) {
+        return 'apps.' + parts.slice(1).join('.');
+      }
+    }
     return '';
   }
 

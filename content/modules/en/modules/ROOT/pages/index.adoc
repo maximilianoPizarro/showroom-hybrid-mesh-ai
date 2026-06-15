@@ -31,89 +31,15 @@ Register at `https://workshop-registration.%HUB_DOMAIN%` to receive your lab ide
 
 == Hub-spoke architecture
 
-The workshop fleet is a three-cluster hub-spoke topology managed by ACM:
+The workshop fleet is a **three-cluster hub-spoke** topology managed by ACM:
 
-[source,yaml]
-----
-# ACM ManagedCluster — hub registers spoke clusters automatically
-apiVersion: cluster.open-cluster-management.io/v1
-kind: ManagedCluster
-metadata:
-  name: east
-  labels:
-    cloud: Amazon
-    region: us-east-1
-    env: workshop
-spec:
-  hubAcceptsClient: true
-----
+* **Hub:** ACM, Argo CD, Developer Hub, OpenShift AI, Service Mesh control plane, Skupper, Kuadrant, ACS Central, Grafana, Kubecost
+* **East spoke:** Industrial Edge workloads, DevSpaces, Kairos, spoke-local Argo CD
+* **West spoke:** workload replicas, cross-cluster traffic via Skupper
 
-[source,yaml]
-----
-# GitOpsCluster — lets Argo CD on the hub deploy to spokes
-apiVersion: apps.open-cluster-management.io/v1beta1
-kind: GitOpsCluster
-metadata:
-  name: workshop-gitops
-  namespace: openshift-gitops
-spec:
-  argoServer:
-    cluster: local-cluster
-    argoNamespace: openshift-gitops
-  placementRef:
-    kind: Placement
-    apiGroup: cluster.open-cluster-management.io
-    name: all-workshop-clusters
-----
+Traffic flows through OpenShift Service Mesh 3 (*ambient mode* — no sidecars) and crosses clusters via Skupper tunnels exposed through Gateway API. See xref:11-hybrid-mesh-architecture.adoc[module 11] for full YAML manifests and mesh topology.
 
-The hub runs: ACM, OpenShift GitOps (Argo CD), Developer Hub, OpenShift AI, Service Mesh control plane, Skupper, Kuadrant, ACS Central, Grafana, and Kubecost. +
-The east spoke runs: Industrial Edge workloads, DevSpaces, Kairos, and spoke-local Argo CD agents. +
-The west spoke runs: additional workload replicas and demonstrates cross-cluster traffic via Skupper.
-
-== Service mesh & traffic flow
-
-The workshop uses OpenShift Service Mesh 3 in *ambient mode* (no sidecars). Traffic between hub and spokes crosses a Skupper tunnel exposed via Gateway API:
-
-[source,yaml]
-----
-# HTTPRoute — routes /api/inference from hub gateway to MaaS on east spoke via Skupper
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: maas-inference-route
-  namespace: hybrid-mesh-gateway
-spec:
-  parentRefs:
-    - name: hub-gateway
-      namespace: hybrid-mesh-gateway
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /api/inference
-      backendRefs:
-        - name: skupper-maas-backend   # Skupper connector bridging to east spoke
-          port: 8080
-----
-
-[source,yaml]
-----
-# AuthorizationPolicy — zero-trust: only gateway SA can reach MaaS
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
-  name: maas-allow-gateway
-  namespace: maas-workshop
-spec:
-  selector:
-    matchLabels:
-      app: maas-api
-  rules:
-    - from:
-        - source:
-            principals:
-              - cluster.local/ns/hybrid-mesh-gateway/sa/hub-gateway
-----
+TIP: Detailed YAML (ManagedCluster, GitOpsCluster, HTTPRoute, AuthorizationPolicy) lives in the hands-on modules 10–17 where you deploy them step by step.
 
 == OpenShift AI — Model as a Service
 

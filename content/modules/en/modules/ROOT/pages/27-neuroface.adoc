@@ -164,6 +164,9 @@ oc get notebook ppe-workbench -n neuroface
 
 . Multimodal capstone: YOLO PPE vision + hub LLM (MaaS).
 . Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] — PPE Safety webcam live.
++
+image::neuroface-ui.png[NeuroFace UI,960]
++
 . Ask chat: _"What PPE is missing for this worker?"_
 . Open link:https://ppe-workbench.%HUB_DOMAIN%[PPE Workbench] — upload a factory image and run detection.
 . Cross-link OpenShift AI → **ai-%USER_NAME%** → per-user notebooks.

@@ -4,50 +4,64 @@
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::27-neuroface.png[NeuroFace — OVMS PPE Safety vision and MaaS chat,960]
+image::27-neuroface.png[NeuroFace — YOLO PPE detection, MaaS chat, and PPE Workbench,960]
 
 .NeuroFace architecture
 [cols="1,1", options="header"]
 |===
 | Capability | Backend
 
-| PPE Safety / face detection
-| OVMS **`face-detection-retail-0005`** (webcam inference)
+| PPE detection (hardhat, safety-vest, goggles)
+| In-cluster **YOLO** `yolo-ppe-serving` (`Hexmon/vyra-yolo-ppe-detection`)
+
+| Face / webcam (optional)
+| OVMS **`face-detection-retail-0005`** when `ovms.enabled: true`
 
 | Operator chat
 | MaaS `/v1/chat/completions` (`llama-scout-17b`)
 
+| Image prediction lab
+| OpenShift AI **`ppe-workbench`** notebook
+
 | Deployment
 | `charts/all/neuroface/` on hub
 
-| URL
-| `https://neuroface.%HUB_DOMAIN%`
+| URLs
+| `https://neuroface.%HUB_DOMAIN%` · `https://ppe-workbench.%HUB_DOMAIN%`
 |===
 
 NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
 
 == What you will do
 
-Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and **Developer Hub → Catalog → neuroface-workshop**. Enable webcam for **PPE Safety** detection; chat uses MaaS at `/api/chat`. Facilitator must inject MaaS key via `scripts/apply-maas-secrets.sh` (secret **`neuroface-maas-api-key`**).
+Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and **Developer Hub → Catalog → neuroface-workshop**. Enable webcam for **PPE Safety** detection; chat uses MaaS at `/api/chat`. Then open the **PPE Workbench** notebook to upload factory images and run YOLO inference. Facilitator must inject MaaS key via `scripts/apply-maas-secrets.sh` (secret **`neuroface-maas-api-key`**).
 
 == Overview
 
 NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
 
-NeuroFace combines **OVMS local vision** (`ovms.enabled: true`, model **`face-detection-retail-0005`** for retail/PPE face detection) and **MaaS chat** at `/api/chat`. The MaaS API key is stored in secret **`neuroface-maas-api-key`** (never committed to Git).
+NeuroFace combines **YOLO PPE serving** (`yolo-ppe-serving`, classes hardhat / safety-vest / goggles), optional **OVMS** webcam face detection, and **MaaS chat** at `/api/chat`. The MaaS API key is stored in secret **`neuroface-maas-api-key`** (never committed to Git).
 
 **Overview-only (~10 min):** Developer Hub → **neuroface-workshop** → Topology; open UI without webcam.
 
-**Hands-on (~30 min):** Test webcam PPE Safety + chat; verify secret and deployment in namespace `neuroface`.
+**Hands-on (~30 min):** Test webcam PPE Safety + chat; run the **PPE Workbench** notebook; verify secret and deployments in namespace `neuroface`.
 
 *Helm values* — NeuroFace chart on hub:
 
 [source,yaml]
 ----
 # charts/all/neuroface/values.yaml
-ovms:
+ppe:
   enabled: true
-  modelName: face-detection-retail-0005   # PPE Safety / retail face detection
+  endpoint: http://yolo-ppe-serving:8080
+  classes: hardhat,safety-vest,goggles
+  confidence: "0.5"
+yoloPpeServing:
+  enabled: true
+  replicas: 1
+ppeWorkbench:
+  enabled: true
+  image: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/pytorch:2025.1
 chat:
   enabled: true
   modelEndpoint: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
@@ -89,9 +103,10 @@ oc rollout restart deployment/neuroface -n neuroface
 
 === Key features
 
-* **OVMS** **`face-detection-retail-0005`** for low-latency webcam PPE Safety demo.
+* **YOLO PPE serving** — hardhat, safety-vest, goggles via `yolo-ppe-serving:8080`.
 * **MaaS chat** at `/api/chat` for operator Q&A.
-* Catalog entity **neuroface-workshop** links UI, routes, and OpenShift AI workbench **`neuroface-ml-lab`**.
+* **PPE Workbench** — Jupyter notebook (`ppe-detection.ipynb`) for image upload and inference.
+* Catalog entity **neuroface-workshop** links UI, routes, and OpenShift AI workbenches.
 
 === Business benefits
 
@@ -106,20 +121,57 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!`
 | Service | URL | Credentials
 
 | NeuroFace app | link:https://neuroface.%HUB_DOMAIN%[NeuroFace app] | Public (no login)
+| PPE Workbench | link:https://ppe-workbench.%HUB_DOMAIN%[PPE Workbench] | OpenShift AI notebook (start workbench first)
 | API chat | link:https://neuroface.%HUB_DOMAIN%/api/chat[API chat] | Public (needs MaaS key on server)
 | OpenShift Console — deploy | ACM → `hub` → namespace `neuroface` | Workshop user
+| OpenShift AI — workbench | Console → AI → Workbenches → **ppe-workbench** | Workshop user
 |===
+
+== Hands-on: PPE Workbench (image prediction)
+
+Use the pre-loaded Jupyter notebook to detect PPE on uploaded factory-floor images.
+
+. **Start the workbench** — OpenShift Console → **AI** → **Workbenches** → namespace `neuroface` → **ppe-workbench** → **Start**.
+. **Open the notebook** — Either:
++
+--
+* OpenShift AI dashboard → open **ppe-detection.ipynb**, or
+* Direct route: link:https://ppe-workbench.%HUB_DOMAIN%[ppe-workbench.%HUB_DOMAIN%] (after workbench is running)
+--
++
+. **Run cells in order:**
++
+--
+. Setup — verifies `PPE_ENDPOINT` health and NeuroFace `/api/ppe/status`
+. Upload — place a `.jpg` in `uploads/sample.jpg` (or change `IMAGE_PATH`)
+. Detect — calls `POST /v1/predict` on `yolo-ppe-serving`
+. Visualize — draws bounding boxes for hardhat, safety-vest, goggles
+. Compare (optional) — local Ultralytics model vs serving endpoint
+--
++
+. **Expected output** — JSON detections with `class_name`, `confidence`, and `bbox` fields; matplotlib overlay on the image.
+
+[source,bash]
+----
+# Facilitator / terminal checks
+curl -sk https://neuroface.%HUB_DOMAIN%/api/ppe/status
+curl -sk https://ppe-workbench.%HUB_DOMAIN%/  # 200 when workbench pod is running
+oc get deploy yolo-ppe-serving -n neuroface
+oc get notebook ppe-workbench -n neuroface
+----
 
 == Show and Tell
 
-. Multimodal capstone: OVMS vision + hub LLM (MaaS).
+. Multimodal capstone: YOLO PPE vision + hub LLM (MaaS).
 . Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] — PPE Safety webcam live.
 . Ask chat: _"What PPE is missing for this worker?"_
-. Cross-link OpenShift AI → **ai-%USER_NAME%** → **neuroface-ml-lab** notebook.
+. Open link:https://ppe-workbench.%HUB_DOMAIN%[PPE Workbench] — upload a factory image and run detection.
+. Cross-link OpenShift AI → **ai-%USER_NAME%** → per-user notebooks.
 
 == Your TODO (user %USER_NAME%)
 
 * [ ] Open `https://neuroface.%HUB_DOMAIN%` and test PPE Safety webcam
+* [ ] Start **ppe-workbench** and run `ppe-detection.ipynb` on one image
 * [ ] Ask `/api/chat` one question (expect **200**, not **401**)
 * [ ] Save progress at the end of this module
 
@@ -134,6 +186,9 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!`
 | UI / capability | Source in GitOps repo
 
 | NeuroFace chart | `charts/all/neuroface/` |
+| YOLO PPE serving | `charts/all/neuroface/templates/yolo-ppe-serving.yaml` |
+| PPE Workbench | `charts/all/neuroface/templates/notebook-ppe-workbench.yaml` |
+| Notebook source | `docs/assets/notebooks/ppe-detection.ipynb` |
 | MaaS secret | `neuroface-maas-api-key` — `scripts/apply-maas-secrets.sh` |
 |===
 
@@ -142,10 +197,12 @@ Verify in the Showroom terminal:
 [source,bash]
 ----
 curl -sk -o /dev/null -w '%{http_code}\n' https://neuroface.%HUB_DOMAIN%/
+curl -sk https://neuroface.%HUB_DOMAIN%/api/ppe/status
 curl -sk -X POST https://neuroface.%HUB_DOMAIN%/api/chat \
   -H 'Content-Type: application/json' \
   -d '{"messages":[{"role":"user","content":"Hello"}]}' | head -c 200
 # Expect HTTP 200 body (401 = facilitator has not applied MAAS_KEY_LLAMA)
+# PPE status should show reachable: true when yolo-ppe-serving is Ready
 ----
 
 == Verify

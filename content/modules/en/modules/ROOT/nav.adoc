@@ -27,7 +27,7 @@
 * xref:24-mcp-gateway.adoc[24. MCP Gateway + Lightspeed]
 * xref:25-llm-rag.adoc[25. LLMs & RAG]
 * xref:26-text-ai-predictive.adoc[26. Generative & Predictive Text]
-* xref:27-neuroface.adoc[27. Face & Object AI + Chat]
+* xref:27-neuroface.adoc[27. NeuroFace — Computer Vision Journey]
 * xref:28-ai-end-user-apps.adoc[28. AI in End-User Apps]
 
 .Part C — AI Show and Tell (facilitator)

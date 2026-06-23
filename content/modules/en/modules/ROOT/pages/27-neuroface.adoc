@@ -1,186 +1,250 @@
-= Face & Object AI + Chat
+= NeuroFace — Computer Vision Journey
 
 ++++
 <span class="workshop-time-badge">~30 min</span>
 ++++
 
-image::27-neuroface.png[NeuroFace — YOLO PPE detection, MaaS chat, and PPE Workbench,960]
+image::27-neuroface.png[NeuroFace — PPE detection CV journey with KServe and Skupper,960]
 
-.NeuroFace architecture
+NeuroFace is a multimodal AI demo that combines **YOLO PPE detection** (hardhat, safety-vest, goggles), **face recognition** (OpenCV/OpenVINO), **object detection** (80 COCO classes), and **MaaS chat** (LLM) — deployed as a KServe InferenceService on Red Hat OpenShift AI with a federated east/west computer vision journey via Skupper.
+
+== Architecture
+
+image::27-neuroface-architecture.png[NeuroFace System Architecture — Angular frontend + FastAPI backend + YOLO PPE + OVMS + Chat,960]
+
+.NeuroFace v1.4.1 architecture
 [cols="1,1", options="header"]
 |===
 | Capability | Backend
 
 | PPE detection (hardhat, safety-vest, goggles)
-| In-cluster **YOLO** `yolo-ppe-serving` (`Hexmon/vyra-yolo-ppe-detection`)
+| KServe **InferenceService** `yolo-ppe-serving` (pre-built `neuroface-ppe-serving:v1.4.1`, KServe v1+v2)
 
-| Face / webcam (optional)
-| OVMS **`face-detection-retail-0005`** when `ovms.enabled: true`
+| Face / webcam detection
+| OVMS **`face-detection-retail-0005`** (optional, `ovms.enabled: true`)
+
+| Object detection (80 COCO classes)
+| YOLOv4-tiny (OpenCV DNN, bundled in backend image)
 
 | Operator chat
 | MaaS `/v1/chat/completions` (`llama-scout-17b`)
 
-| Image prediction lab
-| OpenShift AI **`ppe-workbench`** notebook
+| PPE Workbench
+| OpenShift AI **`ppe-workbench`** notebook (`ppe-detection.ipynb`)
+
+| PPE Retrain Workbench
+| OpenShift AI **`ppe-retrain-workbench`** notebook (MinIO S3 data connection)
+
+| Model storage
+| MinIO `s3://models/ppe-detection/model/best.pt` (hub → Skupper → spokes)
 
 | Deployment
 | `charts/all/neuroface/` on hub
 
 | URLs
-| `https://neuroface.%HUB_DOMAIN%` · `https://ppe-workbench.%HUB_DOMAIN%`
+| `https://neuroface.{hub_domain}` · `https://ppe-workbench.{hub_domain}`
 |===
 
-NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].
+== Computer Vision Journey (hub-and-spoke)
+
+The **NeuroFace CV** journey federates PPE inference across east and west spokes — the same YOLO model deployed on two edge clusters with 50/50 traffic distribution via the hub gateway.
+
+image::27-neuroface-ppe-sequence.png[PPE Detection Sequence — Browser → Frontend → Backend → YOLO → detections,960]
+
+.CV journey components
+[cols="1,2", options="header"]
+|===
+| Component | Description
+
+| **Hub gateway** (`neuroface-gateway`)
+| Gateway API with weighted HTTPRoute (50% east / 50% west)
+
+| **Spoke inference** (`spoke-neuroface-cv`)
+| KServe InferenceService `yolo-ppe-serving` in `neuroface-cv` namespace (HPA min 1, max 4)
+
+| **Skupper**
+| Connectors on each spoke publish `yolo-ppe-serving:8080`; hub listeners bridge into gateway
+
+| **Ambient mesh**
+| `neuroface-cv` namespace has `istio.io/dataplane-mode: ambient` (L4 mTLS + telemetry)
+
+| **Grafana dashboard**
+| `neuroface-cv` — gateway req/s, east vs west split, inference latency
+
+| **Public Route**
+| `https://neuroface-cv.{hub_domain}` (inference-only: `/health`, `/v1/predict`, `/v2/models/yolo-ppe/infer`)
+|===
 
 == What you will do
 
-Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and **Developer Hub → Catalog → neuroface-workshop**. Enable webcam for **PPE Safety** detection; chat uses MaaS at `/api/chat`. Then open the **PPE Workbench** notebook to upload factory images and run YOLO inference. Facilitator must inject MaaS key via `scripts/apply-maas-secrets.sh` (secret **`neuroface-maas-api-key`**).
+. Open link:https://neuroface.{hub_domain}[NeuroFace] and test **PPE Safety** webcam detection
+. Explore the **CV journey** dashboard in Grafana
+. Run the **PPE Workbench** notebook for image-based detection
+. Verify the east/west 50/50 split via the showroom terminal
 
-== Overview
+== UI Screenshots
 
-NOTE: **Workshop pacing (~4 hours hands-on)** — Each module includes **Overview-only** steps (demo/visualization, ~5–10 min) and **Hands-on** steps (full lab). Skip Hands-on blocks to run a ~90-minute executive tour.
+=== PPE Detection & Chat
 
-NeuroFace combines **YOLO PPE serving** (`yolo-ppe-serving`, classes hardhat / safety-vest / goggles), optional **OVMS** webcam face detection, and **MaaS chat** at `/api/chat`. The MaaS API key is stored in secret **`neuroface-maas-api-key`** (never committed to Git).
+image::27-neuroface-chat.png[NeuroFace Chat — AI analysis of detected faces and objects,960]
 
-**Overview-only (~10 min):** Developer Hub → **neuroface-workshop** → Topology; open UI without webcam.
+=== Object Detection (80 COCO classes)
 
-**Hands-on (~30 min):** Test webcam PPE Safety + chat; run the **PPE Workbench** notebook; verify secret and deployments in namespace `neuroface`.
+image::27-neuroface-objects.png[NeuroFace Object Detection — 80 COCO classes via YOLOv4-tiny,960]
 
-*Helm values* — NeuroFace chart on hub:
+=== Face Recognition
 
-[source,yaml]
-----
-# charts/all/neuroface/values.yaml
-ppe:
-  enabled: true
-  endpoint: http://yolo-ppe-serving:8080
-  classes: hardhat,safety-vest,goggles
-  confidence: "0.5"
-yoloPpeServing:
-  enabled: true
-  replicas: 1
-ppeWorkbench:
-  enabled: true
-  image: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/pytorch:2025.1
-chat:
-  enabled: true
-  modelEndpoint: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
-  modelName: llama-scout-17b
-route:
-  enabled: true
-  host: neuroface.%HUB_DOMAIN%
-----
+image::27-neuroface-recognition.png[NeuroFace Face Recognition — LBPH/dlib with training,960]
 
-*MaaS secret* — injected post-install:
+== Feature Flows
 
-[source,yaml]
-----
-# charts/all/neuroface/templates/secret-neuroface-maas-api-key.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: neuroface-maas-api-key
-  namespace: neuroface
-stringData:
-  api-key: <from RHDP litemaas or apply-maas-secrets.sh>
-----
+=== Chat Analysis Flow
 
-Facilitator:
+image::27-neuroface-chat-flow.png[AI Chat Analysis Flow — face + object context → MaaS LLM,720]
 
-[source,bash]
-----
-export MAAS_KEY_LLAMA='sk-...'
-bash scripts/apply-maas-secrets.sh
-oc rollout restart deployment/neuroface -n neuroface
-----
+=== Face Recognition Flow
 
-=== Learn more
+image::27-neuroface-face-flow.png[Face Recognition Flow — detect → crop → LBPH/dlib → identify,720]
 
-* link:https://docs.openvino.ai/2024/openvino-workflow/model-server/ovms_docs_introduction.html[OpenVINO Model Server]
-* link:https://github.com/maximilianoPizarro/neuroface[NeuroFace upstream chart]
+=== Object Detection Flow
 
-== Features, benefits & cloud configuration
+image::27-neuroface-object-flow.png[Object Detection Flow — webcam → YOLOv4-tiny → 80 COCO classes,720]
 
-=== Key features
+=== Training Flow
 
-* **YOLO PPE serving** — hardhat, safety-vest, goggles via `yolo-ppe-serving:8080`.
-* **MaaS chat** at `/api/chat` for operator Q&A.
-* **PPE Workbench** — Jupyter notebook (`ppe-detection.ipynb`) for image upload and inference.
-* Catalog entity **neuroface-workshop** links UI, routes, and OpenShift AI workbenches.
-
-=== Business benefits
-
-* Vision at the app edge; generative answers from governed hub MaaS.
+image::27-neuroface-training-flow.png[Training Flow — upload images → train LBPH model → persist,720]
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — %USER_NAME% / `Welcome123!`
+NOTE: *Workshop login* — {user_name} / `Welcome123!`
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| NeuroFace app | link:https://neuroface.%HUB_DOMAIN%[NeuroFace app] | Public (no login)
-| PPE Workbench | link:https://ppe-workbench.%HUB_DOMAIN%[PPE Workbench] | OpenShift AI notebook (start workbench first)
-| API chat | link:https://neuroface.%HUB_DOMAIN%/api/chat[API chat] | Public (needs MaaS key on server)
-| OpenShift Console — deploy | ACM → `hub` → namespace `neuroface` | Workshop user
-| OpenShift AI — workbench | Console → AI → Workbenches → **ppe-workbench** | Workshop user
+| NeuroFace app | link:https://neuroface.{hub_domain}[neuroface.{hub_domain}] | Public (no login)
+| PPE Workbench | link:https://ppe-workbench.{hub_domain}[ppe-workbench.{hub_domain}] | OpenShift AI notebook
+| PPE Retrain Workbench | link:https://ppe-retrain-workbench.{hub_domain}[ppe-retrain-workbench.{hub_domain}] | OpenShift AI notebook
+| CV Gateway | link:https://neuroface-cv.{hub_domain}[neuroface-cv.{hub_domain}] | Public (inference-only)
+| Grafana — CV dashboard | link:https://grafana.{hub_domain}[Grafana] → dashboard `neuroface-cv` | Admin / from secret
+| API chat | link:https://neuroface.{hub_domain}/api/chat[/api/chat] | Public (needs MaaS key on server)
 |===
+
+== Helm values
+
+[source,yaml]
+----
+# charts/all/neuroface/values.yaml (v1.4.1)
+neuroface:
+  ppe:
+    enabled: true
+    endpoint: http://yolo-ppe-serving:8080
+    classes: hardhat,safety-vest,goggles
+    confidence: "0.5"
+    serving:
+      image:
+        repository: quay.io/maximilianopizarro/neuroface-ppe-serving
+        tag: v1.4.1
+    dataPersistence:
+      enabled: true
+      s3Endpoint: http://minio.industrial-edge-ml-workspace.svc:9000
+      s3Bucket: models
+      s3Prefix: ppe-detection/training-data
+  chat:
+    enabled: true
+    modelEndpoint: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
+    modelName: llama-scout-17b
+
+yoloPpeServing:
+  enabled: true
+  image: quay.io/maximilianopizarro/neuroface-ppe-serving:v1.4.1
+  # KServe InferenceService + ServingRuntime (RawDeployment)
+  # Model downloaded from MinIO s3://models/ppe-detection/model/best.pt
+----
+
+== Hands-on: PPE Safety (webcam)
+
+. Open link:https://neuroface.{hub_domain}[NeuroFace] in your browser
+. Click **PPE Safety** tab
+. Allow webcam access — the YOLO model detects persons, hardhats, safety vests, and goggles in real-time
+. The status bar should show: `PPE ENABLED` · `REACHABLE` · classes detected
+. Try the **AI Chat** tab — ask _"What PPE is this worker wearing?"_
 
 == Hands-on: PPE Workbench (image prediction)
 
-Use the pre-loaded Jupyter notebook to detect PPE on uploaded factory-floor images.
-
-. **Start the workbench** — OpenShift Console → **AI** → **Workbenches** → namespace `neuroface` → **ppe-workbench** → **Start**.
-. **Open the notebook** — Either:
-+
---
-* OpenShift AI dashboard → open **ppe-detection.ipynb**, or
-* Direct route: link:https://ppe-workbench.%HUB_DOMAIN%[ppe-workbench.%HUB_DOMAIN%] (after workbench is running)
---
-+
+. **Start the workbench** — OpenShift Console → **AI** → **Workbenches** → namespace `neuroface` → **ppe-workbench** → **Start**
+. **Open the notebook** — link:https://ppe-workbench.{hub_domain}[ppe-workbench.{hub_domain}]
 . **Run cells in order:**
-+
---
-. Setup — verifies `PPE_ENDPOINT` health and NeuroFace `/api/ppe/status`
-. Upload — place a `.jpg` in `uploads/sample.jpg` (or change `IMAGE_PATH`)
-. Detect — calls `POST /v1/predict` on `yolo-ppe-serving`
-. Visualize — draws bounding boxes for hardhat, safety-vest, goggles
-. Compare (optional) — local Ultralytics model vs serving endpoint
---
-+
-. **Expected output** — JSON detections with `class_name`, `confidence`, and `bbox` fields; matplotlib overlay on the image.
+.. Setup — verifies `PPE_ENDPOINT` health and NeuroFace `/api/ppe/status`
+.. Upload — place a `.jpg` in `uploads/sample.jpg`
+.. Detect — calls `POST /v1/predict` on `yolo-ppe-serving`
+.. Visualize — bounding boxes for hardhat, safety-vest, goggles
+. **Expected output** — JSON detections with `class_name`, `confidence`, and `bbox`; matplotlib overlay
+
+== Hands-on: CV Journey (east/west 50/50)
+
+Verify the federated path in the Showroom terminal:
 
 [source,bash]
 ----
-# Facilitator / terminal checks
-curl -sk https://neuroface.%HUB_DOMAIN%/api/ppe/status
-curl -sk https://ppe-workbench.%HUB_DOMAIN%/  # 200 when workbench pod is running
-oc get deploy yolo-ppe-serving -n neuroface
-oc get notebook ppe-workbench -n neuroface
+# CV gateway health — should return model status from east or west spoke
+for i in $(seq 1 10); do
+  curl -sk https://neuroface-cv.{hub_domain}/health
+  echo
+done
+
+# Check HTTPRoute weights
+neuroface-cv-traffic
+
+# Check Grafana dashboard for east vs west split
+# Open: https://grafana.{hub_domain} → dashboard "neuroface-cv"
 ----
 
-== Show and Tell
+KServe v2 inference is also available:
 
-. Multimodal capstone: YOLO PPE vision + hub LLM (MaaS).
-. Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] — PPE Safety webcam live.
-+
-image::neuroface-ui.png[NeuroFace UI,960]
-+
-. Ask chat: _"What PPE is missing for this worker?"_
-. Open link:https://ppe-workbench.%HUB_DOMAIN%[PPE Workbench] — upload a factory image and run detection.
-. Cross-link OpenShift AI → **ai-%USER_NAME%** → per-user notebooks.
+[source,bash]
+----
+# KServe v2 model ready
+curl -sk https://neuroface-cv.{hub_domain}/v2/models/yolo-ppe/ready
 
-== Your TODO (user %USER_NAME%)
+# KServe v2 model metadata
+curl -sk https://neuroface-cv.{hub_domain}/v2/models/yolo-ppe
+----
 
-* [ ] Open `https://neuroface.%HUB_DOMAIN%` and test PPE Safety webcam
-* [ ] Start **ppe-workbench** and run `ppe-detection.ipynb` on one image
-* [ ] Ask `/api/chat` one question (expect **200**, not **401**)
-* [ ] Save progress at the end of this module
+== Facilitator notes
 
-== Live lab
+[source,bash]
+----
+# Verify PPE status
+curl -sk https://neuroface.{hub_domain}/api/ppe/status
 
-* Showroom integrated `oc` terminal — use hub context unless module says east/west.
+# Verify InferenceService on hub
+oc get inferenceservice yolo-ppe-serving -n neuroface
+
+# Verify CV journey
+bash scripts/verify-neuroface-cv.sh
+
+# MaaS key (if not injected via RHDP)
+export MAAS_KEY_LLAMA='sk-...'
+bash scripts/apply-maas-secrets.sh
+----
+
+== Container images (v1.4.1)
+
+[cols="2,1,2"]
+|===
+| Image | Tag | Description
+
+| `quay.io/maximilianopizarro/neuroface-backend` | v1.4.1 | FastAPI + PPE data persistence + Kafka
+| `quay.io/maximilianopizarro/neuroface-frontend` | v1.4.1 | Angular 17 + PPE UI + object detection
+| `quay.io/maximilianopizarro/neuroface-ppe-serving` | v1.4.1 | Pre-built YOLOv8 PPE (KServe v1+v2, opencv-headless)
+|===
+
+=== Learn more
+
+* link:https://github.com/maximilianoPizarro/neuroface[NeuroFace upstream repo] — source code, Helm chart, Dockerfile
+* link:https://maximilianopizarro.github.io/neuroface/[NeuroFace documentation] — API reference, architecture diagrams
+* link:https://docs.openvino.ai/2024/openvino-workflow/model-server/ovms_docs_introduction.html[OpenVINO Model Server]
 
 == Where this lab is defined
 
@@ -188,25 +252,25 @@ image::neuroface-ui.png[NeuroFace UI,960]
 |===
 | UI / capability | Source in GitOps repo
 
-| NeuroFace chart | `charts/all/neuroface/` |
-| YOLO PPE serving | `charts/all/neuroface/templates/yolo-ppe-serving.yaml` |
-| PPE Workbench | `charts/all/neuroface/templates/notebook-ppe-workbench.yaml` |
-| Notebook source | `docs/assets/notebooks/ppe-detection.ipynb` |
-| MaaS secret | `neuroface-maas-api-key` — `scripts/apply-maas-secrets.sh` |
+| NeuroFace chart | `charts/all/neuroface/`
+| YOLO InferenceService | `charts/all/neuroface/templates/yolo-ppe-serving.yaml`
+| PPE model storage | `charts/all/neuroface/templates/ppe-model-storage.yaml`
+| PPE Workbench | `charts/all/neuroface/templates/notebook-ppe-workbench.yaml`
+| Retrain Workbench | `charts/all/neuroface/templates/notebook-ppe-retrain-workbench.yaml`
+| MinIO model seed | `charts/all/industrial-edge-minio/templates/ppe-model-seed.yaml`
+| CV gateway | `charts/all/neuroface-gateway/`
+| Spoke inference | `charts/all/spoke-neuroface-cv/`
+| Grafana dashboard | `charts/all/grafana-dashboards/templates/neuroface-cv.yaml`
 |===
 
-Verify in the Showroom terminal:
+== Your TODO (user {user_name})
 
-[source,bash]
-----
-curl -sk -o /dev/null -w '%{http_code}\n' https://neuroface.%HUB_DOMAIN%/
-curl -sk https://neuroface.%HUB_DOMAIN%/api/ppe/status
-curl -sk -X POST https://neuroface.%HUB_DOMAIN%/api/chat \
-  -H 'Content-Type: application/json' \
-  -d '{"messages":[{"role":"user","content":"Hello"}]}' | head -c 200
-# Expect HTTP 200 body (401 = facilitator has not applied MAAS_KEY_LLAMA)
-# PPE status should show reachable: true when yolo-ppe-serving is Ready
-----
+* [ ] Open `https://neuroface.{hub_domain}` and test PPE Safety webcam
+* [ ] Verify PPE detects: hardhat, safety-vest, goggles, person
+* [ ] Start **ppe-workbench** and run `ppe-detection.ipynb` on one image
+* [ ] Run `neuroface-cv-status` in the terminal
+* [ ] Ask `/api/chat` one question (expect **200**, not **401**)
+* [ ] Check Grafana `neuroface-cv` dashboard for east/west traffic
 
 == Verify
 
@@ -214,7 +278,9 @@ curl -sk -X POST https://neuroface.%HUB_DOMAIN%/api/chat \
 |===
 | Check | Action | Expected
 
-| Progress | Save checkboxes below | `POST /api/progress` returns OK
+| PPE status | `curl -sk https://neuroface.{hub_domain}/api/ppe/status` | `reachable: true`
+| CV health | `curl -sk https://neuroface-cv.{hub_domain}/health` | `status: ok`
+| KServe v2 | `curl -sk https://neuroface-cv.{hub_domain}/v2/models/yolo-ppe/ready` | HTTP 200
 |===
 
 ++++
@@ -227,6 +293,6 @@ curl -sk -X POST https://neuroface.%HUB_DOMAIN%/api/chat \
 
 ++++
 <div class="workshop-next-nav">
-  <a href="28-ai-end-user-apps.html">Next → 28 ai end user apps</a>
+  <a href="28-ai-end-user-apps.html">Next → 28 AI in End-User Apps</a>
 </div>
 ++++

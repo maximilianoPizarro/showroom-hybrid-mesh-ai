@@ -282,10 +282,18 @@
       }
     }
 
-    frame.addEventListener('load', function () {
+    function clearFrameUnloadGuard() {
       try {
-        if (frame.contentWindow) frame.contentWindow.onbeforeunload = null;
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.onbeforeunload = null;
+          try { frame.contentWindow.removeEventListener('beforeunload', frame.contentWindow.onbeforeunload); } catch (e2) {}
+        }
       } catch (e) {}
+    }
+
+    frame.addEventListener('load', function () {
+      clearFrameUnloadGuard();
+      setInterval(clearFrameUnloadGuard, 2000);
     });
 
     if (sessionStorage.getItem(TERMINAL_OPEN_KEY) === '1') {
@@ -321,6 +329,7 @@
         if (!href || href.charAt(0) === '#' || /^javascript:/i.test(href)) return;
         if (a.hasAttribute('download')) return;
         sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
+        clearFrameUnloadGuard();
       },
       true
     );

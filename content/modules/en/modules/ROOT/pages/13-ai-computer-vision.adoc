@@ -64,7 +64,7 @@ curl -sk https://neuroface.{hub_domain}/api/ppe/status
 | Developer Hub — NeuroFace system | link:https://developer-hub.{hub_domain}/catalog/default/system/neuroface[Developer Hub → neuroface]
 | DevSpaces — open code | link:https://devspaces.{hub_domain}/#https://github.com/maximilianoPizarro/neuroface[DevSpaces]
 | Grafana — hub dashboard | link:https://grafana.{hub_domain}[Grafana] → "AI Computer Vision at the Edge — NeuroFace (hub)"
-| OpenShift AI | link:https://rh-ai.apps.{hub_domain}/projects/neuroface[OpenShift AI → neuroface project]
+| OpenShift AI | link:https://rh-ai.{hub_domain}/projects/neuroface[OpenShift AI → neuroface project]
 |===
 
 == Container images (v1.5.0)

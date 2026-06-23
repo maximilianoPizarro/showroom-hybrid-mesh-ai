@@ -21,7 +21,7 @@ image::17-service-mesh.png[Service Mesh ambient mode,960]
 | Label `istio.io/dataplane-mode: ambient`
 
 | Deliberate exclusions
-| `stackrox`, `gitea`, `redhat-connectivity-link-operator` — no mesh label
+| `stackrox`, `gitlab`, `redhat-connectivity-link-operator` — no mesh label
 |===
 
 NOTE: For AWS/Azure integration snippets see xref:index.adoc#hybrid-integration[Module 00 — hybrid integration notes].

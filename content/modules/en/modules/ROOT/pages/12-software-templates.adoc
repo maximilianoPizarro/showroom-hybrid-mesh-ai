@@ -131,7 +131,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 | Developer Hub — Create | link:https://developer-hub.%HUB_DOMAIN%/create[Developer Hub — Create] | Workshop user
 | Developer Hub — Catalog | link:https://developer-hub.%HUB_DOMAIN%/catalog[Developer Hub — Catalog] | Workshop user
 | Plan B shared demos | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/hybrid-mesh-shared-demos[Plan B shared demos] | Workshop user
-| Gitea (repos created by scaffold) | link:https://gitea-gitea.%HUB_DOMAIN%[Gitea (repos created by scaffold)] | Workshop user
+| GitLab (repos created by scaffold) | link:https://gitlab.apps.%HUB_DOMAIN%[GitLab (repos created by scaffold)] | Workshop user
 |===
 
 == Show and Tell

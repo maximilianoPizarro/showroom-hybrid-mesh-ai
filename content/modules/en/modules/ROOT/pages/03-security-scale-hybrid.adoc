@@ -70,7 +70,7 @@ spec:
 # charts/all/namespaces/templates/all.yaml — noMeshNamespaces
 # These namespaces NEVER get istio.io/dataplane-mode=ambient:
 #   - stackrox        (ACS sensors would be disrupted by ztunnel interception)
-#   - gitea           (internal git traffic — no mesh overhead needed)
+#   - gitlab          (internal git traffic — no mesh overhead needed)
 #   - redhat-connectivity-link-operator (CrashLoopBackOff on spokes when meshed)
 ----
 

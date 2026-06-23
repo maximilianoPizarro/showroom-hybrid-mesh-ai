@@ -204,7 +204,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 
 | ACM fleet | link:https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters[ACM fleet] | Workshop user
 | Industrial Edge | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge UI] | Public (no login)
-| Gitea | link:https://gitea-gitea.%HUB_DOMAIN%[Gitea] | Workshop user or facilitator
+| GitLab | link:https://gitlab.apps.%HUB_DOMAIN%[GitLab] | Workshop user or facilitator
 | Grafana | link:https://grafana.%HUB_DOMAIN%[Grafana] | OpenShift OAuth
 | Kiali | link:https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%[Kiali] | OpenShift OAuth
 | Kairos Console | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos] | OpenShift OAuth
@@ -340,7 +340,7 @@ operators:
       docs: https://docs.redhat.com/en/documentation/red_hat_amq/
     - name: Gitea
       version: "12.5.0"
-      gitPath: charts/all/gitea/
+      gitPath: charts/all/gitlab-operator/
 ----
 
 === OpenShift Container Platform
@@ -379,7 +379,7 @@ operators:
 
 === Community & third-party
 * **Kairos Community** — SmartScalingPolicy for IE sensor workloads (`charts/all/kairos/`)
-* **Gitea** — per-user org `ws-%USER_NAME%` for scaffolded repos (`charts/all/gitea/`)
+* **GitLab** — per-user group `ws-%USER_NAME%` for scaffolded repos (`charts/all/gitlab-operator/`)
 * **MinIO** — object storage for model artifacts and data lake
 * **Kubecost** — FinOps allocations federated hub + spokes (`charts/all/kubecost/`)
 

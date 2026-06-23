@@ -176,7 +176,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| Gitea | link:https://gitea-gitea.%HUB_DOMAIN%[Gitea] | Workshop user (*Gitea admin (facilitator):* `gitea_admin` / `openshift`)
+| GitLab | link:https://gitlab.apps.%HUB_DOMAIN%[GitLab] | Workshop user (*GitLab root (facilitator):* `root` / `Welcome123!`)
 | Argo CD (hub) | link:https://console-openshift-console.%HUB_DOMAIN%/k8s/ns/openshift-gitops/applications.argoproj.io~v1alpha1~Application[Argo CD (hub)] | Workshop user
 | ACM GitOps cluster | ACM → Infrastructure → Clusters → GitOps | Workshop user
 |===

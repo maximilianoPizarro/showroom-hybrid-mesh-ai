@@ -12,13 +12,13 @@ NeuroFace is a multimodal AI demo that combines **YOLO PPE detection** (hardhat,
 
 image::27-neuroface-architecture.png[NeuroFace System Architecture — Angular frontend + FastAPI backend + YOLO PPE + OVMS + Chat,960]
 
-.NeuroFace v1.4.1 architecture
+.NeuroFace v1.5.0 architecture
 [cols="1,1", options="header"]
 |===
 | Capability | Backend
 
 | PPE detection (hardhat, safety-vest, goggles)
-| KServe **InferenceService** `yolo-ppe-serving` (pre-built `neuroface-ppe-serving:v1.4.1`, KServe v1+v2)
+| KServe **InferenceService** `yolo-ppe-serving` (pre-built `neuroface-ppe-serving:v1.5.0`, KServe v1+v2)
 
 | Face / webcam detection
 | OVMS **`face-detection-retail-0005`** (optional, `ovms.enabled: true`)
@@ -27,7 +27,10 @@ image::27-neuroface-architecture.png[NeuroFace System Architecture — Angular f
 | YOLOv4-tiny (OpenCV DNN, bundled in backend image)
 
 | Operator chat
-| MaaS `/v1/chat/completions` (`llama-scout-17b`)
+| MaaS `/v1/chat/completions` (`llama-scout-17b`) — direct or via AI Gateway
+
+| PPE events
+| Kafka `cv.ppe.detections` → Camel K → Mailpit alerts
 
 | PPE Workbench
 | OpenShift AI **`ppe-workbench`** notebook (`ppe-detection.ipynb`)
@@ -134,17 +137,23 @@ NOTE: *Workshop login* — {user_name} / `Welcome123!`
 
 [source,yaml]
 ----
-# charts/all/neuroface/values.yaml (v1.4.1)
+# charts/all/neuroface/values.yaml (v1.5.0)
 neuroface:
   ppe:
     enabled: true
     endpoint: http://yolo-ppe-serving:8080
     classes: hardhat,safety-vest,goggles
-    confidence: "0.5"
+    confidence: "0.15"
     serving:
       image:
         repository: quay.io/maximilianopizarro/neuroface-ppe-serving
-        tag: v1.4.1
+        tag: v1.5.0
+    kafka:
+      enabled: true
+      bootstrap: "kafka-east-tst.service-interconnect.svc:9092"
+      topic: "cv.ppe.detections"
+      camelConsumer:
+        enabled: true
     dataPersistence:
       enabled: true
       s3Endpoint: http://minio.industrial-edge-ml-workspace.svc:9000
@@ -152,12 +161,14 @@ neuroface:
       s3Prefix: ppe-detection/training-data
   chat:
     enabled: true
+    # Direct MaaS (default). For Kuadrant API keys use AI Gateway:
+    # modelEndpoint: "https://ai-gateway.<hub-domain>/v1"
     modelEndpoint: https://maas-rhdp.apps.maas.redhatworkshops.io/v1
     modelName: llama-scout-17b
 
 yoloPpeServing:
   enabled: true
-  image: quay.io/maximilianopizarro/neuroface-ppe-serving:v1.4.1
+  image: quay.io/maximilianopizarro/neuroface-ppe-serving:v1.5.0
   # KServe InferenceService + ServingRuntime (RawDeployment)
   # Model downloaded from MinIO s3://models/ppe-detection/model/best.pt
 ----
@@ -229,15 +240,15 @@ export MAAS_KEY_LLAMA='sk-...'
 bash scripts/apply-maas-secrets.sh
 ----
 
-== Container images (v1.4.1)
+== Container images (v1.5.0)
 
 [cols="2,1,2"]
 |===
 | Image | Tag | Description
 
-| `quay.io/maximilianopizarro/neuroface-backend` | v1.4.1 | FastAPI + PPE data persistence + Kafka
-| `quay.io/maximilianopizarro/neuroface-frontend` | v1.4.1 | Angular 17 + PPE UI + object detection
-| `quay.io/maximilianopizarro/neuroface-ppe-serving` | v1.4.1 | Pre-built YOLOv8 PPE (KServe v1+v2, opencv-headless)
+| `quay.io/maximilianopizarro/neuroface-backend` | v1.5.0 | FastAPI + PPE + Kafka events + OpenTelemetry
+| `quay.io/maximilianopizarro/neuroface-frontend` | v1.5.0 | Angular 17 + PatternFly 5 UI
+| `quay.io/maximilianopizarro/neuroface-ppe-serving` | v1.5.0 | Pre-built YOLOv8 PPE (KServe v1+v2, opencv-headless)
 |===
 
 === Learn more

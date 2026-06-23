@@ -294,10 +294,7 @@
 
     document.addEventListener('visibilitychange', function () {
       if (!panel.classList.contains('is-open')) return;
-      if (document.visibilityState === 'hidden') {
-        sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
-        blankFrame();
-      } else {
+      if (document.visibilityState === 'visible' && !loaded) {
         reloadFrameIfOpen();
       }
     });
@@ -305,14 +302,12 @@
     window.addEventListener('beforeunload', function () {
       if (panel.classList.contains('is-open')) {
         sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
-        blankFrame();
       }
     });
 
     window.addEventListener('pagehide', function () {
       if (panel.classList.contains('is-open')) {
         sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
-        blankFrame();
       }
     });
 
@@ -326,19 +321,6 @@
         if (!href || href.charAt(0) === '#' || /^javascript:/i.test(href)) return;
         if (a.hasAttribute('download')) return;
         sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
-        if (a.target === '_blank') {
-          blankFrame();
-          return;
-        }
-        try {
-          var url = new URL(a.href, window.location.href);
-          if (url.origin === window.location.origin) {
-            e.preventDefault();
-            blankFrame();
-            setTimeout(function () { window.location.href = a.href; }, 50);
-            return;
-          }
-        } catch (err) {}
       },
       true
     );

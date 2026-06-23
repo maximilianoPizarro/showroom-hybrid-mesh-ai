@@ -1,4 +1,6 @@
-= Deploy Industrial Edge Apps
+= Deploy Industrial Edge Apps (Optional)
+
+IMPORTANT: **Optional module.** The Industrial Edge sensor stack is disabled by default in the AI Computer Vision at the Edge pattern. To enable, uncomment the IE applications in `charts/region/east/values.yaml` and `charts/region/west/values.yaml`, then sync Argo CD.
 
 ++++
 <span class="workshop-time-badge">~25 min</span>

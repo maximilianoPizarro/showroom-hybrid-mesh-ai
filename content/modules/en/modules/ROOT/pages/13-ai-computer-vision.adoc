@@ -1,0 +1,101 @@
+= AI Computer Vision at the Edge
+
+++++
+<span class="workshop-time-badge">~20 min</span>
+++++
+
+image::13-ai-computer-vision.png[AI Computer Vision at the Edge — NeuroFace PPE detection,960]
+
+**AI Computer Vision at the Edge** is the primary demo pattern of this workshop. **NeuroFace** is the reference application — combining YOLO PPE detection, face recognition, object detection, MaaS chat, and federated edge inference across a hybrid mesh.
+
+== Pattern architecture
+
+.AI CV at the Edge — middleware footprint
+[cols="1,2", options="header"]
+|===
+| Product | NeuroFace integration
+
+| OSSM3 / Istio | Ambient mesh (hub neuroface ns), sidecar (CV gateway)
+| Skupper | CV federation + Kafka tunnel (east cv-kafka)
+| Kafka / Strimzi | PPE events `cv.ppe.detections` (producer + Camel K consumer)
+| OpenShift AI / KServe | YOLO PPE InferenceService + workbenches
+| Kuadrant / AI Gateway | Documented MaaS alternative (module 23)
+| Camel K | PPE Kafka→Mailpit violation alerts
+| OpenTelemetry / Tempo | App-level FastAPI + mesh traces
+| Grafana | Hub NeuroFace + CV journey dashboards
+| ACM / GitOps | Argo CD managed apps
+| Vault + ESO | MaaS API key sync
+| DevSpaces | Hub DevSpaces — open NeuroFace code from Developer Hub
+| Quay | Image registry (`neuroface-backend`, `neuroface-frontend`, `neuroface-ppe-serving`)
+| GitLab | Scaffolder target (AI CV software template)
+| Developer Hub | Full system catalog + `ai-computer-vision` software template
+| Kubecost | Namespace cost labels (`kubecost.io/team: neuroface`)
+| Mailpit | PPE alert emails
+|===
+
+== What you will do
+
+. Open **NeuroFace** and explore each tab (PPE, objects, chat, recognition)
+. Verify the KServe InferenceService in OpenShift AI
+. Check the Developer Hub catalog — system `neuroface`
+. Open the NeuroFace Grafana dashboard
+
+== Quick verify
+
+[source,bash]
+----
+# App health
+curl -sk https://neuroface.{hub_domain}/api/health
+
+# Full readiness (PPE serving, chat backend, model status)
+curl -sk https://neuroface.{hub_domain}/api/ready | python3 -m json.tool
+
+# PPE status
+curl -sk https://neuroface.{hub_domain}/api/ppe/status
+----
+
+== Lab access
+
+[cols="2,3"]
+|===
+| Service | URL
+
+| NeuroFace app | link:https://neuroface.{hub_domain}[neuroface.{hub_domain}]
+| Developer Hub — NeuroFace system | link:https://developer-hub.{hub_domain}/catalog/default/system/neuroface[Developer Hub → neuroface]
+| DevSpaces — open code | link:https://devspaces.{hub_domain}/#https://github.com/maximilianoPizarro/neuroface[DevSpaces]
+| Grafana — hub dashboard | link:https://grafana.{hub_domain}[Grafana] → "AI Computer Vision at the Edge — NeuroFace (hub)"
+| OpenShift AI | link:https://rh-ai.apps.{hub_domain}/projects/neuroface[OpenShift AI → neuroface project]
+|===
+
+== Container images (v1.5.0)
+
+[cols="2,1,2"]
+|===
+| Image | Tag | Description
+
+| `quay.io/maximilianopizarro/neuroface-backend` | v1.5.0 | FastAPI + PPE + Kafka events + OpenTelemetry
+| `quay.io/maximilianopizarro/neuroface-frontend` | v1.5.0 | Angular 17 + PatternFly 5 UI
+| `quay.io/maximilianopizarro/neuroface-ppe-serving` | v1.5.0 | Pre-built YOLOv8 PPE (KServe v1+v2)
+|===
+
+== Your TODO (user {user_name})
+
+* [ ] Open `https://neuroface.{hub_domain}` — confirm v1.5.0 in footer
+* [ ] Test **PPE Safety** — activate Auto-detect with webcam
+* [ ] Test **AI Chat** — ask _"What PPE is this person wearing?"_
+* [ ] Open Developer Hub → system `neuroface` — verify all components
+* [ ] Check Grafana hub dashboard for NeuroFace metrics
+
+++++
+<div class="workshop-progress" data-module="13-ai-computer-vision">
+  <label><input type="checkbox" data-completed> I completed this module</label>
+  <label><input type="checkbox" data-interest> I want to learn more</label>
+  <button type="button" onclick="saveWorkshopProgress('13-ai-computer-vision')">Save progress</button>
+</div>
+++++
+
+++++
+<div class="workshop-next-nav">
+  <a href="14-kairos-scaling.html">Next → 14 Worker Scaling with Kairos</a>
+</div>
+++++

@@ -11,7 +11,7 @@
 * xref:10-acm-multicluster.adoc[10. Multicluster Fleet & ACM]
 * xref:11-hybrid-mesh-architecture.adoc[11. Hybrid Mesh Architecture]
 * xref:12-software-templates.adoc[12. Software Templates]
-* xref:13-deploy-industrial-edge.adoc[13. Deploy Industrial Edge Apps]
+* xref:13-ai-computer-vision.adoc[13. AI Computer Vision at the Edge ★]
 * xref:14-kairos-scaling.adoc[14. Worker Scaling with Kairos]
 * xref:15-observability.adoc[15. Metrics Logging Dashboards]
 * xref:16-openshift-gitops.adoc[16. OpenShift GitOps]
@@ -27,8 +27,11 @@
 * xref:24-mcp-gateway.adoc[24. MCP Gateway + Lightspeed]
 * xref:25-llm-rag.adoc[25. LLMs & RAG]
 * xref:26-text-ai-predictive.adoc[26. Generative & Predictive Text]
-* xref:27-neuroface.adoc[27. NeuroFace — Computer Vision Journey]
+* xref:27-neuroface.adoc[27. NeuroFace — CV Journey (advanced)]
 * xref:28-ai-end-user-apps.adoc[28. AI in End-User Apps]
+
+.Optional — Industrial Edge Sensors
+* xref:13-deploy-industrial-edge.adoc[IE. Deploy Industrial Edge Apps (optional)]
 
 .Part C — AI Show and Tell (facilitator)
 * xref:30-ai-show-and-tell.adoc[30. AI Show and Tell — Facilitator Track]

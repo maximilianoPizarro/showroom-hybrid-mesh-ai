@@ -184,7 +184,7 @@
     var links = {
       'link-console': 'https://console-openshift-console.' + hubDomain,
       'link-developer-hub': 'https://developer-hub.' + hubDomain,
-      'link-gitea': 'https://gitlab.apps.' + hubDomain,
+      'link-gitea': 'https://gitlab.' + hubDomain,
       'link-devspaces': 'https://devspaces.' + (eastDomain || hubDomain),
       'link-openshift-ai':
         'https://rhods-dashboard-redhat-ods-applications.' + hubDomain

@@ -176,7 +176,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 | Service | URL | Credentials
 
 | Developer Hub — scaffold IE | link:https://developer-hub.%HUB_DOMAIN%/create[Developer Hub — scaffold IE] | Workshop user
-| GitLab — your IE repos | link:https://gitlab.apps.%HUB_DOMAIN%[GitLab — your IE repos] | Workshop user
+| GitLab — your IE repos | link:https://gitlab.%HUB_DOMAIN%[GitLab — your IE repos] | Workshop user
 | Industrial Edge UI | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge UI] | Public (no login)
 | OpenShift GitOps (east) | ACM → cluster `east` → GitOps applications | Workshop user
 | Kafka Console | link:https://kafka-console.%HUB_DOMAIN%[Kafka Console] | OpenShift OAuth

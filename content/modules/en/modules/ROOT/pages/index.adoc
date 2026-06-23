@@ -204,7 +204,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 
 | ACM fleet | link:https://console-openshift-console.%HUB_DOMAIN%/multicloud/infrastructure/clusters[ACM fleet] | Workshop user
 | Industrial Edge | link:https://industrial-edge.%HUB_DOMAIN%[Industrial Edge UI] | Public (no login)
-| GitLab | link:https://gitlab.apps.%HUB_DOMAIN%[GitLab] | Workshop user or facilitator
+| GitLab | link:https://gitlab.%HUB_DOMAIN%[GitLab] | Workshop user or facilitator
 | Grafana | link:https://grafana.%HUB_DOMAIN%[Grafana] | OpenShift OAuth
 | Kiali | link:https://kiali-openshift-cluster-observability-operator.%HUB_DOMAIN%[Kiali] | OpenShift OAuth
 | Kairos Console | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos] | OpenShift OAuth

@@ -244,7 +244,7 @@
       try {
         var win = frame.contentWindow;
         if (win) {
-          win.onbeforeunload = null;
+          win.onbeforeunload = function() {};
           try { win.removeEventListener('beforeunload', win.onbeforeunload); } catch (e2) {}
         }
         frame.src = 'about:blank';
@@ -285,7 +285,7 @@
     function clearFrameUnloadGuard() {
       try {
         if (frame && frame.contentWindow) {
-          frame.contentWindow.onbeforeunload = null;
+          frame.contentWindow.onbeforeunload = function() {};
           try { frame.contentWindow.removeEventListener('beforeunload', frame.contentWindow.onbeforeunload); } catch (e2) {}
         }
       } catch (e) {}
@@ -307,10 +307,11 @@
       }
     });
 
-    window.addEventListener('beforeunload', function () {
+    window.addEventListener('beforeunload', function (e) {
       if (panel.classList.contains('is-open')) {
         sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
       }
+      clearFrameUnloadGuard();
     });
 
     window.addEventListener('pagehide', function () {
@@ -330,6 +331,11 @@
         if (a.hasAttribute('download')) return;
         sessionStorage.setItem(TERMINAL_OPEN_KEY, '1');
         clearFrameUnloadGuard();
+        
+        // Extra guard for Antora nav links
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.onbeforeunload = function() {};
+        }
       },
       true
     );

@@ -43,7 +43,7 @@ FinOps closes the executive loop from module 01: hybrid strategy without cost vi
 
 * link:https://docs.kubecost.com/[Kubecost documentation]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_container_platform/4.16/html/nodes/index[OpenShift capacity and nodes]
-* link:https://www.redhat.com/en/blog/tag/finops[Red Hat FinOps blog tag]
+* link:https://www.redhat.com/en/blog[Red Hat blog — FinOps and cloud cost]
 
 
 == Features, benefits & cloud configuration

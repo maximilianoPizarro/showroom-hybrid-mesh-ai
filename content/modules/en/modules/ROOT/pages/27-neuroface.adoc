@@ -45,7 +45,7 @@ image::27-neuroface-architecture.png[NeuroFace System Architecture — Angular f
 | `charts/all/neuroface/` on hub
 
 | URLs
-| `https://neuroface.{hub_domain}` · `https://ppe-workbench.{hub_domain}`
+| `https://neuroface.%HUB_DOMAIN%` · `https://ppe-workbench.%HUB_DOMAIN%`
 |===
 
 == Computer Vision Journey (hub-and-spoke)
@@ -75,12 +75,12 @@ image::27-neuroface-ppe-sequence.png[PPE Detection Sequence — Browser → Fron
 | `neuroface-cv` — gateway req/s, east vs west split, inference latency
 
 | **Public Route**
-| `https://neuroface-cv.{hub_domain}` (inference-only: `/health`, `/v1/predict`, `/v2/models/yolo-ppe/infer`)
+| `https://neuroface-cv.%HUB_DOMAIN%` (inference-only: `/health`, `/v1/predict`, `/v2/models/yolo-ppe/infer`)
 |===
 
 == What you will do
 
-. Open link:https://neuroface.{hub_domain}[NeuroFace] and test **PPE Safety** webcam detection
+. Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] and test **PPE Safety** webcam detection
 . Explore the **CV journey** dashboard in Grafana
 . Run the **PPE Workbench** notebook for image-based detection
 . Verify the east/west 50/50 split via the showroom terminal
@@ -119,18 +119,18 @@ image::27-neuroface-training-flow.png[Training Flow — upload images → train 
 
 == Lab access — URLs & credentials
 
-NOTE: *Workshop login* — {user_name} / `Welcome123!`
+NOTE: *Workshop login* — %USER_NAME% / `Welcome123!`
 
 [cols="2,3,2"]
 |===
 | Service | URL | Credentials
 
-| NeuroFace app | link:https://neuroface.{hub_domain}[neuroface.{hub_domain}] | Public (no login)
-| PPE Workbench | link:https://ppe-workbench.{hub_domain}[ppe-workbench.{hub_domain}] | OpenShift AI notebook
-| PPE Retrain Workbench | link:https://ppe-retrain-workbench.{hub_domain}[ppe-retrain-workbench.{hub_domain}] | OpenShift AI notebook
-| CV Gateway | link:https://neuroface-cv.{hub_domain}[neuroface-cv.{hub_domain}] | Public (inference-only)
-| Grafana — CV dashboard | link:https://grafana.{hub_domain}[Grafana] → dashboard `neuroface-cv` | Admin / from secret
-| API chat | link:https://neuroface.{hub_domain}/api/chat[/api/chat] | Public (needs MaaS key on server)
+| NeuroFace app | link:https://neuroface.%HUB_DOMAIN%[neuroface.%HUB_DOMAIN%] | Public (no login)
+| PPE Workbench | link:https://ppe-workbench.%HUB_DOMAIN%[ppe-workbench.%HUB_DOMAIN%] | OpenShift AI notebook
+| PPE Retrain Workbench | link:https://ppe-retrain-workbench.%HUB_DOMAIN%[ppe-retrain-workbench.%HUB_DOMAIN%] | OpenShift AI notebook
+| CV Gateway | link:https://neuroface-cv.%HUB_DOMAIN%[neuroface-cv.%HUB_DOMAIN%] | Public (inference-only)
+| Grafana — CV dashboard | link:https://grafana.%HUB_DOMAIN%[Grafana] → dashboard `neuroface-cv` | Admin / from secret
+| API chat | `POST https://neuroface.%HUB_DOMAIN%/api/chat` | Public (needs MaaS key on server)
 |===
 
 == Helm values
@@ -175,7 +175,7 @@ yoloPpeServing:
 
 == Hands-on: PPE Safety (webcam)
 
-. Open link:https://neuroface.{hub_domain}[NeuroFace] in your browser
+. Open link:https://neuroface.%HUB_DOMAIN%[NeuroFace] in your browser
 . Click **PPE Safety** tab
 . Allow webcam access — the YOLO model detects persons, hardhats, safety vests, and goggles in real-time
 . The status bar should show: `PPE ENABLED` · `REACHABLE` · classes detected
@@ -184,7 +184,7 @@ yoloPpeServing:
 == Hands-on: PPE Workbench (image prediction)
 
 . **Start the workbench** — OpenShift Console → **AI** → **Workbenches** → namespace `neuroface` → **ppe-workbench** → **Start**
-. **Open the notebook** — link:https://ppe-workbench.{hub_domain}[ppe-workbench.{hub_domain}]
+. **Open the notebook** — link:https://ppe-workbench.%HUB_DOMAIN%[ppe-workbench.%HUB_DOMAIN%]
 . **Run cells in order:**
 .. Setup — verifies `PPE_ENDPOINT` health and NeuroFace `/api/ppe/status`
 .. Upload — place a `.jpg` in `uploads/sample.jpg`
@@ -200,7 +200,7 @@ Verify the federated path in the Showroom terminal:
 ----
 # CV gateway health — should return model status from east or west spoke
 for i in $(seq 1 10); do
-  curl -sk https://neuroface-cv.{hub_domain}/health
+  curl -sk https://neuroface-cv.%HUB_DOMAIN%/health
   echo
 done
 
@@ -208,7 +208,7 @@ done
 neuroface-cv-traffic
 
 # Check Grafana dashboard for east vs west split
-# Open: https://grafana.{hub_domain} → dashboard "neuroface-cv"
+# Open: https://grafana.%HUB_DOMAIN% → dashboard "neuroface-cv"
 ----
 
 KServe v2 inference is also available:
@@ -216,10 +216,10 @@ KServe v2 inference is also available:
 [source,bash]
 ----
 # KServe v2 model ready
-curl -sk https://neuroface-cv.{hub_domain}/v2/models/yolo-ppe/ready
+curl -sk https://neuroface-cv.%HUB_DOMAIN%/v2/models/yolo-ppe/ready
 
 # KServe v2 model metadata
-curl -sk https://neuroface-cv.{hub_domain}/v2/models/yolo-ppe
+curl -sk https://neuroface-cv.%HUB_DOMAIN%/v2/models/yolo-ppe
 ----
 
 == Facilitator notes
@@ -227,7 +227,7 @@ curl -sk https://neuroface-cv.{hub_domain}/v2/models/yolo-ppe
 [source,bash]
 ----
 # Verify PPE status
-curl -sk https://neuroface.{hub_domain}/api/ppe/status
+curl -sk https://neuroface.%HUB_DOMAIN%/api/ppe/status
 
 # Verify InferenceService on hub
 oc get inferenceservice yolo-ppe-serving -n neuroface
@@ -274,9 +274,9 @@ bash scripts/apply-maas-secrets.sh
 | Grafana dashboard | `charts/all/grafana-dashboards/templates/neuroface-cv.yaml`
 |===
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
-* [ ] Open `https://neuroface.{hub_domain}` and test PPE Safety webcam
+* [ ] Open `https://neuroface.%HUB_DOMAIN%` and test PPE Safety webcam
 * [ ] Verify PPE detects: hardhat, safety-vest, goggles, person
 * [ ] Start **ppe-workbench** and run `ppe-detection.ipynb` on one image
 * [ ] Run `neuroface-cv-status` in the terminal
@@ -289,9 +289,9 @@ bash scripts/apply-maas-secrets.sh
 |===
 | Check | Action | Expected
 
-| PPE status | `curl -sk https://neuroface.{hub_domain}/api/ppe/status` | `reachable: true`
-| CV health | `curl -sk https://neuroface-cv.{hub_domain}/health` | `status: ok`
-| KServe v2 | `curl -sk https://neuroface-cv.{hub_domain}/v2/models/yolo-ppe/ready` | HTTP 200
+| PPE status | `curl -sk https://neuroface.%HUB_DOMAIN%/api/ppe/status` | `reachable: true`
+| CV health | `curl -sk https://neuroface-cv.%HUB_DOMAIN%/health` | `status: ok`
+| KServe v2 | `curl -sk https://neuroface-cv.%HUB_DOMAIN%/v2/models/yolo-ppe/ready` | HTTP 200
 |===
 
 ++++

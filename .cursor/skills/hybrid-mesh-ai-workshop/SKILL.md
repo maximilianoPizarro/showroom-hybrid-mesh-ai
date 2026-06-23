@@ -176,9 +176,11 @@ Prefer these when expanding AI modules:
 5. Reference `charts/all/` paths from hybrid-mesh-platform
 6. Include at least one annotated YAML block and 5+ official links for AI-related topics
 
-## Screenshot sources (Gemini + optional live capture)
+## Screenshot sources (Gemini 3.1 Pro)
 
-Hero PNGs use **Gemini-generated diagrams** (Red Hat branding) in `docs/assets/images/workshop/`, restored from git `8d41c0d`. Manually edited heroes are kept on top when re-syncing from Gemini.
+Hero PNG regeneration criteria are defined in **`.cursor/skills/showroom-validation/SKILL.md`** — mandatory: **white background**, **ux.redhat.com / PatternFly** style, **official Red Hat product logos**.
+
+Baseline and sync workflow:
 
 - **Gemini baseline commit:** `8d41c0d` (pre live-capture batch)
 - **Manual overrides (do not overwrite from Gemini):** `18-scalability`, `20-acs-kuadrant`, `23-ai-gateway`, `24-mcp-gateway`, `30-ai-show-and-tell`

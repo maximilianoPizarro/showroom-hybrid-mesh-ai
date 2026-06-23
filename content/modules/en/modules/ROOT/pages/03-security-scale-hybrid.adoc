@@ -181,7 +181,7 @@ See link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_secur
 * link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_security_for_kubernetes[Advanced Cluster Security (ACS) documentation]
 * link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.16/html/security_and_compliance/index[OpenShift security and compliance]
 * link:https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.14/html/governance/governance-overview[ACM governance overview]
-* link:https://www.redhat.com/en/blog/tag/security[Red Hat security blog]
+* link:https://www.redhat.com/en/blog[Red Hat blog — security topics]
 
 
 == Features, benefits & cloud configuration

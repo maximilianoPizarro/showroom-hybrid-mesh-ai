@@ -195,7 +195,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 
 | OpenShift AI dashboard | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[OpenShift AI dashboard] | OpenShift OAuth
 | Developer Hub (Lightspeed / catalog) | link:https://developer-hub.%HUB_DOMAIN%[Developer Hub (Lightspeed / catalog)] | Workshop user
-| MaaS endpoint (lab) | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1[MaaS endpoint (lab)] | Facilitator token
+| MaaS endpoint (lab) | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1/models[MaaS models endpoint] | Facilitator token (401 without auth)
 |===
 
 == Show and Tell

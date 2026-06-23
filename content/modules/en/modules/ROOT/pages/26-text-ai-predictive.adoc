@@ -103,7 +103,7 @@ Verify with: `oc logs -l app=ie-anomaly-alerter -n industrial-edge-tst-all --tai
 * link:https://onnxruntime.ai/docs/[ONNX Runtime — export path for custom models]
 * link:https://scikit-learn.org/stable/model_persistence.html[scikit-learn model persistence]
 * link:https://prometheus.io/docs/prometheus/latest/querying/basics/[Prometheus query basics]
-* link:https://www.redhat.com/en/blog/tag/artificial-intelligence[Red Hat AI blog]
+* link:https://www.redhat.com/en/blog[Red Hat blog — AI topics]
 
 
 == Features, benefits & cloud configuration
@@ -145,7 +145,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak for Developer H
 |===
 | Service | URL | Credentials
 
-| MaaS playground | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1[MaaS playground] | Facilitator token
+| MaaS playground | link:https://maas-rhdp.apps.maas.redhatworkshops.io/v1/models[MaaS models endpoint] | Facilitator token (401 without auth)
 | OpenShift AI dashboard | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[OpenShift AI dashboard] | OpenShift OAuth
 | Anomaly alerter (east spoke) | ACM → `east` → `industrial-edge-tst-%USER_NAME%` | Workshop user
 |===

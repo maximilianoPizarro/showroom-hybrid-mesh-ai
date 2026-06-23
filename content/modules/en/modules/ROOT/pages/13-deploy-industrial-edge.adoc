@@ -130,7 +130,7 @@ oc get applications -n openshift-gitops | grep industrial-edge
 
 === Learn more
 
-* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/industrial-edge[Industrial Edge on OpenShift]
+* link:https://validatedpatterns.io/patterns/industrial-edge/[Validated Patterns — Industrial Edge]
 * link:https://docs.redhat.com/en/documentation/red_hat_amq_streams[AMQ Streams documentation]
 * link:https://developers.redhat.com/topics/microservices[Microservices learning hub]
 

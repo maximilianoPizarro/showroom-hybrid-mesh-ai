@@ -45,13 +45,13 @@ image::13-ai-computer-vision.png[AI Computer Vision at the Edge — NeuroFace PP
 [source,bash]
 ----
 # App health
-curl -sk https://neuroface.{hub_domain}/api/health
+curl -sk https://neuroface.%HUB_DOMAIN%/api/health
 
 # Full readiness (PPE serving, chat backend, model status)
-curl -sk https://neuroface.{hub_domain}/api/ready | python3 -m json.tool
+curl -sk https://neuroface.%HUB_DOMAIN%/api/ready | python3 -m json.tool
 
 # PPE status
-curl -sk https://neuroface.{hub_domain}/api/ppe/status
+curl -sk https://neuroface.%HUB_DOMAIN%/api/ppe/status
 ----
 
 == Lab access
@@ -60,11 +60,11 @@ curl -sk https://neuroface.{hub_domain}/api/ppe/status
 |===
 | Service | URL
 
-| NeuroFace app | link:https://neuroface.{hub_domain}[neuroface.{hub_domain}]
-| Developer Hub — NeuroFace system | link:https://developer-hub.{hub_domain}/catalog/default/system/neuroface[Developer Hub → neuroface]
-| DevSpaces — open code | link:https://devspaces.{hub_domain}/#https://github.com/maximilianoPizarro/neuroface[DevSpaces]
-| Grafana — hub dashboard | link:https://grafana.{hub_domain}[Grafana] → "AI Computer Vision at the Edge — NeuroFace (hub)"
-| OpenShift AI | link:https://rh-ai.{hub_domain}/projects/neuroface[OpenShift AI → neuroface project]
+| NeuroFace app | link:https://neuroface.%HUB_DOMAIN%[neuroface.%HUB_DOMAIN%]
+| Developer Hub — NeuroFace system | link:https://developer-hub.%HUB_DOMAIN%/catalog/default/system/neuroface[Developer Hub → neuroface]
+| DevSpaces — open code | link:https://devspaces.%EAST_DOMAIN%/#https://github.com/maximilianoPizarro/neuroface[DevSpaces east]
+| Grafana — hub dashboard | link:https://grafana.%HUB_DOMAIN%[Grafana] → "AI Computer Vision at the Edge — NeuroFace (hub)"
+| OpenShift AI | link:https://rhods-dashboard-redhat-ods-applications.%HUB_DOMAIN%[ODS Dashboard → neuroface project]
 |===
 
 == Container images (v1.5.0)
@@ -78,9 +78,9 @@ curl -sk https://neuroface.{hub_domain}/api/ppe/status
 | `quay.io/maximilianopizarro/neuroface-ppe-serving` | v1.5.0 | Pre-built YOLOv8 PPE (KServe v1+v2)
 |===
 
-== Your TODO (user {user_name})
+== Your TODO (user %USER_NAME%)
 
-* [ ] Open `https://neuroface.{hub_domain}` — confirm v1.5.0 in footer
+* [ ] Open `https://neuroface.%HUB_DOMAIN%` — confirm v1.5.0 in footer
 * [ ] Test **PPE Safety** — activate Auto-detect with webcam
 * [ ] Test **AI Chat** — ask _"What PPE is this person wearing?"_
 * [ ] Open Developer Hub → system `neuroface` — verify all components

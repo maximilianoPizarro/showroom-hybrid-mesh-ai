@@ -130,7 +130,7 @@ spec:
 * link:https://docs.redhat.com/en/documentation/red_hat_developer_hub[Developer Hub — golden paths for apps]
 * link:https://docs.redhat.com/en/documentation/red_hat_openshift_ai/[OpenShift AI — production patterns]
 * link:https://camel.apache.org/camel-k/[Camel K operator documentation]
-* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/industrial-edge[Industrial Edge on OpenShift]
+* link:https://validatedpatterns.io/patterns/industrial-edge/[Validated Patterns — Industrial Edge]
 * link:https://validatedpatterns.io/patterns/industrial-edge/[Industrial Edge Validated Pattern]
 * link:https://ai-on-openshift.io/[AI on OpenShift — community patterns]
 

@@ -210,7 +210,7 @@ NOTE: *Workshop login* — %USER_NAME% / `Welcome123!` (Keycloak Developer Hub; 
 | Kairos Console | link:https://kairos-console-kairos-system.%HUB_DOMAIN%[Kairos] | OpenShift OAuth
 | ACS Central | link:https://central-stackrox.%HUB_DOMAIN%[ACS Central] | OpenShift OAuth
 | Kuadrant API keys | link:https://developer-hub.%HUB_DOMAIN%/kuadrant[Kuadrant UI] | Workshop user
-| Workshop APIs | link:https://workshop-apis.%HUB_DOMAIN%[Workshop APIs] | `Authorization: APIKEY` (module 20)
+| Workshop APIs | link:https://workshop-apis.%HUB_DOMAIN%/httpbin/get[Workshop APIs — httpbin] | `Authorization: APIKEY` (module 20)
 | AI Gateway (MaaS LLM) | link:https://ai-gateway.%HUB_DOMAIN%/v1/chat/completions[AI Gateway] | `Authorization: APIKEY` (module 23)
 | Kafka Console | link:https://kafka-console.%HUB_DOMAIN%[Kafka Console] | OpenShift OAuth
 | Kubecost | link:https://kubecost.%HUB_DOMAIN%[Kubecost] | OpenShift OAuth

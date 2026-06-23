@@ -1,4 +1,4 @@
-= OpenShift Virtualization (CNV)
+= 19b. OpenShift Virtualization (CNV)
 
 ++++
 <span class="workshop-time-badge">~15 min</span>
